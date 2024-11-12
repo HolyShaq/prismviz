@@ -41,19 +41,19 @@ Open http://localhost:3000 in your browser to view the application.
 You can start modifying the tool by editing the primary page component located in app/page.tsx. Changes made to this file will automatically update in the browser.
 
 ### Tech Stack
-Frontend Framework: Next.js for a robust, React-based user interface.
-Data Visualization: Chart.js and react-chartjs-2 for interactive charting.
-File Handling: Papaparse for parsing CSV files.
-Data Cleaning: Lodash and Pandasjs for data manipulation.
-PDF Generation and Printing: jsPDF, html2canvas, and react-to-print for report generation.
-State Management: React Query for data fetching and caching.
-AI Integration (Optional): OpenAI API for AI-powered insights and dotenv for managing API keys.
+- Frontend Framework: **Next.js** for a robust, React-based user interface.
+- Data Visualization: **Chart.js** and **react-chartjs-2** for interactive charting.
+- File Handling: **Papaparse** for parsing CSV files.
+- Data Cleaning: **Lodash** and **Pandasjs** for data manipulation.
+- PDF Generation and Printing: **jsPDF**, **html2canvas**, and **react-to-print** for report generation.
+- State Management: **React Query** for data fetching and caching.
+- AI Integration (Optional): **OpenAI API** for AI-powered insights and **dotenv** for managing API keys.
 
 ### Usage
-Upload Data: Use the upload interface to select a CSV file. The tool automatically parses and loads the data.
-Clean Data: Access options for handling missing values, removing duplicates, and validating entries.
-Visualize Data: Choose from various chart types to represent your data. Customize labels, colors, and styles.
-Generate Reports: Save or print visualizations and data summaries as PDFs for sharing or offline analysis.
+1. Upload Data: Use the upload interface to select a CSV file. The tool automatically parses and loads the data.
+2. Clean Data: Access options for handling missing values, removing duplicates, and validating entries.
+3. Visualize Data: Choose from various chart types to represent your data. Customize labels, colors, and styles.
+4. Generate Reports: Save or print visualizations and data summaries as PDFs for sharing or offline analysis.
 
 ### Folder Structure
 ```bash
