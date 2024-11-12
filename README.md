@@ -1,15 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PrismViz
+
+This is a **Data Visualization Tool** built with [Next.js](https://nextjs.org) for processing, visualizing, and exporting data from various sources, primarily designed to handle CSV files and generate interactive charts. This tool is ideal for users looking to explore their data through visual analytics, generate reports, and leverage optional AI insights.
+
+## Features
+- **Data Upload and Cleaning**: Easily upload CSV files, remove duplicates, handle missing data, and validate entries.
+- **Interactive Data Visualization**: Create dynamic and interactive charts powered by [Chart.js](https://www.chartjs.org/) and [react-chartjs-2](https://github.com/reactchartjs/react-chartjs-2).
+- **Report Generation and Printing**: Export reports as PDFs using [jsPDF](https://github.com/parallax/jsPDF) and [html2canvas](https://github.com/niklasvh/html2canvas), or print directly with [react-to-print](https://github.com/gregnb/react-to-print).
+- **Optional AI Integration**: Integrate AI-powered data insights with the OpenAI API.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- **Node.js** 20.9.0 or later
+- **Package Manager**: Choose one of npm, yarn, pnpm, or bun
+
+### Installation
+Clone the repository and install dependencies:
 
 ```bash
-run npm install next
+git clone <your-repo-url>
+cd dataviz-tool
+npm install --legacy-peer-deps
+```
 
-then next,
-
-run npm run dev
+### Development Server
+Start the development server:
+```bash
+npm run dev
 # or
 yarn dev
 # or
@@ -18,23 +35,35 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 in your browser to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Editing the Application
+You can start modifying the tool by editing the primary page component located in app/page.tsx. Changes made to this file will automatically update in the browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Tech Stack
+- Frontend Framework: **Next.js** for a robust, React-based user interface.
+- Data Visualization: **Chart.js** and **react-chartjs-2** for interactive charting.
+- File Handling: **Papaparse** for parsing CSV files.
+- Data Cleaning: **Lodash** and **Pandasjs** for data manipulation.
+- PDF Generation and Printing: **jsPDF**, **html2canvas**, and **react-to-print** for report generation.
+- State Management: **React Query** for data fetching and caching.
+- AI Integration (Optional): **OpenAI API** for AI-powered insights and **dotenv** for managing API keys.
 
-## Learn More
+### Usage
+1. Upload Data: Use the upload interface to select a CSV file. The tool automatically parses and loads the data.
+2. Clean Data: Access options for handling missing values, removing duplicates, and validating entries.
+3. Visualize Data: Choose from various chart types to represent your data. Customize labels, colors, and styles.
+4. Generate Reports: Save or print visualizations and data summaries as PDFs for sharing or offline analysis.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Folder Structure
+```bash
+src/
+├── app/
+│   ├── page.tsx                # Main entry point for the app
+│   ├── layout.tsx              # Layout of the app (global)    
+├── components/                 # Reusable components with components for single-URL page (Stepper, Charts, etc.)
+│   ├── Stepper.tsx
+│   ├── UploadFile.tsx
+├── lib/                        # Utility functions (API handling, helpers)
+│   ├── dataCleaning.js        # Data manipulation functions
+```
