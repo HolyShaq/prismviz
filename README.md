@@ -1,4 +1,4 @@
-# DataViz Tool
+# PrismViz
 
 This is a **Data Visualization Tool** built with [Next.js](https://nextjs.org) for processing, visualizing, and exporting data from various sources, primarily designed to handle CSV files and generate interactive charts. This tool is ideal for users looking to explore their data through visual analytics, generate reports, and leverage optional AI insights.
 
