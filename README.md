@@ -20,7 +20,7 @@ Clone the repository and install dependencies:
 ```bash
 git clone <your-repo-url>
 cd dataviz-tool
-npm install
+npm install --legacy-peer-deps
 ```
 
 ### Development Server
