@@ -83,6 +83,7 @@ const HomeContent: React.FC = () => {
           currentStep={currentStep}
           setCurrentStep={(step) => setCurrentStep(step)}
           completedSteps={completedSteps}
+          isCsvUploaded={!!csvFile}
         />
 
         <div className="flex flex-col h-full w-full p-4">
