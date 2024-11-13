@@ -4,7 +4,7 @@ import React from "react";
 
 type Step = {
   name: string;
-  component: React.FC<{ onComplete: () => void }>;
+  component: React.FC<any>;
 };
 
 interface SidebarProps {
@@ -12,28 +12,47 @@ interface SidebarProps {
   currentStep: number;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   completedSteps: boolean[];
+  isCsvUploaded: boolean; // Added here
 }
 
-// TODO: Adjust logic for step completion
-const Sidebar: React.FC<SidebarProps> = ({ steps, currentStep, setCurrentStep, completedSteps }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  steps,
+  currentStep,
+  setCurrentStep,
+  completedSteps,
+  isCsvUploaded,
+}) => {
   return (
     <div className="flex flex-col space-y-2 p-2 outline outline-1 outline-[#d9d9d9]">
-      {steps.map((step, index) => (
-        <button
-          key={index}
-          onClick={() => {
-            if (index === currentStep || completedSteps[index] || index === currentStep - 1) {
-              setCurrentStep(index);
-            }
-          }}
-          className={`w-8 h-8 ${
-            index <= currentStep ? "cursor-pointer" : "cursor-not-allowed"
-          } ${completedSteps[index] || index === currentStep ? "bg-blue-500" : "bg-gray-300"}`}
-          disabled={!completedSteps[index] && index > currentStep} // Disable next steps if they’re not completed
-        >
-          {index + 1}
-        </button>
-      ))}
+      {steps.map((step, index) => {
+        const isDisabled =
+          !completedSteps[index] &&
+          index > currentStep &&
+          !(index === 1 && isCsvUploaded); // Step 2 is disabled if CSV is not uploaded
+
+        return (
+          <button
+            key={index}
+            onClick={() => {
+              if (!isDisabled) {
+                setCurrentStep(index);
+              }
+            }}
+            className={`w-8 h-8 ${
+              index <= currentStep || (index === 1 && isCsvUploaded)
+                ? "cursor-pointer"
+                : "cursor-not-allowed"
+            } ${
+              completedSteps[index] || index === currentStep
+                ? "bg-blue-500"
+                : "bg-gray-300"
+            }`}
+            disabled={isDisabled}
+          >
+            {index + 1}
+          </button>
+        );
+      })}
     </div>
   );
 };
