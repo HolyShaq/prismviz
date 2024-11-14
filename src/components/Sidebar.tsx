@@ -25,9 +25,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div className="flex flex-col space-y-2 p-2 outline outline-1 outline-[#d9d9d9]">
       {steps.map((step, index) => {
-          const isDisabled =
-          (index === 1 && !isCsvUploaded && !completedSteps[index]) || // Step 2 requires upload OR must be completed
-          (index === 2 && !completedSteps[1]); // Step 3 requires Step 2 to be completed
+        const isDisabled =
+          !completedSteps[index] && // Allow completed steps to always be accessible
+          ((index === 1 && !isCsvUploaded) || // Step 2 requires CSV upload
+            (index === 2 && !completedSteps[1])); // Step 3 requires Step 2 to be completed
 
         return (
           <button
@@ -38,11 +39,11 @@ const Sidebar: React.FC<SidebarProps> = ({
               }
             }}
             className={`w-8 h-8 ${
-              index <= currentStep || (index === 1 && isCsvUploaded) || (index === 0 && isCsvUploaded) // Ensure Step 1 stays interactive and blue if a CSV is uploaded
+              completedSteps[index] || index === currentStep || (index === 0 && isCsvUploaded)
                 ? "cursor-pointer"
                 : "cursor-not-allowed"
             } ${
-              completedSteps[index] || index === currentStep || (index === 0 && isCsvUploaded) // Ensure Step 1 is blue if a CSV is uploaded
+              completedSteps[index] || index === currentStep || (index === 0 && isCsvUploaded)
                 ? "bg-blue-500"
                 : "bg-gray-300"
             }`}
