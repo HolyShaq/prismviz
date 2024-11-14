@@ -25,9 +25,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div className="flex flex-col space-y-2 p-2 outline outline-1 outline-[#d9d9d9]">
       {steps.map((step, index) => {
-         const isDisabled =
-         (index === 1 && !isCsvUploaded) || // Step 2 requires CSV to be uploaded
-         (index === 2 && !completedSteps[1]); // Step 3 requires Step 2 to be completed
+          const isDisabled =
+          (index === 1 && !isCsvUploaded && !completedSteps[index]) || // Step 2 requires upload OR must be completed
+          (index === 2 && !completedSteps[1]); // Step 3 requires Step 2 to be completed
 
         return (
           <button
