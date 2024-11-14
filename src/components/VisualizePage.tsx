@@ -3,24 +3,22 @@
 import React, { useEffect } from "react";
 
 interface VisualizePageProps {
-  cleanedData: any;
+  cleanedData: any[];
   onComplete: () => void;
 }
 
 const VisualizePage: React.FC<VisualizePageProps> = ({ cleanedData, onComplete }) => {
-  // Mark this step as complete if cleanedData is available
   useEffect(() => {
-    if (cleanedData && onComplete) {
-      onComplete(); // Signal that this step is complete
+    if (cleanedData.length > 0) {
+      onComplete(); // Mark the step as complete
     }
-  }, [cleanedData, onComplete]);
+  }, [cleanedData]); // Only run when cleanedData changes
 
-  if (!cleanedData) {
+  if (!cleanedData || cleanedData.length === 0) {
     return <p>Please complete data cleaning before visualizing.</p>;
   }
 
   const handleGenerateReport = () => {
-    // Placeholder for generating and displaying visualizations or reports
     console.log("Generating report based on cleaned data:", cleanedData);
     alert("Report generated successfully!");
   };

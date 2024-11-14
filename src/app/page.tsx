@@ -23,6 +23,7 @@ const steps: Step[] = [
 const HomeContent: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [completedSteps, setCompletedSteps] = useState<boolean[]>([false, false, false]);
+  const [cleanedData, setCleanedData] = useState<any[]>([]); 
 
   const { csvFile, csvData, clearFile, handleFileLoaded } = useContext(CsvContext);
 
@@ -44,10 +45,16 @@ const HomeContent: React.FC = () => {
   const completeCurrentStep = () => {
     setCompletedSteps((prevSteps) => {
       const newSteps = [...prevSteps];
-      newSteps[currentStep] = true;
+      if (!newSteps[currentStep]) {
+        newSteps[currentStep] = true; // Mark the current step as complete
+      }
       return newSteps;
     });
-    handleNext(); // Automatically move to the next step
+  
+    // Increment `currentStep` only if it is within bounds
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
   };
 
   // Reset steps when clearing the file
@@ -92,6 +99,8 @@ const HomeContent: React.FC = () => {
             clearFile={clearFile}
             resetSteps={resetSteps} // Pass resetSteps to components
             goToDataCleaningStep={() => setCurrentStep(1)}
+            setCleanedData={setCleanedData} // Pass setCleanedData here
+            cleanedData={cleanedData} // Pass cleanedData to the visualization step
           />
 
           <div className="flex space-x-4 mt-8">
