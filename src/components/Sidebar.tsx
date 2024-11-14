@@ -38,11 +38,11 @@ const Sidebar: React.FC<SidebarProps> = ({
               }
             }}
             className={`w-8 h-8 ${
-              index <= currentStep || (index === 1 && isCsvUploaded)
+              index <= currentStep || (index === 1 && isCsvUploaded) || (index === 0 && isCsvUploaded) // Ensure Step 1 stays interactive and blue if a CSV is uploaded
                 ? "cursor-pointer"
                 : "cursor-not-allowed"
             } ${
-              completedSteps[index] || index === currentStep
+              completedSteps[index] || index === currentStep || (index === 0 && isCsvUploaded) // Ensure Step 1 is blue if a CSV is uploaded
                 ? "bg-blue-500"
                 : "bg-gray-300"
             }`}
