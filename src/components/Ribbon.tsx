@@ -26,7 +26,7 @@ const RibbonButton: React.FC<RibbonButtonProps> = ({ label, onClick }) => {
 const Ribbon: React.FC<RibbonProps> = ({ currentStep }) => {
   const temp = () => {};
 
-  const buttonSet = [
+  const buttonSets = [
     // Upload
     [],
 
@@ -47,7 +47,7 @@ const Ribbon: React.FC<RibbonProps> = ({ currentStep }) => {
 
   return (
     <div className="flex flex-row h-20 space-x-2">
-      {buttonSet[currentStep].map((button) => button)}
+      {buttonSets[currentStep].map((button) => button)}
     </div>
   );
 };
