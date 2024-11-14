@@ -3,6 +3,7 @@
 import React, { useState, useContext } from "react";
 import { Skeleton } from "@mui/material";
 import Sidebar from "../components/Sidebar";
+import Ribbon from "../components/Ribbon";
 import UploadPage from "../components/UploadPage";
 import CleanPage from "../components/CleanPage";
 import VisualizePage from "../components/VisualizePage";
@@ -68,15 +69,15 @@ const HomeContent: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex flex-row w-full space-x-4 px-4 bg-[#d9d9d9]">
+      <div className="flex flex-row w-full pb-1 items-center space-x-4 px-4 bg-[#d9d9d9]">
         <img src="favicon.ico" alt="logo" className="w-16 h-16 my-4" />
-        <div className="flex flex-col space-y-1 my-3 w-full">
+        <div className="flex flex-col items-start space-y-1 my-1 w-full">
           <div className="flex flex-row space-x-2 font-sans text-sm">
             <span>File</span>
             <span>Home</span>
             <span>Help</span>
           </div>
-          <Skeleton variant="rectangular" animation={false} className="w-full h-full" />
+          <Ribbon currentStep={currentStep} />
         </div>
       </div>
 
