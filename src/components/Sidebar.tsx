@@ -39,9 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               }
             }}
             className={`w-8 h-8 ${
-              completedSteps[index] || index === currentStep || (index === 0 && isCsvUploaded)
-                ? "cursor-pointer"
-                : "cursor-not-allowed"
+              !isDisabled ? "cursor-pointer" : "cursor-not-allowed"
             } ${
               completedSteps[index] || index === currentStep || (index === 0 && isCsvUploaded)
                 ? "bg-blue-500"
