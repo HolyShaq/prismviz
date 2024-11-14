@@ -26,14 +26,9 @@ const HomeContent: React.FC = () => {
 
   const { csvFile, csvData, clearFile, handleFileLoaded } = useContext(CsvContext);
 
-  // Go to the data cleaning step (2nd step)
-  const goToDataCleaningStep = () => {
-    setCurrentStep(1);
-  };
-
   // Move to the next step
   const handleNext = () => {
-    if (currentStep < steps.length - 1) {
+    if (currentStep < steps.length - 1 && completedSteps[currentStep]) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -47,17 +42,18 @@ const HomeContent: React.FC = () => {
 
   // Mark the current step as complete
   const completeCurrentStep = () => {
-    console.log("Completing current step:", currentStep);
     setCompletedSteps((prevSteps) => {
-      if (prevSteps[currentStep]) {
-        return prevSteps; // No change if already complete
-      }
       const newSteps = [...prevSteps];
       newSteps[currentStep] = true;
-      console.log("Updated steps:", newSteps);
       return newSteps;
     });
     handleNext(); // Automatically move to the next step
+  };
+
+  // Reset steps when clearing the file
+  const resetSteps = () => {
+    setCompletedSteps([false, false, false]);
+    setCurrentStep(0);
   };
 
   // Render the current step's component
@@ -81,7 +77,7 @@ const HomeContent: React.FC = () => {
         <Sidebar
           steps={steps}
           currentStep={currentStep}
-          setCurrentStep={(step) => setCurrentStep(step)}
+          setCurrentStep={setCurrentStep}
           completedSteps={completedSteps}
           isCsvUploaded={!!csvFile}
         />
@@ -94,8 +90,8 @@ const HomeContent: React.FC = () => {
             csvData={csvData}
             handleFileLoaded={handleFileLoaded}
             clearFile={clearFile}
-            goToDataCleaningStep={goToDataCleaningStep}
-            cleanedData={csvData} // TODO: Pass cleaned data to visualization step (placeholder as of now)
+            resetSteps={resetSteps} // Pass resetSteps to components
+            goToDataCleaningStep={() => setCurrentStep(1)}
           />
 
           <div className="flex space-x-4 mt-8">
@@ -112,7 +108,6 @@ const HomeContent: React.FC = () => {
   );
 };
 
-// TODO: Set global css properties
 export default function Home() {
   return (
     <CsvContextProvider>
