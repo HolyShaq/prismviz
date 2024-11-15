@@ -15,15 +15,22 @@ interface RibbonButtonProps {
   // icon: React.ReactNode;
   label: string;
   onClick: () => void;
+  enabled: boolean;
 }
 
-const RibbonButton: React.FC<RibbonButtonProps> = ({ label, onClick }) => {
+const RibbonButton: React.FC<RibbonButtonProps> = ({
+  label,
+  onClick,
+  enabled,
+}) => {
   return (
     <div
       onClick={onClick}
       className="flex flex-col w-16 space-y-1 items-center"
     >
-      <div className="h-10 aspect-square bg-slate-500" />
+      <div
+        className={`h-10 aspect-square ${enabled ? "bg-blue-500" : "bg-slate-500"}`}
+      />
       <span className="text-xs text-wrap text-center w-max-full">{label}</span>
     </div>
   );
@@ -44,16 +51,46 @@ const Ribbon: React.FC<RibbonProps> = ({
 
     // Clean
     [
-      <RibbonButton key={0} label="Remove Duplicate" onClick={temp} />,
-      <RibbonButton key={1} label="Remove Invalid" onClick={temp} />,
-      <RibbonButton key={2} label="Remove Empty" onClick={temp} />,
+      <RibbonButton
+        key={0}
+        label="Remove Duplicate"
+        onClick={temp}
+        enabled={true}
+      />,
+      <RibbonButton
+        key={1}
+        label="Remove Invalid"
+        onClick={temp}
+        enabled={true}
+      />,
+      <RibbonButton
+        key={2}
+        label="Remove Empty"
+        onClick={temp}
+        enabled={true}
+      />,
     ],
 
     // Visualize
     [
-      <RibbonButton key={0} label="Add a Chart" onClick={temp} />,
-      <RibbonButton key={1} label="Add a Textbox" onClick={temp} />,
-      <RibbonButton key={2} label="Add Controls" onClick={temp} />,
+      <RibbonButton
+        key={0}
+        label="Add a Chart"
+        onClick={temp}
+        enabled={true}
+      />,
+      <RibbonButton
+        key={1}
+        label="Add a Textbox"
+        onClick={temp}
+        enabled={true}
+      />,
+      <RibbonButton
+        key={2}
+        label="Add Controls"
+        onClick={temp}
+        enabled={true}
+      />,
     ],
   ];
 
@@ -68,6 +105,7 @@ const Ribbon: React.FC<RibbonProps> = ({
           setCompletedSteps([false, false, false]);
           setCurrentStep(0);
         }}
+        enabled={csvData.length > 0}
       />,
       <RibbonButton
         key={1}
@@ -76,19 +114,25 @@ const Ribbon: React.FC<RibbonProps> = ({
           setCompletedSteps([true, false, false]);
           setCurrentStep(1);
         }}
+        enabled={csvData.length > 0}
       />,
     ],
 
     // Clean
     [
-      <RibbonButton key={0} label="Delete Rows" onClick={temp} />,
-      <RibbonButton key={1} label="Proceed" onClick={temp} />,
+      <RibbonButton
+        key={0}
+        label="Delete Rows"
+        onClick={temp}
+        enabled={true}
+      />,
+      <RibbonButton key={1} label="Proceed" onClick={temp} enabled={true} />,
     ],
 
     // Visualize
     [
-      <RibbonButton key={0} label="Preview" onClick={temp} />,
-      <RibbonButton key={1} label="Print" onClick={temp} />,
+      <RibbonButton key={0} label="Preview" onClick={temp} enabled={true} />,
+      <RibbonButton key={1} label="Print" onClick={temp} enabled={true} />,
     ],
   ];
 
