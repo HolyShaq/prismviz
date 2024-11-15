@@ -1,10 +1,13 @@
 "use client";
 
 import { Skeleton } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
+import { CsvContext } from "../lib/CsvContext";
 
 interface RibbonProps {
   currentStep: number;
+  setCurrentStep: (step: number) => void;
+  setCompletedSteps: (steps: boolean[]) => void;
 }
 
 interface RibbonButtonProps {
@@ -16,14 +19,23 @@ interface RibbonButtonProps {
 
 const RibbonButton: React.FC<RibbonButtonProps> = ({ label, onClick }) => {
   return (
-    <div className="flex flex-col w-16 space-y-1 items-center">
+    <div
+      onClick={onClick}
+      className="flex flex-col w-16 space-y-1 items-center"
+    >
       <div className="h-10 aspect-square bg-slate-500" />
       <span className="text-xs text-wrap text-center w-max-full">{label}</span>
     </div>
   );
 };
 
-const Ribbon: React.FC<RibbonProps> = ({ currentStep }) => {
+const Ribbon: React.FC<RibbonProps> = ({
+  currentStep,
+  setCurrentStep,
+  setCompletedSteps,
+}) => {
+  const { csvData, clearFile } = useContext(CsvContext);
+
   const temp = () => {};
 
   const buttonSetsLeft = [
@@ -48,8 +60,23 @@ const Ribbon: React.FC<RibbonProps> = ({ currentStep }) => {
   const buttonSetsRight = [
     // Upload
     [
-      <RibbonButton key={0} label="Clear" onClick={temp} />,
-      <RibbonButton key={1} label="Proceed" onClick={temp} />,
+      <RibbonButton
+        key={0}
+        label="Clear"
+        onClick={() => {
+          clearFile();
+          setCompletedSteps([false, false, false]);
+          setCurrentStep(0);
+        }}
+      />,
+      <RibbonButton
+        key={1}
+        label="Proceed"
+        onClick={() => {
+          setCompletedSteps([true, false, false]);
+          setCurrentStep(1);
+        }}
+      />,
     ],
 
     // Clean

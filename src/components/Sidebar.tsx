@@ -21,12 +21,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   setCurrentStep,
   completedSteps,
 }) => {
-
   const { csvFile } = useContext(CsvContext);
   const isCsvUploaded = !!csvFile;
 
   return (
-    <div className="flex flex-col space-y-2 p-2 outline outline-1 outline-[#d9d9d9]">
+    <div className="flex flex-col h-full space-y-2 p-2 outline outline-1 outline-[#d9d9d9]">
       {steps.map((step, index) => {
         const isDisabled =
           !completedSteps[index] && // Allow completed steps to always be accessible
@@ -43,7 +42,9 @@ const Sidebar: React.FC<SidebarProps> = ({
             className={`w-8 h-8 ${
               !isDisabled ? "cursor-pointer" : "cursor-not-allowed"
             } ${
-              completedSteps[index] || index === currentStep || (index === 0 && isCsvUploaded)
+              completedSteps[index] ||
+              index === currentStep ||
+              (index === 0 && isCsvUploaded)
                 ? "bg-blue-500"
                 : "bg-gray-300"
             }`}
