@@ -67,11 +67,11 @@ const UploadPage: React.FC<UploadPageProps> = ({
       : [];
 
   return (
-    <div className="max-h-full max-w-full pb-28">
+    <div className="max-h-full max-w-full pb-28 pr-11">
       {csvFile ? (
         <div className="w-full h-full max-w-full max-h-full">
           <DataGrid
-            className="w-full"
+            className="max-w-full"
             rows={csvData.map((row, index) => ({ id: index, ...row }))}
             columns={columns}
           />

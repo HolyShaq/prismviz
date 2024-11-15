@@ -75,7 +75,7 @@ const HomeContent: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-row h-full max-h-full">
+      <div className="flex flex-row h-full max-h-full max-w-full">
         <Sidebar
           steps={steps}
           currentStep={currentStep}
@@ -83,7 +83,7 @@ const HomeContent: React.FC = () => {
           completedSteps={completedSteps}
         />
 
-        <div className="flex flex-col max-h-30 max-w-full p-4">
+        <div className="flex flex-col max-h-full max-w-full p-4">
           <StepComponent
             setCurrentStep={setCurrentStep}
             onComplete={completeCurrentStep}
