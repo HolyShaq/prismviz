@@ -2,20 +2,197 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Root Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Primary Colors */
+  --primary-main: #0A0A2A;
+  --primary-surface: #FFFFFF;
+  --primary-hover: #313154;
+  --primary-pressed: #545469;
+
+  /* Secondary Colors */
+  --secondary-main: #2E2E1F;
+  --secondary-surface: #3D3D47;
+  --secondary-hover: #4A3B4F;
+  --secondary-pressed: #394E5F;
+
+  /* Neutral Colors */
+  --neutral-white-10: #FFFFFF;
+  --neutral-white-20: #F0F0F0;
+  --neutral-white-30: #D6D7D8;
+  --neutral-black-100: #000000;
+
+  /* Background & Foreground */
+  --background: var(--primary-surface);
+  --foreground: var(--primary-main);
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Font */
+  --font-primary: 'Inter', sans-serif;
+
+  /* Font Sizes */
+  --font-size-h1: 32px;
+  --font-size-h2: 28px;
+  --font-size-h3: 24px;
+  --font-size-h4: 20px;
+  --font-size-h5: 18px;
+  --font-size-p1: 16px;
+  --font-size-p2: 14px;
+
+  /* Checkbox Colors */
+  --checkbox-primary: #3B82F6;
+  --checkbox-secondary: #9333EA;
+  --checkbox-error: #EF4444;
+  --checkbox-warning: #F59E0B;
+  --checkbox-info: #0EA5E9;
+  --checkbox-success: #10B981;
+  --checkbox-disabled: #D1D5DB;
+
+  /* Button Colors */
+  --button-primary: #3B82F6;
+  --button-primary-hover: #2563EB;
+  --button-primary-pressed: #1D4ED8;
+  --button-primary-disabled: #93C5FD;
+  --button-secondary: #9333EA;
+  --button-secondary-hover: #7E22CE;
+  --button-secondary-pressed: #6B21A8;
+  --button-secondary-disabled: #C4B5FD;
+  --button-error: #EF4444;
+  --button-error-hover: #DC2626;
+  --button-error-pressed: #B91C1C;
+  --button-error-disabled: #FCA5A5;
+  --button-success: #10B981;
+  --button-success-hover: #059669;
+  --button-success-pressed: #047857;
+  --button-success-disabled: #6EE7B7;
+  --button-warning: #F59E0B;
+  --button-warning-hover: #D97706;
+  --button-warning-pressed: #B45309;
+  --button-warning-disabled: #FDE68A;
+  --button-disabled-bg: #E5E7EB;
+  --button-disabled-text: #9CA3AF;
+
+  /* Alert Colors */
+  --alert-primary: #EF4444;
+  --alert-primary-bg: #FEE2E2;
+  --alert-primary-border: #FCA5A5;
+  --alert-secondary: #F59E0B;
+  --alert-secondary-bg: #FFFBEB;
+  --alert-secondary-border: #FDE68A;
+  --alert-success: #10B981;
+  --alert-success-bg: #ECFDF5;
+  --alert-success-border: #A7F3D0;
+  --alert-info: #3B82F6;
+  --alert-info-bg: #DBEAFE;
+  --alert-info-border: #BFDBFE;
+  --alert-warning: #F97316;
+  --alert-warning-bg: #FFEDD5;
+  --alert-warning-border: #FDBA74;
+  --alert-neutral: #64748B;
+  --alert-neutral-bg: #F1F5F9;
+  --alert-neutral-border: #E2E8F0;
+  --alert-error: #EF4444;
+  --alert-error-bg: #FEE2E2;
+  --alert-error-border: #FCA5A5;
+
+  /* Line Heights */
+  --line-height-heading: 1.5;
+  --line-height-paragraph: 1.75;
 }
 
-/*@media (prefers-color-scheme: dark) {*/
-/*  :root {*/
-/*    --background: #0a0a0a;*/
-/*    --foreground: #ededed;*/
-/*  }*/
-/*}*/
-
+/* Global Reset */
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply font-primary text-primary-main bg-primary-surface m-0 p-0;
+}
+
+/* Typography */
+h1 {
+  @apply text-h1 font-extrabold mb-md;
+}
+
+h2 {
+  @apply text-h2 font-semibold mb-md;
+}
+
+h3 {
+  @apply text-h3 font-semibold mb-sm;
+}
+
+h4 {
+  @apply text-h4 font-medium mb-sm;
+}
+
+h5 {
+  @apply text-h5 font-medium mb-xs;
+}
+
+p {
+  @apply text-p1 mb-sm leading-relaxed;
+}
+
+a {
+  @apply text-primary-main no-underline;
+}
+
+a:hover {
+  @apply text-primary-hover;
+}
+
+/* Utility Classes */
+.icon {
+  @apply w-6 h-6;
+  fill: currentColor;
+}
+
+/* Checkbox Styles */
+.checkbox {
+  @apply w-4 h-4 border rounded;
+  border-color: var(--checkbox-disabled);
+}
+
+.checkbox-primary:checked {
+  background-color: var(--checkbox-primary);
+  border-color: var(--checkbox-primary);
+}
+
+/* Button Styles */
+.button {
+  @apply px-4 py-2 rounded-md font-semibold text-white;
+}
+
+.button-primary {
+  background-color: var(--button-primary);
+}
+
+.button-primary:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.button-primary:active {
+  background-color: var(--button-primary-pressed);
+}
+
+.button-primary:disabled {
+  background-color: var(--button-primary-disabled);
+  color: var(--button-disabled-text);
+  cursor: not-allowed;
+}
+
+/* Alert Styles */
+.alert {
+  @apply flex items-center border rounded-md p-md mb-sm;
+}
+
+.alert-primary {
+  background-color: var(--alert-primary-bg);
+  border-color: var(--alert-primary-border);
+  color: var(--alert-primary);
 }
