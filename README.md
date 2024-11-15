@@ -18,8 +18,8 @@ This is a **Data Visualization Tool** built with [Next.js](https://nextjs.org) f
 Clone the repository and install dependencies:
 
 ```bash
-git clone <your-repo-url>
-cd dataviz-tool
+git clone <https://github.com/HolyShaq/prismviz>
+cd prismviz
 npm install --legacy-peer-deps
 ```
 

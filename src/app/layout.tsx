@@ -13,6 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link rel="icon" href="/prismicon.ico"/>
       <body>
         {children}
       </body>
