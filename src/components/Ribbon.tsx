@@ -17,7 +17,7 @@ interface RibbonButtonProps {
 const RibbonButton: React.FC<RibbonButtonProps> = ({ label, onClick }) => {
   return (
     <div className="flex flex-col w-16 space-y-1 items-center">
-      <div className="h-16 aspect-square bg-slate-500" />
+      <div className="h-10 aspect-square bg-slate-500" />
       <span className="text-xs text-wrap text-center w-max-full">{label}</span>
     </div>
   );
@@ -26,7 +26,7 @@ const RibbonButton: React.FC<RibbonButtonProps> = ({ label, onClick }) => {
 const Ribbon: React.FC<RibbonProps> = ({ currentStep }) => {
   const temp = () => {};
 
-  const buttonSets = [
+  const buttonSetsLeft = [
     // Upload
     [],
 
@@ -45,9 +45,34 @@ const Ribbon: React.FC<RibbonProps> = ({ currentStep }) => {
     ],
   ];
 
+  const buttonSetsRight = [
+    // Upload
+    [
+      <RibbonButton key={0} label="Clear" onClick={temp} />,
+      <RibbonButton key={1} label="Proceed" onClick={temp} />,
+    ],
+
+    // Clean
+    [
+      <RibbonButton key={0} label="Delete Rows" onClick={temp} />,
+      <RibbonButton key={1} label="Proceed" onClick={temp} />,
+    ],
+
+    // Visualize
+    [
+      <RibbonButton key={0} label="Preview" onClick={temp} />,
+      <RibbonButton key={1} label="Print" onClick={temp} />,
+    ],
+  ];
+
   return (
-    <div className="flex flex-row h-20 space-x-2">
-      {buttonSets[currentStep].map((button) => button)}
+    <div className="flex flex-row h-20 w-full justify-between">
+      <div className="flex flex-row space-x-2">
+        {buttonSetsLeft[currentStep].map((button) => button)}
+      </div>
+      <div className="flex flex-row space-x-2">
+        {buttonSetsRight[currentStep].map((button) => button)}
+      </div>
     </div>
   );
 };
