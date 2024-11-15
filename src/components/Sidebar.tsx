@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
+import { CsvContext } from "../lib/CsvContext";
 
 type Step = {
   name: string;
@@ -12,7 +13,6 @@ interface SidebarProps {
   currentStep: number;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   completedSteps: boolean[];
-  isCsvUploaded: boolean;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -20,8 +20,11 @@ const Sidebar: React.FC<SidebarProps> = ({
   currentStep,
   setCurrentStep,
   completedSteps,
-  isCsvUploaded,
 }) => {
+
+  const { csvFile } = useContext(CsvContext);
+  const isCsvUploaded = !!csvFile;
+
   return (
     <div className="flex flex-col space-y-2 p-2 outline outline-1 outline-[#d9d9d9]">
       {steps.map((step, index) => {
@@ -29,7 +32,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           !completedSteps[index] && // Allow completed steps to always be accessible
           ((index === 1 && !isCsvUploaded) || // Step 2 requires CSV upload
             (index === 2 && !completedSteps[1])); // Step 3 requires Step 2 to be completed
-
         return (
           <button
             key={index}

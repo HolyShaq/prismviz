@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useContext } from "react";
-import { Skeleton } from "@mui/material";
+import React, { useContext, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Ribbon from "../components/Ribbon";
 import UploadPage from "../components/UploadPage";
@@ -24,9 +23,6 @@ const steps: Step[] = [
 const HomeContent: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [completedSteps, setCompletedSteps] = useState<boolean[]>([false, false, false]);
-  const [cleanedData, setCleanedData] = useState<any[]>([]); 
-
-  const { csvFile, csvData, clearFile, handleFileLoaded } = useContext(CsvContext);
 
   // Move to the next step
   const handleNext = () => {
@@ -45,23 +41,13 @@ const HomeContent: React.FC = () => {
   // Mark the current step as complete
   const completeCurrentStep = () => {
     setCompletedSteps((prevSteps) => {
-      const newSteps = [...prevSteps];
-      if (!newSteps[currentStep]) {
-        newSteps[currentStep] = true; // Mark the current step as complete
+      if (prevSteps[currentStep]) {
+        return prevSteps;
       }
+      const newSteps = [...prevSteps];
+      newSteps[currentStep] = true;
       return newSteps;
     });
-  
-    // Increment `currentStep` only if it is within bounds
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  // Reset steps when clearing the file
-  const resetSteps = () => {
-    setCompletedSteps([false, false, false]);
-    setCurrentStep(0);
   };
 
   // Render the current step's component
@@ -87,21 +73,13 @@ const HomeContent: React.FC = () => {
           currentStep={currentStep}
           setCurrentStep={setCurrentStep}
           completedSteps={completedSteps}
-          isCsvUploaded={!!csvFile}
         />
 
         <div className="flex flex-col h-full w-full p-4">
           <StepComponent
-            onBack={handleBack}
-            onComplete={completeCurrentStep}
-            csvFile={csvFile}
-            csvData={csvData}
-            handleFileLoaded={handleFileLoaded}
-            clearFile={clearFile}
-            resetSteps={resetSteps} // Pass resetSteps to components
-            goToDataCleaningStep={() => setCurrentStep(1)}
-            setCleanedData={setCleanedData} // Pass setCleanedData here
-            cleanedData={cleanedData} // Pass cleanedData to the visualization step
+            setCurrentStep={setCurrentStep} 
+            onComplete={completeCurrentStep} 
+            setCompletedSteps={setCompletedSteps}
           />
 
           <div className="flex space-x-4 mt-8">

@@ -1,32 +1,41 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
+import { CsvContext } from "../lib/CsvContext";
 
 interface VisualizePageProps {
-  cleanedData: any[];
   onComplete: () => void;
 }
 
-const VisualizePage: React.FC<VisualizePageProps> = ({ cleanedData, onComplete }) => {
-  useEffect(() => {
-    if (cleanedData.length > 0) {
-      onComplete(); // Mark the step as complete
-    }
-  }, [cleanedData]); // Only run when cleanedData changes
+const VisualizePage: React.FC<VisualizePageProps> = ({ onComplete }) => {
+  const { csvData } = useContext(CsvContext);
+  const [isCompleteNotified, setIsCompleteNotified] = useState(false); // Improved naming for clarity
 
-  if (!cleanedData || cleanedData.length === 0) {
+  // Notify parent component of completion only once when `csvData` is available
+  useEffect(() => {
+    if (csvData.length > 0 && !isCompleteNotified) {
+      onComplete();
+      setIsCompleteNotified(true);
+    }
+  }, [csvData, onComplete, isCompleteNotified]);
+
+  // If `csvData` is empty, show a message and prevent further rendering
+  if (csvData.length === 0) {
     return <p>Please complete data cleaning before visualizing.</p>;
   }
 
-  const handleGenerateReport = () => {
-    console.log("Generating report based on cleaned data:", cleanedData);
+  const handleReportGeneration = () => {
+    console.log("Generating report based on cleaned data:", csvData);
     alert("Report generated successfully!");
   };
 
   return (
     <div>
-      <p>Visualization and Reporting</p>
-      <button onClick={handleGenerateReport} className="mt-4 px-4 py-2 bg-green-500 text-white rounded">
+      <h2>Visualization and Reporting</h2>
+      <button
+        onClick={handleReportGeneration}
+        className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
+      >
         Generate Report
       </button>
     </div>
