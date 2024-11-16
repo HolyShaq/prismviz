@@ -3,8 +3,10 @@ import RibbonButton from "./RibbonButton";
 import { CsvContext } from "../../lib/CsvContext";
 import { useStepContext } from "../../lib/StepContext";
 
-const UploadRibbon: React.FC = () => {
-  // Initialization
+const UploadRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
+  left = false,
+  right = false,
+}) => {
   const { csvData, clearFile } = useContext(CsvContext);
   const { completeCurrentStep, handleNext, setCompletedSteps, setCurrentStep } =
     useStepContext();
@@ -51,12 +53,8 @@ const UploadRibbon: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-row space-x-2">
-        {UploadButtonSet["left"].map((button) => button)}
-      </div>
-      <div className="flex flex-row space-x-2">
-        {UploadButtonSet["right"].map((button) => button)}
-      </div>
+      {left ? UploadButtonSet.left.map((button) => button) : null}
+      {right ? UploadButtonSet.right.map((button) => button) : null}
     </>
   );
 };

@@ -3,18 +3,13 @@ import RibbonButton from "./RibbonButton";
 import { CsvContext } from "../../lib/CsvContext";
 import { useStepContext } from "../../lib/StepContext";
 
-const VisualizeRibbon: React.FC = () => {
+const VisualizeRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
+  left = false,
+  right = false,
+}) => {
   // Initialization
-  const { csvData, clearFile } = useContext(CsvContext);
-  const { completeCurrentStep, handleNext, setCompletedSteps, setCurrentStep } =
-    useStepContext();
 
   // Functions
-  const handleClearFile = () => {
-    clearFile(); // Clears file data from CsvContext
-    setCompletedSteps([false, false, false]); // Resets all step completions
-    setCurrentStep(0);
-  };
 
   // Button Set Definition
   type VisualizeButtonSetType = {
@@ -53,18 +48,13 @@ const VisualizeRibbon: React.FC = () => {
         onClick={() => {}}
         enabled={true}
       />,
-      <RibbonButton key={1} label="Print" onClick={() => {}} enabled={true} />,
     ],
   };
 
   return (
     <>
-      <div className="flex flex-row space-x-2">
-        {VisualizeButtonSet["left"].map((button) => button)}
-      </div>
-      <div className="flex flex-row space-x-2">
-        {VisualizeButtonSet["right"].map((button) => button)}
-      </div>
+      {left ? VisualizeButtonSet.left.map((button) => button) : null}
+      {right ? VisualizeButtonSet.right.map((button) => button) : null}
     </>
   );
 };

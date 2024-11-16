@@ -14,7 +14,12 @@ const Ribbon: React.FC = () => {
 
   return (
     <div className="flex flex-row h-20 w-full justify-between">
-      <ActiveButtonSet />
+      <div className="flex flex-row space-x-2">
+        <ActiveButtonSet left />
+      </div>
+      <div className="flex flex-row space-x-2">
+        <ActiveButtonSet right />
+      </div>
     </div>
   );
 };

@@ -3,18 +3,14 @@ import RibbonButton from "./RibbonButton";
 import { CsvContext } from "../../lib/CsvContext";
 import { useStepContext } from "../../lib/StepContext";
 
-const CleanRibbon: React.FC = () => {
+const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
+  left = false,
+  right = false,
+}) => {
   // Initialization
-  const { csvData, clearFile } = useContext(CsvContext);
-  const { completeCurrentStep, handleNext, setCompletedSteps, setCurrentStep } =
-    useStepContext();
+  const { completeCurrentStep, handleNext } = useStepContext();
 
   // Functions
-  const handleClearFile = () => {
-    clearFile(); // Clears file data from CsvContext
-    setCompletedSteps([false, false, false]); // Resets all step completions
-    setCurrentStep(0);
-  };
 
   // Button Set Definition
   type CleanButtonSetType = {
@@ -49,12 +45,6 @@ const CleanRibbon: React.FC = () => {
       // Right Ribbon Buttons
       <RibbonButton
         key={0}
-        label="Delete Rows"
-        onClick={() => {}}
-        enabled={true}
-      />,
-      <RibbonButton
-        key={1}
         label="Proceed"
         onClick={() => {
           completeCurrentStep();
@@ -67,12 +57,8 @@ const CleanRibbon: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-row space-x-2">
-        {CleanButtonSet["left"].map((button) => button)}
-      </div>
-      <div className="flex flex-row space-x-2">
-        {CleanButtonSet["right"].map((button) => button)}
-      </div>
+      {left ? CleanButtonSet.left.map((button) => button) : null}
+      {right ? CleanButtonSet.right.map((button) => button) : null}
     </>
   );
 };
