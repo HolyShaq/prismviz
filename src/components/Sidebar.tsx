@@ -3,6 +3,9 @@
 import React, { useContext } from "react";
 import { CsvContext } from "../lib/CsvContext";
 import { useStepContext } from "../lib/StepContext";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import AddchartIcon from "@mui/icons-material/Addchart";
 
 type Step = {
   name: string;
@@ -18,8 +21,15 @@ const Sidebar: React.FC<SidebarProps> = ({ steps }) => {
   const { csvFile } = useContext(CsvContext);
   const isCsvUploaded = !!csvFile;
 
+  // Define icons for each step
+  const stepIcons = [
+    <FileUploadIcon fontSize="medium" />, // Medium size for smaller icons
+    <CleaningServicesIcon fontSize="medium" />,
+    <AddchartIcon fontSize="medium" />,
+  ];
+
   return (
-    <div className="flex flex-col space-y-2 p-2 outline outline-1 outline-[#d9d9d9]">
+    <div className="flex flex-col bg-primary-pressed p-2 w-16 h-full text-neutral-white-10 space-y-2">
       {steps.map((step, index) => {
         const isDisabled =
           !completedSteps[index] &&
@@ -34,18 +44,18 @@ const Sidebar: React.FC<SidebarProps> = ({ steps }) => {
                 setCurrentStep(index);
               }
             }}
-            className={`w-8 h-8 ${
-              !isDisabled ? "cursor-pointer" : "cursor-not-allowed"
+            className={`w-full p-2 text-center rounded-lg flex items-center justify-center ${
+              !isDisabled ? "cursor-pointer" : "cursor-not-allowed opacity-50"
             } ${
               completedSteps[index] ||
               index === currentStep ||
               (index === 0 && isCsvUploaded)
-                ? "bg-blue-500"
-                : "bg-gray-300"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-300 text-gray-700"
             }`}
             disabled={isDisabled}
           >
-            {index + 1}
+            {stepIcons[index]}
           </button>
         );
       })}

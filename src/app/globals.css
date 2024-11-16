@@ -39,11 +39,12 @@
   --font-primary: 'Inter', sans-serif;
 
   /* Font Sizes */
-  --font-size-h1: 32px;
-  --font-size-h2: 28px;
-  --font-size-h3: 24px;
-  --font-size-h4: 20px;
-  --font-size-h5: 18px;
+  --font-size-h1: 60px;
+  --font-size-h2: 32px;
+  --font-size-h3: 28px;
+  --font-size-h4: 24px;
+  --font-size-h5: 20px;
+  --font-size-h6: 18px;
   --font-size-p1: 16px;
   --font-size-p2: 14px;
 
