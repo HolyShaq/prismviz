@@ -2,22 +2,20 @@
 
 import React, { useEffect, useContext, useState } from "react";
 import { CsvContext } from "../lib/CsvContext";
+import { useStepContext } from "../lib/StepContext";
 
-interface VisualizePageProps {
-  onComplete: () => void;
-}
-
-const VisualizePage: React.FC<VisualizePageProps> = ({ onComplete }) => {
+const VisualizePage: React.FC = () => {
   const { csvData } = useContext(CsvContext);
-  const [isCompleteNotified, setIsCompleteNotified] = useState(false); // Improved naming for clarity
+  const { completeCurrentStep } = useStepContext();
+  const [isCompleteNotified, setIsCompleteNotified] = useState(false);
 
-  // Notify parent component of completion only once when `csvData` is available
+  // Notify step context of completion only once when `csvData` is available
   useEffect(() => {
     if (csvData.length > 0 && !isCompleteNotified) {
-      onComplete();
+      completeCurrentStep(); // Mark the step as complete
       setIsCompleteNotified(true);
     }
-  }, [csvData, onComplete, isCompleteNotified]);
+  }, [csvData, completeCurrentStep, isCompleteNotified]);
 
   // If `csvData` is empty, show a message and prevent further rendering
   if (csvData.length === 0) {
