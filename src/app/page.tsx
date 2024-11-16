@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React from "react";
 import Sidebar from "../components/Sidebar";
 import Ribbon from "../components/Ribbon";
 import UploadPage from "../components/UploadPage";
 import CleanPage from "../components/CleanPage";
 import VisualizePage from "../components/VisualizePage";
 import { CsvContextProvider, CsvContext } from "../lib/CsvContext";
+import { StepContextProvider, useStepContext } from "../lib/StepContext";
 
 type Step = {
   name: string;
@@ -21,44 +22,14 @@ const steps: Step[] = [
 ];
 
 const HomeContent: React.FC = () => {
-  const [currentStep, setCurrentStep] = useState<number>(0);
-  const [completedSteps, setCompletedSteps] = useState<boolean[]>([
-    false,
-    false,
-    false,
-  ]);
-
-  // Move to the next step
-  const handleNext = () => {
-    if (currentStep < steps.length - 1 && completedSteps[currentStep]) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
-
-  // Move back to the previous step
-  const handleBack = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
-
-  // Mark the current step as complete
-  const completeCurrentStep = () => {
-    setCompletedSteps((prevSteps) => {
-      if (prevSteps[currentStep]) {
-        return prevSteps;
-      }
-      const newSteps = [...prevSteps];
-      newSteps[currentStep] = true;
-      return newSteps;
-    });
-  };
+  const { currentStep, handleNext, handleBack } = useStepContext();
 
   // Render the current step's component
   const StepComponent = steps[currentStep].component;
 
   return (
     <div className="flex flex-col h-screen w-screen max-w-screen max-h-screen overflow-clip">
+      {/* Ribbon Section */}
       <div className="flex flex-row w-full pb-1 items-center space-x-4 px-4 bg-[#d9d9d9]">
         <img src="/prismicon.ico" alt="logo" className="w-16 h-16 my-4" />
         <div className="flex flex-col items-start space-y-1 my-1 w-full">
@@ -67,30 +38,19 @@ const HomeContent: React.FC = () => {
             <span>Home</span>
             <span>Help</span>
           </div>
-          <Ribbon
-            currentStep={currentStep}
-            setCurrentStep={setCurrentStep}
-            setCompletedSteps={setCompletedSteps}
-          />
+          <Ribbon />
         </div>
       </div>
-
+      {/* Main Content */}
       <div className="flex flex-row h-full max-h-full max-w-full">
-        <Sidebar
-          steps={steps}
-          currentStep={currentStep}
-          setCurrentStep={setCurrentStep}
-          completedSteps={completedSteps}
-        />
-
+        {/* Sidebar */}
+        <Sidebar steps={steps} />
+        {/* Step Component */}
         <div className="flex flex-col max-h-full max-w-full p-4">
-          <StepComponent
-            setCurrentStep={setCurrentStep}
-            onComplete={completeCurrentStep}
-            setCompletedSteps={setCompletedSteps}
-          />
+          <StepComponent />
         </div>
       </div>
+      {/* Navigation Buttons */} 
     </div>
   );
 };
@@ -98,7 +58,9 @@ const HomeContent: React.FC = () => {
 export default function Home() {
   return (
     <CsvContextProvider>
-      <HomeContent />
+      <StepContextProvider>
+        <HomeContent />
+      </StepContextProvider>
     </CsvContextProvider>
   );
 }

@@ -5,25 +5,15 @@ import Papa from "papaparse";
 import { Box, Modal, Typography, Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { CsvContext } from "../lib/CsvContext";
+import { useStepContext } from "../lib/StepContext";
 
-interface UploadPageProps {
-  onComplete: () => void;
-  setCurrentStep: (step: number) => void;
-  setCompletedSteps: React.Dispatch<React.SetStateAction<boolean[]>>;
-}
-
-const UploadPage: React.FC<UploadPageProps> = ({
-  onComplete,
-  setCurrentStep,
-  setCompletedSteps,
-}) => {
+const UploadPage: React.FC = () => {
   const { csvFile, setCsvFile, csvData, handleFileLoaded, clearFile } =
     useContext(CsvContext);
+  const { completeCurrentStep, setCurrentStep, setCompletedSteps } = useStepContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [uploadedData, setUploadedData] = useState<Record<string, unknown>[]>(
-    [],
-  );
+  const [uploadedData, setUploadedData] = useState<Record<string, unknown>[]>([]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -32,24 +22,23 @@ const UploadPage: React.FC<UploadPageProps> = ({
         header: true,
         skipEmptyLines: true,
         complete: (results: { data: Record<string, unknown>[] }) => {
-          //handleFileLoaded(file, results.data);
           setFile(file);
           setUploadedData(results.data);
-          setIsModalOpen(true);
+          setIsModalOpen(true); // Open preview modal
         },
       });
     }
   };
 
   const handleFileLoad = () => {
-    if (file && uploadedData) {
+    if (file && uploadedData.length > 0) {
       handleFileLoaded(file, uploadedData);
-      setIsModalOpen(false);
-      onComplete();
+      setIsModalOpen(false); // Close the modal
+      completeCurrentStep(); // Mark this step as complete
     }
   };
 
-  // Get columns of csvData or uploadedData depending on which is available
+  // Dynamically generate columns for the table preview
   const columns: GridColDef[] = csvData.length
     ? Object.keys(csvData[0]).map((key) => ({
         field: key,
@@ -58,13 +47,13 @@ const UploadPage: React.FC<UploadPageProps> = ({
         minWidth: 100,
       }))
     : uploadedData.length
-      ? Object.keys(uploadedData[0]).map((key) => ({
-          field: key,
-          headerName: key,
-          flex: 1,
-          minWidth: 100,
-        }))
-      : [];
+    ? Object.keys(uploadedData[0]).map((key) => ({
+        field: key,
+        headerName: key,
+        flex: 1,
+        minWidth: 100,
+      }))
+    : [];
 
   return (
     <div className="max-h-full max-w-full pb-28 pr-11">
