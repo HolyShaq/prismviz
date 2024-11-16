@@ -1,18 +1,10 @@
 "use client";
 
-import { Skeleton } from "@mui/material";
 import React, { useContext } from "react";
-import { CsvContext } from "../lib/CsvContext";
-
-interface RibbonProps {
-  currentStep: number;
-  setCurrentStep: (step: number) => void;
-  setCompletedSteps: (steps: boolean[]) => void;
-}
+import { CsvContext } from "../lib/CsvContext"; // Assuming you use `` for CsvContext
+import { useStepContext } from "../lib/StepContext";
 
 interface RibbonButtonProps {
-  //  TODO: Implement icons
-  // icon: React.ReactNode;
   label: string;
   onClick: () => void;
   enabled: boolean;
@@ -26,7 +18,7 @@ const RibbonButton: React.FC<RibbonButtonProps> = ({
   return enabled ? (
     <div
       onClick={onClick}
-      className="flex flex-col w-16 space-y-1 items-center"
+      className="flex flex-col w-16 space-y-1 items-center cursor-pointer"
     >
       <div className="h-10 aspect-square bg-slate-500" />
       <span className="text-xs text-wrap text-center w-max-full">{label}</span>
@@ -36,15 +28,19 @@ const RibbonButton: React.FC<RibbonButtonProps> = ({
   );
 };
 
-const Ribbon: React.FC<RibbonProps> = ({
-  currentStep,
-  setCurrentStep,
-  setCompletedSteps,
-}) => {
+const Ribbon: React.FC = () => {
+  const { currentStep, setCurrentStep, setCompletedSteps, completeCurrentStep, handleNext } =
+    useStepContext();
   const { csvData, clearFile } = useContext(CsvContext);
 
-  const temp = () => {};
+  const temp = () => { }; // Placeholder for additional actions
 
+  const handleClearFile = () => {
+    clearFile(); // Clears file data from CsvContext
+    setCompletedSteps([false, false, false]); // Resets all step completions
+    setCurrentStep(0);
+  };
+  
   const buttonSetsLeft = [
     // Upload
     [],
@@ -101,9 +97,7 @@ const Ribbon: React.FC<RibbonProps> = ({
         key={0}
         label="Clear"
         onClick={() => {
-          clearFile();
-          setCompletedSteps([false, false, false]);
-          setCurrentStep(0);
+          handleClearFile();
         }}
         enabled={csvData.length > 0}
       />,
@@ -111,8 +105,8 @@ const Ribbon: React.FC<RibbonProps> = ({
         key={1}
         label="Proceed"
         onClick={() => {
-          setCompletedSteps([true, false, false]);
-          setCurrentStep(1);
+          completeCurrentStep();
+          handleNext();
         }}
         enabled={csvData.length > 0}
       />,
@@ -126,7 +120,15 @@ const Ribbon: React.FC<RibbonProps> = ({
         onClick={temp}
         enabled={true}
       />,
-      <RibbonButton key={1} label="Proceed" onClick={temp} enabled={true} />,
+      <RibbonButton
+        key={1}
+        label="Proceed"
+        onClick={() => {
+          completeCurrentStep();
+          handleNext();
+        }}
+        enabled={true}
+      />,
     ],
 
     // Visualize
