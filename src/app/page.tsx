@@ -22,7 +22,11 @@ const steps: Step[] = [
 
 const HomeContent: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [completedSteps, setCompletedSteps] = useState<boolean[]>([false, false, false]);
+  const [completedSteps, setCompletedSteps] = useState<boolean[]>([
+    false,
+    false,
+    false,
+  ]);
 
   // Move to the next step
   const handleNext = () => {
@@ -54,7 +58,7 @@ const HomeContent: React.FC = () => {
   const StepComponent = steps[currentStep].component;
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen w-screen max-w-screen max-h-screen overflow-clip">
       <div className="flex flex-row w-full pb-1 items-center space-x-4 px-4 bg-[#d9d9d9]">
         <img src="/prismicon.ico" alt="logo" className="w-16 h-16 my-4" />
         <div className="flex flex-col items-start space-y-1 my-1 w-full">
@@ -63,11 +67,15 @@ const HomeContent: React.FC = () => {
             <span>Home</span>
             <span>Help</span>
           </div>
-          <Ribbon currentStep={currentStep} />
+          <Ribbon
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
+            setCompletedSteps={setCompletedSteps}
+          />
         </div>
       </div>
 
-      <div className="flex flex-row h-full">
+      <div className="flex flex-row h-full max-h-full max-w-full">
         <Sidebar
           steps={steps}
           currentStep={currentStep}
@@ -75,21 +83,12 @@ const HomeContent: React.FC = () => {
           completedSteps={completedSteps}
         />
 
-        <div className="flex flex-col h-full w-full p-4">
+        <div className="flex flex-col max-h-full max-w-full p-4">
           <StepComponent
-            setCurrentStep={setCurrentStep} 
-            onComplete={completeCurrentStep} 
+            setCurrentStep={setCurrentStep}
+            onComplete={completeCurrentStep}
             setCompletedSteps={setCompletedSteps}
           />
-
-          <div className="flex space-x-4 mt-8">
-            <button onClick={handleBack} disabled={currentStep === 0} className="px-4 py-2 bg-gray-300 rounded">
-              Back
-            </button>
-            <button onClick={handleNext} disabled={!completedSteps[currentStep]} className="px-4 py-2 bg-blue-500 text-white rounded">
-              {currentStep === steps.length - 1 ? "Finish" : "Next"}
-            </button>
-          </div>
         </div>
       </div>
     </div>
