@@ -2,7 +2,7 @@
 
 import React from "react";
 import Sidebar from "../components/Sidebar";
-import Ribbon from "../components/Ribbon";
+import Ribbon from "../components/ribbon/Ribbon";
 import UploadPage from "../components/UploadPage";
 import CleanPage from "../components/CleanPage";
 import VisualizePage from "../components/VisualizePage";
