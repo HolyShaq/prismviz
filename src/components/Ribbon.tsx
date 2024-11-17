@@ -10,39 +10,46 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
+import { Tooltip } from "@mui/material";
 
 interface RibbonButtonProps {
-  label: string;
   Icon: React.ElementType; // Material-UI icon component
   onClick: () => void;
   enabled: boolean;
+  tooltip: string;
 }
 
 const RibbonButton: React.FC<RibbonButtonProps> = ({
-  label,
   Icon,
   onClick,
   enabled,
+  tooltip,
 }) => {
   return enabled ? (
-    <div
-      onClick={onClick}
-      className="flex flex-col w-20 space-y-1 items-center cursor-pointer p-2 rounded-md"
-    >
-      <div className="h-10 w-10 flex items-center justify-center text-white">
-        <Icon fontSize="large" /> {/* Render the Material-UI Icon */}
+    <Tooltip title={tooltip} arrow>
+      <div
+        onClick={onClick}
+        className="flex flex-col w-20 space-y-1 items-center cursor-pointer p-2 rounded-md"
+      >
+        <div className="h-10 w-10 flex items-center justify-center text-white">
+          <Icon fontSize="large" /> {/* Render the Material-UI Icon */}
+        </div>
       </div>
-      <span className="text-xs text-wrap text-center text-white">{label}</span>
-    </div>
+    </Tooltip>
   ) : null;
 };
 
 const Ribbon: React.FC = () => {
-  const { currentStep, setCurrentStep, setCompletedSteps, completeCurrentStep, handleNext } =
-    useStepContext();
+  const {
+    currentStep,
+    setCurrentStep,
+    setCompletedSteps,
+    completeCurrentStep,
+    handleNext,
+  } = useStepContext();
   const { csvData, clearFile } = useContext(CsvContext);
 
-  const temp = () => { }; // Placeholder for additional actions
+  const temp = () => {}; // Placeholder for additional actions
 
   const handleClearFile = () => {
     clearFile(); // Clears file data from CsvContext
@@ -58,24 +65,24 @@ const Ribbon: React.FC = () => {
     [
       <RibbonButton
         key={0}
-        label="Remove Duplicate"
         Icon={RemoveCircleIcon}
         onClick={temp}
         enabled={true}
+        tooltip="Remove Duplicate: Deletes duplicate entries"
       />,
       <RibbonButton
         key={1}
-        label="Remove Invalid"
         Icon={CheckCircleIcon}
         onClick={temp}
         enabled={true}
+        tooltip="Remove Invalid: Identifies and removes invalid data"
       />,
       <RibbonButton
         key={2}
-        label="Remove Empty"
         Icon={DeleteIcon}
         onClick={temp}
         enabled={true}
+        tooltip="Remove Empty: Deletes empty entries"
       />,
     ],
 
@@ -83,17 +90,17 @@ const Ribbon: React.FC = () => {
     [
       <RibbonButton
         key={0}
-        label="Add a Chart"
         Icon={BarChartIcon}
         onClick={temp}
         enabled={true}
+        tooltip="Add a Chart: Visualize your data with a chart"
       />,
       <RibbonButton
         key={1}
-        label="Add a Textbox"
         Icon={TextFieldsIcon}
         onClick={temp}
         enabled={true}
+        tooltip="Add a Textbox: Annotate your visualization"
       />,
     ],
   ];
@@ -103,22 +110,20 @@ const Ribbon: React.FC = () => {
     [
       <RibbonButton
         key={0}
-        label="Clear"
         Icon={DeleteIcon}
-        onClick={() => {
-          handleClearFile();
-        }}
+        onClick={handleClearFile}
         enabled={csvData.length > 0}
+        tooltip="Clear: Removes all uploaded data"
       />,
       <RibbonButton
         key={1}
-        label="Proceed"
         Icon={CheckCircleIcon}
         onClick={() => {
           completeCurrentStep();
           handleNext();
         }}
         enabled={csvData.length > 0}
+        tooltip="Proceed: Move to the next step"
       />,
     ],
 
@@ -126,20 +131,20 @@ const Ribbon: React.FC = () => {
     [
       <RibbonButton
         key={0}
-        label="Delete Rows"
         Icon={DeleteIcon}
         onClick={temp}
         enabled={true}
+        tooltip="Delete Rows: Remove selected rows"
       />,
       <RibbonButton
         key={1}
-        label="Proceed"
         Icon={CheckCircleIcon}
         onClick={() => {
           completeCurrentStep();
           handleNext();
         }}
         enabled={true}
+        tooltip="Proceed: Move to the next step"
       />,
     ],
 
@@ -147,17 +152,17 @@ const Ribbon: React.FC = () => {
     [
       <RibbonButton
         key={0}
-        label="Preview"
         Icon={BarChartIcon}
         onClick={temp}
         enabled={true}
+        tooltip="Preview: View your chart before finalizing"
       />,
       <RibbonButton
         key={1}
-        label="Print"
         Icon={CheckCircleIcon}
         onClick={temp}
         enabled={true}
+        tooltip="Print: Print your chart and annotations"
       />,
     ],
   ];
