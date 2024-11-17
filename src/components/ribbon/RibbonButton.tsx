@@ -1,27 +1,31 @@
 import React from "react";
+import { Tooltip } from "@mui/material";
 
 interface RibbonButtonProps {
-  label: string;
+  Icon: React.ElementType; // Material-UI icon component
   onClick: () => void;
   enabled: boolean;
+  tooltip: string;
 }
 
 const RibbonButton: React.FC<RibbonButtonProps> = ({
-  label,
+  Icon,
   onClick,
   enabled,
+  tooltip,
 }) => {
   return enabled ? (
-    <div
-      onClick={onClick}
-      className="flex flex-col w-16 space-y-1 items-center cursor-pointer"
-    >
-      <div className="h-10 aspect-square bg-slate-500" />
-      <span className="text-xs text-wrap text-center w-max-full">{label}</span>
-    </div>
-  ) : (
-    <></>
-  );
+    <Tooltip title={tooltip} arrow>
+      <div
+        onClick={onClick}
+        className="flex flex-col w-20 space-y-1 items-center cursor-pointer p-2 rounded-md"
+      >
+        <div className="h-10 w-10 flex items-center justify-center text-white">
+          <Icon fontSize="large" /> {/* Render the Material-UI Icon */}
+        </div>
+      </div>
+    </Tooltip>
+  ) : null;
 };
 
 export default RibbonButton;

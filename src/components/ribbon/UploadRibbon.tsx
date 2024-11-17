@@ -3,6 +3,10 @@ import RibbonButton from "./RibbonButton";
 import { CsvContext } from "../../lib/CsvContext";
 import { useStepContext } from "../../lib/StepContext";
 
+// Material UI Icons
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
 const UploadRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
   left = false,
   right = false,
@@ -33,20 +37,20 @@ const UploadRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
       // Right Ribbon Buttons
       <RibbonButton
         key={0}
-        label="Clear"
-        onClick={() => {
-          handleClearFile();
-        }}
+        Icon={DeleteIcon}
+        onClick={handleClearFile}
         enabled={csvData.length > 0}
+        tooltip="Clear: Removes all uploaded data"
       />,
       <RibbonButton
         key={1}
-        label="Proceed"
+        Icon={CheckCircleIcon}
         onClick={() => {
           completeCurrentStep();
           handleNext();
         }}
         enabled={csvData.length > 0}
+        tooltip="Proceed: Move to the next step"
       />,
     ],
   };

@@ -3,6 +3,11 @@ import RibbonButton from "./RibbonButton";
 import { CsvContext } from "../../lib/CsvContext";
 import { useStepContext } from "../../lib/StepContext";
 
+// Material-UI icons
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
   left = false,
   right = false,
@@ -23,21 +28,24 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
       // Left Ribbon Buttons
       <RibbonButton
         key={0}
-        label="Remove Duplicate"
+        Icon={RemoveCircleIcon}
         onClick={() => {}}
         enabled={true}
+        tooltip="Remove Duplicate: Deletes duplicate entries"
       />,
       <RibbonButton
         key={1}
-        label="Remove Invalid"
+        Icon={CheckCircleIcon}
         onClick={() => {}}
         enabled={true}
+        tooltip="Remove Invalid: Identifies and removes invalid data"
       />,
       <RibbonButton
         key={2}
-        label="Remove Empty"
+        Icon={DeleteIcon}
         onClick={() => {}}
         enabled={true}
+        tooltip="Remove Empty: Deletes empty entries"
       />,
     ],
 
@@ -45,12 +53,20 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
       // Right Ribbon Buttons
       <RibbonButton
         key={0}
-        label="Proceed"
+        Icon={DeleteIcon}
+        onClick={() => {}}
+        enabled={true}
+        tooltip="Delete Rows: Remove selected rows"
+      />,
+      <RibbonButton
+        key={1}
+        Icon={CheckCircleIcon}
         onClick={() => {
           completeCurrentStep();
           handleNext();
         }}
         enabled={true}
+        tooltip="Proceed: Move to the next step"
       />,
     ],
   };

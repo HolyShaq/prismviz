@@ -104,6 +104,7 @@ const config: Config = {
         h3: ['var(--font-size-h3)', { lineHeight: '1.5' }],
         h4: ['var(--font-size-h4)', { lineHeight: '1.5' }],
         h5: ['var(--font-size-h5)', { lineHeight: '1.5' }],
+        h6: ['var(--font-size-h5)', { lineHeight: '1.5' }],
         p1: ['var(--font-size-p1)', { lineHeight: '1.75' }],
         p2: ['var(--font-size-p2)', { lineHeight: '1.75' }],
       },
