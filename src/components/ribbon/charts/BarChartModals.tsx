@@ -20,7 +20,7 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
   return (
     <>
       <StepModal
-        header="Please select the columns for the x-axis"
+        header="Please select a column for the x-axis"
         open={invoked}
         onClose={() => {
           setInvoked(false);
@@ -34,7 +34,7 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
       />
 
       <StepModal
-        header="Please select the columns for the y-axis"
+        header="Please select a column for the y-axis"
         open={yAxisModalOpen}
         onClose={() => {
           setYAxisModalOpen(false);
