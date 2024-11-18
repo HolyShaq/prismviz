@@ -27,17 +27,7 @@ const VisualizePage: React.FC = () => {
     alert("Report generated successfully!");
   };
 
-  return (
-    <div>
-      <h2>Visualization and Reporting</h2>
-      <button
-        onClick={handleReportGeneration}
-        className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
-      >
-        Generate Report
-      </button>
-    </div>
-  );
+  return <div></div>;
 };
 
 export default VisualizePage;
