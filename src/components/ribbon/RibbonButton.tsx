@@ -6,6 +6,7 @@ interface RibbonButtonProps {
   onClick: () => void;
   enabled: boolean;
   tooltip: string;
+  ref?: React.RefObject<HTMLDivElement>;
 }
 
 const RibbonButton: React.FC<RibbonButtonProps> = ({
@@ -13,11 +14,13 @@ const RibbonButton: React.FC<RibbonButtonProps> = ({
   onClick,
   enabled,
   tooltip,
+  ref,
 }) => {
   return enabled ? (
     <Tooltip title={tooltip} arrow>
       <div
         onClick={onClick}
+        ref={ref}
         className="flex flex-col w-20 space-y-1 items-center cursor-pointer p-2 rounded-md"
       >
         <div className="h-10 w-10 flex items-center justify-center text-white">
