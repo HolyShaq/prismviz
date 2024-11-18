@@ -1,7 +1,8 @@
 import React, { useState, useContext, useRef } from "react";
 import RibbonButton from "./RibbonButton";
+import { CreateBarChart } from "./charts/BarChartModals";
 import { CsvContext } from "../../lib/CsvContext";
-import { useStepContext } from "../../lib/StepContext";
+import { useChartContext } from "../../lib/ChartContext";
 
 // Material UI
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -21,12 +22,18 @@ interface VisualizeRibbonProps {
 interface PopoverButtonProps {
   Icon: React.ElementType;
   label: string;
+  onClick?: () => void;
 }
 
 // Static Components
-const PopoverButton: React.FC<PopoverButtonProps> = ({ Icon, label }) => {
+const PopoverButton: React.FC<PopoverButtonProps> = ({
+  Icon,
+  label,
+  onClick,
+}) => {
   return (
     <div
+      onClick={onClick}
       className="w-24 h-24 rounded-md flex flex-col justify-center items-center outline
         text-[#313154] hover:text-white
         bg-[#b4b4b4]
@@ -45,7 +52,9 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
 }) => {
   // Initialization
   const addChartRef = useRef(null);
+  const { addFigure } = useChartContext();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const [isBarChartInvoked, setIsBarChartInvoked] = useState(false);
 
   // Components
   const AddChartPopover: React.FC = () => {
@@ -65,7 +74,14 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
       >
         <div className="flex flex-col space-y-6 p-6 bg-white rounded-xl shadow-md items-center">
           <div className="flex flex-row space-x-6">
-            <PopoverButton Icon={BarChartIcon} label="Bar Chart" />
+            <PopoverButton
+              Icon={BarChartIcon}
+              label="Bar Chart"
+              onClick={() => {
+                setIsBarChartInvoked(true);
+                setIsPopoverOpen(false);
+              }}
+            />
             <PopoverButton Icon={PieChartIcon} label="Pie Chart" />
           </div>
           <div className="flex flex-row space-x-6">
@@ -105,7 +121,13 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
       <RibbonButton
         key={1}
         Icon={TextFieldsIcon}
-        onClick={() => {}}
+        onClick={() => {
+          addFigure(
+            <div className="flex flex-row bg-white justify-center items-center w-64 h-32">
+              <p className="text-sm">Text</p>
+            </div>,
+          );
+        }}
         enabled={true}
         tooltip="Add a Textbox: Annotate your visualization"
       />,
@@ -135,6 +157,10 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
       {left ? VisualizeButtonSet.left.map((button) => button) : null}
       {right ? VisualizeButtonSet.right.map((button) => button) : null}
       <AddChartPopover />
+      <CreateBarChart
+        invoked={isBarChartInvoked}
+        setInvoked={setIsBarChartInvoked}
+      />
     </>
   );
 };

@@ -3,9 +3,11 @@
 import React, { useEffect, useContext, useState } from "react";
 import { CsvContext } from "../lib/CsvContext";
 import { useStepContext } from "../lib/StepContext";
+import { useChartContext } from "../lib/ChartContext";
 
 const VisualizePage: React.FC = () => {
   const { csvData } = useContext(CsvContext);
+  const { figures } = useChartContext();
   const { completeCurrentStep } = useStepContext();
   const [isCompleteNotified, setIsCompleteNotified] = useState(false);
 
@@ -22,12 +24,15 @@ const VisualizePage: React.FC = () => {
     return <p>Please complete data cleaning before visualizing.</p>;
   }
 
-  const handleReportGeneration = () => {
-    console.log("Generating report based on cleaned data:", csvData);
-    alert("Report generated successfully!");
-  };
-
-  return <div></div>;
+  return (
+    <div className="h-full w-full max-h-full max-w-full">
+      <div className="flex flex-col space-y-2 justify-center">
+        {figures.map((figure, index) => (
+          <React.Fragment key={index}>{figure}</React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default VisualizePage;
