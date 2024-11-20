@@ -3,71 +3,105 @@
 import React, { createContext, useState, ReactNode, useContext } from "react";
 
 type StepContextType = {
-    currentStep: number;
-    setCurrentStep: (step: number) => void;
-    completedSteps: boolean[];
-    setCompletedSteps: (steps: boolean[]) => void;
-    completeCurrentStep: () => void;
-    handleNext: () => void;
-    handleBack: () => void;
+  currentStep: number;
+  setCurrentStep: (step: number) => void;
+  completedSteps: boolean[];
+  setCompletedSteps: (steps: boolean[]) => void;
+  completeCurrentStep: () => void;
+  handleStepNext: () => void;
+  handleStepBack: () => void;
+  // Cleaning step properties
+  cleanStep: number;
+  setCleanStep: (step: number) => void;
+  cleanStepCompleted: boolean[];
+  setCleanStepCompleted: (steps: boolean[]) => void;
+  completeCleanStep: () => void;
+  isCurrentCleanStepComplete: boolean; 
+  handleCleanStepNext: () => void;
+  handleCleanStepBack: () => void;
 };
 
-export const StepContext = createContext<StepContextType | undefined>(undefined);
+export const StepContext = createContext<StepContextType | undefined>(
+  undefined
+);
 
 export const StepContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [currentStep, setCurrentStep] = useState<number>(0);
-    const [completedSteps, setCompletedSteps] = useState<boolean[]>([false, false, false]);
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [completedSteps, setCompletedSteps] = useState<boolean[]>([false, false, false]);
+  const [cleanStep, setCleanStep] = useState<number>(0);
+  const [cleanStepCompleted, setCleanStepCompleted] = useState<boolean[]>([false, false, false]);
+  
 
-    // Mark the current step as complete
-    const completeCurrentStep = () => {
-        setCompletedSteps((prevSteps) => {
-            if (prevSteps[currentStep]) {
-                return prevSteps;
-            }
-            const newSteps = [...prevSteps];
-            newSteps[currentStep] = true;
-            return newSteps;
-        });
-    };
+  const completeCurrentStep = () => {
+    setCompletedSteps((prev) => {
+      const newSteps = [...prev];
+      newSteps[currentStep] = true;
+      return newSteps;
+    });
+  };
 
-    // Move back to the previous step
-    const handleBack = () => {
-        if (currentStep > 0) {
-            setCurrentStep((prevStep) => prevStep - 1);
-        }
-    };
-    
-    // Move to the next step
-    const handleNext = () => {
-        if (currentStep < completedSteps.length - 1 && completedSteps[currentStep]) {
-            setCurrentStep((prevStep) => prevStep + 1);
-        }
-    };
+  const handleStepNext = () => {
+    if (currentStep < completedSteps.length - 1 && completedSteps[currentStep]) {
+      setCurrentStep((prev) => prev + 1);
+    }
+  };
 
+  const handleStepBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1);
+    }
+  };
 
+  const completeCleanStep = () => {
+    setCleanStepCompleted((prev) => {
+      const newSteps = [...prev];
+      newSteps[cleanStep] = true; // Mark current step as complete
+      return newSteps;
+    });
+  };
 
-    return (
-        <StepContext.Provider
-            value={{
-                currentStep,
-                setCurrentStep,
-                completedSteps,
-                setCompletedSteps,
-                completeCurrentStep,
-                handleNext,
-                handleBack,
-            }}
-        >
-            {children}
-        </StepContext.Provider>
-    );
+  const handleCleanStepNext = () => {
+    setCleanStep((prev) => (prev < cleanStepCompleted.length - 1 ? prev + 1 : prev));
+  };
+
+  const handleCleanStepBack = () => {
+    if (cleanStep > 0) {
+      setCleanStep((prev) => prev - 1);
+    }
+  };
+
+  const isCurrentCleanStepComplete = cleanStepCompleted[cleanStep] || false; // Derived state
+
+  return (
+    <StepContext.Provider
+      value={{
+        currentStep,
+        setCurrentStep,
+        completedSteps,
+        setCompletedSteps,
+        completeCurrentStep,
+        handleStepNext,
+        handleStepBack,
+        // Cleaning step methods
+        cleanStep,
+        setCleanStep,
+        cleanStepCompleted,
+        setCleanStepCompleted,
+        completeCleanStep,
+        handleCleanStepNext,
+        handleCleanStepBack,
+        isCurrentCleanStepComplete,
+      }}
+    >
+      {children}
+    </StepContext.Provider>
+  );
 };
 
-// Custom hook to use StepContext in components
 export const useStepContext = () => {
-    const context = useContext(StepContext);
-    if (!context) {
-        throw new Error("useStepContext must be used within a StepContextProvider");
-    }
-    return context;
+  const context = useContext(StepContext);
+  if (!context) {
+    throw new Error("useStepContext must be used within a StepContextProvider");
+  }
+  return context;
 };
