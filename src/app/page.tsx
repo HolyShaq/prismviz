@@ -8,6 +8,7 @@ import CleanPage from "../components/CleanPage";
 import VisualizePage from "../components/VisualizePage";
 import { CsvContextProvider, CsvContext } from "../lib/CsvContext";
 import { StepContextProvider, useStepContext } from "../lib/StepContext";
+import { ChartContextProvider } from "../lib/ChartContext";
 
 type Step = {
   name: string;
@@ -43,11 +44,11 @@ const HomeContent: React.FC = () => {
         </div>
       </div>
       {/* Main Content */}
-      <div className="flex h-screen bg-primary-main text-neutral-white-10">
+      <div className="flex h-full max-h-full bg-primary-main text-neutral-white-10">
         {/* Sidebar */}
         <Sidebar steps={steps} />
         {/* Step Component */}
-        <div className="flex flex-col flex-grow p-6 overflow-hidden">
+        <div className="flex flex-col flex-grow p-6 max-h-full overflow-hidden">
           <StepComponent />
         </div>
       </div>
@@ -60,7 +61,9 @@ export default function Home() {
   return (
     <CsvContextProvider>
       <StepContextProvider>
-        <HomeContent />
+        <ChartContextProvider>
+          <HomeContent />
+        </ChartContextProvider>
       </StepContextProvider>
     </CsvContextProvider>
   );
