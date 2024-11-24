@@ -8,6 +8,8 @@ import {
   MenuItem,
   Popover,
 } from "@mui/material";
+import Fade from "@mui/material/Fade";
+import Slide from "@mui/material/Slide";
 import { DataGrid, GridColDef, GridColumnHeaderParams } from "@mui/x-data-grid";
 import { CsvContext } from "../../../lib/CsvContext";
 
@@ -168,74 +170,76 @@ const StepModal: React.FC<StepModalProps> = ({
     : [];
   return (
     <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "80%",
-          bgcolor: "background.paper",
-          border: "2px solid #000",
-          boxShadow: 24,
-          p: 4,
-        }}
-      >
-        <div className="flex flex-row w-full justify-center mb-4">
-          <span className="text-2xl font-bold">
-            {header}
-            {optional ? " (Optional)" : ""}
-          </span>
-        </div>
-        <Box sx={{ height: 400, width: "100%" }}>
-          <DataGrid
-            rows={csvData.map((row, index) => ({
-              id: index,
-              ...row,
-            }))}
-            columns={columns}
-            disableColumnMenu={true}
-            disableColumnSorting={true}
-          />
-        </Box>
-        <div className="flex flex-row space-x-4 justify-end mt-4">
-          <Button
-            onClick={() => {
-              columnSelection
-                .filter((col) => col.selected)
-                .map((col) => {
-                  col.setSelected(false);
-                  setChoice(col.name);
-                  setChoiceMetric(col.metric);
-                });
-              onConfirm();
+      <Slide direction="up" in={open}>
+        <div className="flex h-screen justify-center items-center">
+          <Box
+            sx={{
+              width: "80%",
+              bgcolor: "background.paper",
+              border: "2px solid #000",
+              boxShadow: 24,
+              p: 4,
             }}
-            disabled={
-              optional ? false : !columnSelection.some((col) => col.selected)
-            }
-            color="primary"
-            variant="contained"
           >
-            Confirm
-          </Button>
-          <Button onClick={onClose} color="secondary" variant="contained">
-            Cancel
-          </Button>
-        </div>
+            <div className="flex flex-row w-full justify-center mb-4">
+              <span className="text-2xl font-bold">
+                {header}
+                {optional ? " (Optional)" : ""}
+              </span>
+            </div>
+            <Box sx={{ height: 400, width: "100%" }}>
+              <DataGrid
+                rows={csvData.map((row, index) => ({
+                  id: index,
+                  ...row,
+                }))}
+                columns={columns}
+                disableColumnMenu={true}
+                disableColumnSorting={true}
+              />
+            </Box>
+            <div className="flex flex-row space-x-4 justify-end mt-4">
+              <Button
+                onClick={() => {
+                  columnSelection
+                    .filter((col) => col.selected)
+                    .map((col) => {
+                      col.setSelected(false);
+                      setChoice(col.name);
+                      setChoiceMetric(col.metric);
+                    });
+                  onConfirm();
+                }}
+                disabled={
+                  optional
+                    ? false
+                    : !columnSelection.some((col) => col.selected)
+                }
+                color="primary"
+                variant="contained"
+              >
+                Confirm
+              </Button>
+              <Button onClick={onClose} color="secondary" variant="contained">
+                Cancel
+              </Button>
+            </div>
 
-        {columnSelection.map((col, index) => {
-          return (
-            <PopoverMetric
-              key={index}
-              anchorEl={col.ref.current}
-              open={col.open}
-              setOpen={col.setOpen}
-              metric={col.metric}
-              setMetric={col.setMetric}
-            />
-          );
-        })}
-      </Box>
+            {columnSelection.map((col, index) => {
+              return (
+                <PopoverMetric
+                  key={index}
+                  anchorEl={col.ref.current}
+                  open={col.open}
+                  setOpen={col.setOpen}
+                  metric={col.metric}
+                  setMetric={col.setMetric}
+                />
+              );
+            })}
+          </Box>
+        </div>
+      </Slide>
     </Modal>
   );
 };
