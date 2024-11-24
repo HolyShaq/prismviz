@@ -78,6 +78,8 @@ const PopoverMetric: React.FC<PopeverMetric> = ({
         <MenuItem value="average">Average</MenuItem>
         <MenuItem value="minimum">Minimum</MenuItem>
         <MenuItem value="maximum">Maximum</MenuItem>
+        <MenuItem value="median">Median</MenuItem>
+        <MenuItem value="mode">Mode</MenuItem>
       </Select>
     </Popover>
   );

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import StepModal from "./StepModal";
 import { useChartContext } from "@/lib/ChartContext";
+import { BarChart } from "../../charts/Bar";
 
 interface CreateBarChartProps {
   invoked: boolean;
@@ -14,19 +15,26 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
   const { addFigure } = useChartContext();
 
   const [xAxis, setXAxis] = useState("");
-  const [xMetric, setXMetric] = useState("");
   const [yAxis, setYAxis] = useState("");
+  const [yMetric, setYMetric] = useState("");
   const [yAxisModalOpen, setYAxisModalOpen] = useState(false);
+  const isMounted = useRef(false);
+  const [done, setDone] = useState(false);
 
-  const handleConfirm = () => {
-    console.log("X:", xAxis, xMetric);
-    console.log("Y:", yAxis);
-  };
+  useEffect(() => {
+    if (done) {
+      addFigure(<BarChart x={xAxis} y={yAxis} yMetric={yMetric} />);
+      setDone(false);
+      setXAxis("");
+      setYAxis("");
+      setYMetric("");
+    }
+  }, [done]);
 
   return (
     <>
       <StepModal
-        header="Please select a column for the x-axis"
+        header="Please select a column for the x-axis / bars"
         open={invoked}
         onClose={() => {
           setInvoked(false);
@@ -36,26 +44,21 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
           setYAxisModalOpen(true);
         }}
         setChoice={setXAxis}
-        setChoiceMetric={setXMetric}
         categorical
       />
 
       <StepModal
-        header="Please select a column for the y-axis"
+        header="Please select a column for the y-axis / size"
         open={yAxisModalOpen}
         onClose={() => {
           setYAxisModalOpen(false);
         }}
         onConfirm={() => {
           setYAxisModalOpen(false);
-          handleConfirm();
-          //addFigure(
-          //  <div className="flex flex-col items-center justify-center h-64 w-64 bg-white">
-          //    <p className="text-lg bold">Bar Chart!</p>
-          //  </div>,
-          //);
+          setDone(true);
         }}
         setChoice={setYAxis}
+        setChoiceMetric={setYMetric}
         optional
       />
     </>

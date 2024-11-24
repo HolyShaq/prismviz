@@ -120,7 +120,6 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
         Icon={AddchartIcon}
         onClick={() => {
           setIsPopoverOpen(true);
-          console.log("Adding a chart...");
         }}
         enabled={true}
         tooltip="Add a Chart:
@@ -168,7 +167,6 @@ See what report looks like."
         tooltip="Print Report:
 Save your report as PDF or Image"
       />,
-      
     ],
   };
 
