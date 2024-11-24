@@ -4,9 +4,13 @@ import { useStepContext } from "../../lib/StepContext";
 import { CsvContext } from "../../lib/CsvContext";
 
 // Material-UI icons
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import SearchOffIcon from '@mui/icons-material/SearchOff';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
+
+// Material UI Icons for proceed and clearing uploaded data
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
   left = false,
@@ -38,6 +42,11 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
     left: [
       <RibbonButton
         key={0}
+        Icon={SearchOffIcon}
+        onClick={() => {}}
+        enabled={true}
+        tooltip="Handle Missing Data: 
+Delete or Replace empty entries"
         Icon={DeleteIcon}
         onClick={() => {
           console.log("Handle Missing Data action triggered.");
@@ -50,6 +59,11 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
       <RibbonButton
         key={1}
         Icon={RemoveCircleIcon}
+        onClick={() => {}}
+        enabled={true}
+        tooltip="Remove Duplicate Entries:
+Delete duplicate entries"
+        Icon={RemoveCircleIcon}
         onClick={() => {
           console.log("Remove Duplicate Entries action triggered.");
           triggerCleaningStep();
@@ -59,6 +73,11 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
       />,
       <RibbonButton
         key={2}
+        Icon={CheckCircleIcon}
+        onClick={() => {}}
+        enabled={true}
+        tooltip="Validate Column Entry:
+Delete or Replace unsual entries"
         Icon={CheckCircleIcon}
         onClick={() => {
           console.log("Validate Column Entries action triggered.");
@@ -76,7 +95,19 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
           console.log("Delete Rows action executed.");
         }}
         enabled={true}
-        tooltip="Delete Rows: Remove selected rows"
+        tooltip="Delete Selected Row/s:
+Delete specific rows"
+      />,
+      <RibbonButton
+        key={1}
+        Icon={ArrowCircleRightIcon}
+        onClick={() => {
+          completeCurrentStep();
+          handleNext();
+        }}
+        enabled={true}
+        tooltip="Proceed to Data Visualization:
+Proceed to the next section"
       />,
       // Conditionally include the "Proceed" button if all steps are complete
       ...(cleanStepCompleted.every((step) => step === true)

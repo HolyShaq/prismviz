@@ -13,7 +13,7 @@ const Ribbon: React.FC = () => {
   const ActiveButtonSet = buttonSets[currentStep];
 
   return (
-    <div className="flex flex-row h-20 w-full justify-between">
+    <div className="flex flex-row h-10 w-full justify-between">
       <div className="flex flex-row space-x-2">
         <ActiveButtonSet left />
       </div>

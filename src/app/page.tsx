@@ -8,6 +8,7 @@ import CleanPage from "../components/CleanPage";
 import VisualizePage from "../components/VisualizePage";
 import { CsvContextProvider, CsvContext } from "../lib/CsvContext";
 import { StepContextProvider, useStepContext } from "../lib/StepContext";
+import { ChartContextProvider } from "../lib/ChartContext";
 
 type Step = {
   name: string;
@@ -30,24 +31,29 @@ const HomeContent: React.FC = () => {
   return (
     <div className="flex flex-col h-screen bg-primary-main text-neutral-white-10">
       {/* Navigation Bar  */}
-      <div className="flex items-center justify-between px-6 py-3 bg-primary-hover shadow-md">
-        <img src="/prismicon.ico" alt="logo" className="w-16 h-16 my-4" />
+      <div className="flex items-center px-6 py-3 bg-primary-hover shadow-md">
+        <img src="/prismicon.ico" alt="logo" className="w-12 h-12" />
         <div className="flex flex-col items-start space-y-1 my-1 w-full">
-          <div className="flex space-x-6 font-semibold text-white ml-4">
+          <div className="flex space-x-6 font-semibold text-white ml-2">
             <span className="cursor-pointer hover:opacity-75">File</span>
             <span className="cursor-pointer hover:opacity-75">Home</span>
             <span className="cursor-pointer hover:opacity-75">Help</span>
           </div>
-          {/* Ribbon Section */}
-          <Ribbon />
+          {/* Background Section sa Nav Bar */}
+          <div className="bg-primary-pressed rounded-lg py-1 px-4 w-full">
+            {/* Ribbon Section */}
+            <Ribbon />
+          </div>
         </div>
       </div>
       {/* Main Content */}
-      <div className="flex h-screen bg-primary-main text-neutral-white-10">
+      <div className="flex h-full max-h-full bg-primary-main text-neutral-white-10">
         {/* Sidebar */}
-        <Sidebar steps={steps} />
+        <div className="h-full">
+          <Sidebar steps={steps} />
+        </div>
         {/* Step Component */}
-        <div className="flex flex-col flex-grow p-6 overflow-hidden">
+        <div className="flex flex-col flex-grow p-6 max-h-full overflow-hidden">
           <StepComponent />
         </div>
       </div>
@@ -60,7 +66,9 @@ export default function Home() {
   return (
     <CsvContextProvider>
       <StepContextProvider>
-        <HomeContent />
+        <ChartContextProvider>
+          <HomeContent />
+        </ChartContextProvider>
       </StepContextProvider>
     </CsvContextProvider>
   );
