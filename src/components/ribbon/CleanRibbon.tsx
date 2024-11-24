@@ -16,7 +16,7 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
   left = false,
   right = false,
 }) => {
-  const { cleanStep, completeCleanStep, completeCurrentStep, handleStepNext, cleanStepCompleted } = useStepContext(); // Access cleaning step context
+  const { cleanStep, setCleanStep, completeCleanStep, completeCurrentStep, setCleanStepCompleted, cleanStepCompleted } = useStepContext(); // Access cleaning step context
   const { handleMissingData, removeDuplicates, validateColumns } = useContext(CsvContext); // Access cleaning methods from CsvContext
 
   type CleanButtonSetType = {
@@ -24,67 +24,58 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
     right: Array<React.ReactElement<typeof RibbonButton>>;
   };
   // Trigger cleaning logic based on the current step
-  const triggerCleaningStep = () => {
-    if (cleanStep === 0) {
-      handleMissingData();
-    } else if (cleanStep === 1) {
-      removeDuplicates();
-    } else if (cleanStep === 2) {
-      validateColumns();
-    }
-    completeCleanStep(); // Mark the current cleaning step as complete
+  const triggerCleaningStep = (step: number) => {
+    console.log(`Triggering cleaning for step: ${step}`);
+
+    // Allow navigation to any step
+    setCleanStep(step);
+
+    // Execute cleaning logic for the step
+    if (step === 0) handleMissingData();
+    if (step === 1) removeDuplicates();
+    if (step === 2) validateColumns();
+
+    // Mark the step as completed
+    setCleanStepCompleted((prev) => {
+      const updatedSteps = [...prev];
+      updatedSteps[step] = true; // Mark current step as complete
+      if (step < updatedSteps.length - 1) {
+        updatedSteps[step + 1] = true; // Enable the next step
+      }
+      console.log(
+        "Updated cleanStepCompleted after re-triggering step logic:",
+        updatedSteps
+      );
+      return updatedSteps;
+    });
   };
 
-  // Check if all cleaning steps are complete
-  const allStepsComplete = cleanStepCompleted.every((step) => step === true);
 
   const CleanButtonSet: CleanButtonSetType = {
     left: [
       <RibbonButton
         key={0}
         Icon={SearchOffIcon}
-        onClick={() => {}}
+        onClick={() => triggerCleaningStep(0)}
         enabled={true}
         tooltip="Handle Missing Data: 
 Delete or Replace empty entries"
-        Icon={DeleteIcon}
-        onClick={() => {
-          console.log("Handle Missing Data action triggered.");
-          alert("Handle Missing Data action triggered.");
-          triggerCleaningStep();
-        }}
-        enabled={cleanStep === 0}
-        tooltip="Handle Missing Data: Deletes or fills missing values"
       />,
       <RibbonButton
         key={1}
         Icon={RemoveCircleIcon}
-        onClick={() => {}}
+        onClick={() => triggerCleaningStep(1)}
         enabled={true}
         tooltip="Remove Duplicate Entries:
 Delete duplicate entries"
-        Icon={RemoveCircleIcon}
-        onClick={() => {
-          console.log("Remove Duplicate Entries action triggered.");
-          triggerCleaningStep();
-        }}
-        enabled={cleanStep === 1}
-        tooltip="Remove Duplicate Entries: Deletes duplicate rows"
       />,
       <RibbonButton
         key={2}
         Icon={CheckCircleIcon}
-        onClick={() => {}}
+        onClick={() => triggerCleaningStep(2)}
         enabled={true}
         tooltip="Validate Column Entry:
 Delete or Replace unsual entries"
-        Icon={CheckCircleIcon}
-        onClick={() => {
-          console.log("Validate Column Entries action triggered.");
-          triggerCleaningStep(); // Trigger cleaning for "Validate Column Entries"
-        }}
-        enabled={cleanStep === 2}
-        tooltip="Validate Column Entries: Ensures column values meet criteria"
       />,
     ],
     right: [
@@ -96,41 +87,39 @@ Delete or Replace unsual entries"
         }}
         enabled={true}
         tooltip="Delete Selected Row/s:
-Delete specific rows"
-      />,
-      <RibbonButton
-        key={1}
-        Icon={ArrowCircleRightIcon}
-        onClick={() => {
-          completeCurrentStep();
-          handleNext();
-        }}
-        enabled={true}
-        tooltip="Proceed to Data Visualization:
-Proceed to the next section"
+    Delete specific rows"
       />,
       // Conditionally include the "Proceed" button if all steps are complete
-      ...(cleanStepCompleted.every((step) => step === true)
+      ...(cleanStepCompleted.every((step) => step === true) && cleanStep === cleanStepCompleted.length - 1
         ? [
-          <RibbonButton
-            key={1}
-            Icon={CheckCircleIcon}
-            onClick={() => {
-              console.log("Proceed action executed.");
-              completeCurrentStep();
-              handleStepNext();
-            }}
-            enabled={true}
-            tooltip="Proceed: Move to the next step"
-          />,
-        ]
+            <RibbonButton
+              key={1}
+              Icon={ArrowCircleRightIcon}
+              onClick={() => {
+                completeCurrentStep();
+              }}
+              enabled={true}
+              tooltip="Proceed to Data Visualization:
+      Proceed to the next section"
+            />,
+          ]
         : []), // Return an empty array if the condition is not met
     ],
   };
 
   return (
     <>
-      {left ? CleanButtonSet.left.map((button) => button) : null}
+      {left ? CleanButtonSet.left.map((button, index) => (
+        <div
+          style={{
+            opacity: cleanStepCompleted[index] || cleanStep === index ? 1 : 0.5, // Fully visible if the step is complete or it's the current step
+            pointerEvents: cleanStepCompleted[index] || cleanStep === index ? "auto" : "none", // Disable interaction for incomplete steps
+          }}
+          key={index}
+        >
+          {button}
+        </div>
+      )) : null}
       {right ? CleanButtonSet.right.map((button) => button) : null}
     </>
   );
