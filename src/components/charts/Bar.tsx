@@ -18,6 +18,9 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
   const [yAxis, setYAxis] = useState(y);
   const [yMetricAxis, setYMetricAxis] = useState(yMetric);
 
+  const capitalize = (str: any) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
   const options = {
     responsive: true,
     plugins: {
@@ -26,7 +29,9 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
       },
       title: {
         display: true,
-        text: "Hello Owrld",
+        text:
+          (yAxis ? capitalize(yMetricAxis) + " " + yAxis + " per " : "") +
+          xAxis,
       },
     },
   };
@@ -74,7 +79,6 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
     labels: labels,
     datasets: [
       {
-        label: "",
         data: data,
         backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
