@@ -56,6 +56,7 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
           //);
         }}
         setChoice={setYAxis}
+        optional
       />
     </>
   );

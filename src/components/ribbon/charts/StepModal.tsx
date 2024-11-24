@@ -182,7 +182,10 @@ const StepModal: React.FC<StepModalProps> = ({
         }}
       >
         <div className="flex flex-row w-full justify-center mb-4">
-          <span className="text-2xl font-bold">{header}</span>
+          <span className="text-2xl font-bold">
+            {header}
+            {optional ? " (Optional)" : ""}
+          </span>
         </div>
         <Box sx={{ height: 400, width: "100%" }}>
           <DataGrid
@@ -207,6 +210,9 @@ const StepModal: React.FC<StepModalProps> = ({
                 });
               onConfirm();
             }}
+            disabled={
+              optional ? false : !columnSelection.some((col) => col.selected)
+            }
             color="primary"
             variant="contained"
           >
