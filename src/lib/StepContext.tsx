@@ -8,13 +8,12 @@ type StepContextType = {
   completedSteps: boolean[];
   setCompletedSteps: (steps: boolean[]) => void;
   completeCurrentStep: () => void;
-  handleStepNext: () => void;
   handleStepBack: () => void;
   // Cleaning step properties
   cleanStep: number;
   setCleanStep: (step: number) => void;
   cleanStepCompleted: boolean[];
-  setCleanStepCompleted: (steps: boolean[]) => void;
+  setCleanStepCompleted: React.Dispatch<React.SetStateAction<boolean[]>>;
   completeCleanStep: () => void;
   isCurrentCleanStepComplete: boolean; 
   handleCleanStepNext: () => void;
@@ -38,10 +37,8 @@ export const StepContextProvider: React.FC<{ children: ReactNode }> = ({ childre
       newSteps[currentStep] = true;
       return newSteps;
     });
-  };
-
-  const handleStepNext = () => {
-    if (currentStep < completedSteps.length - 1 && completedSteps[currentStep]) {
+     // Move to the next step immediately after marking as complete
+    if (currentStep < completedSteps.length - 1) {
       setCurrentStep((prev) => prev + 1);
     }
   };
@@ -80,7 +77,6 @@ export const StepContextProvider: React.FC<{ children: ReactNode }> = ({ childre
         completedSteps,
         setCompletedSteps,
         completeCurrentStep,
-        handleStepNext,
         handleStepBack,
         // Cleaning step methods
         cleanStep,
