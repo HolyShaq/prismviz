@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useState, ReactNode } from "react";
+import { StepContextProvider, useStepContext } from "./StepContext";
 import _ from "lodash";
 
 type CsvContextType = {
@@ -34,18 +35,28 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({ children
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState<Record<string, unknown>[]>([]);
 
+  const { setCleanStep, setCleanStepCompleted } = useStepContext(); // Access StepContext methods
+
   // Handle loading a CSV file and its parsed data
   const handleFileLoaded = (file: File, data: Record<string, unknown>[]) => {
     setCsvFile(file);
     setCsvData(data);
+     // Reset the cleaning steps when a new file is uploaded
+    resetCleaningSteps();
   };
 
   // Clear the uploaded file and data
   const clearFile = () => {
     setCsvFile(null);
     setCsvData([]);
+    resetCleaningSteps(); // Reset cleaning steps
   };
 
+  // Reset cleaning steps
+  const resetCleaningSteps = () => {
+    setCleanStep(0); // Start from the first cleaning step
+    setCleanStepCompleted([false, false, false]); // Mark all steps as incomplete
+  };
   /* Data cleaning methods */
 
   // Handle missing data
