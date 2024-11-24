@@ -38,7 +38,6 @@ const UploadPage: React.FC = () => {
     if (file && uploadedData.length > 0) {
       handleFileLoaded(file, uploadedData);
       setIsModalOpen(false); // Close the modal
-      completeCurrentStep(); // Mark this step as complete
     }
   };
 

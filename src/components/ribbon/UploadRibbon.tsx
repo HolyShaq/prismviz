@@ -12,7 +12,7 @@ const UploadRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
   right = false,
 }) => {
   const { csvData, clearFile } = useContext(CsvContext);
-  const { completeCurrentStep, handleStepNext, setCompletedSteps, setCurrentStep } =
+  const { completeCurrentStep, setCompletedSteps, setCurrentStep } =
     useStepContext();
 
   // Functions
@@ -47,7 +47,6 @@ const UploadRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
         Icon={ArrowCircleRightIcon}
         onClick={() => {
           completeCurrentStep();
-          handleStepNext();
         }}
         enabled={csvData.length > 0}
         tooltip="Proceed to Data Cleaning: Proceed to the next section."
