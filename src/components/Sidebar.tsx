@@ -29,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ steps }) => {
   ];
 
   return (
-    <div className="flex flex-col bg-primary-pressed p-2 w-16 h-screen text-neutral-white-10 space-y-2">
+    <div className="flex flex-col bg-primary-pressed p-2 w-16 h-full text-neutral-white-10 space-y-2">
       {steps.map((step, index) => {
         const isDisabled =
           !completedSteps[index] &&

@@ -38,7 +38,8 @@ const CleanPage: React.FC = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh", // Full screen height
+        height: "100%", // Full screen height
+        maxHeight: "100%",
         backgroundColor: "var(--neutral-white-10)",
       }}
     >
