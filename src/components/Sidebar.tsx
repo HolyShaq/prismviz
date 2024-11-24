@@ -3,8 +3,8 @@
 import React, { useContext } from "react";
 import { CsvContext } from "../lib/CsvContext";
 import { useStepContext } from "../lib/StepContext";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
-import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
+import UploadIcon from '@mui/icons-material/Upload';
+import DatasetIcon from '@mui/icons-material/Dataset';
 import AddchartIcon from "@mui/icons-material/Addchart";
 
 type Step = {
@@ -23,13 +23,13 @@ const Sidebar: React.FC<SidebarProps> = ({ steps }) => {
 
   // Define icons for each step
   const stepIcons = [
-    <FileUploadIcon fontSize="medium" />, // Medium size for smaller icons
-    <CleaningServicesIcon fontSize="medium" />,
+    <UploadIcon fontSize="medium" />, // Medium size for smaller icons
+    <DatasetIcon fontSize="medium" />,
     <AddchartIcon fontSize="medium" />,
   ];
 
   return (
-    <div className="flex flex-col bg-primary-pressed p-2 w-16 h-full text-neutral-white-10 space-y-2">
+    <div className="flex flex-col bg-primary-pressed p-2 w-16 h-screen text-neutral-white-10 space-y-2">
       {steps.map((step, index) => {
         const isDisabled =
           !completedSteps[index] &&
