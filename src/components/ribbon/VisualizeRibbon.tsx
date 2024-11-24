@@ -1,6 +1,6 @@
 import React, { useState, useContext, useRef } from "react";
 import RibbonButton from "./RibbonButton";
-import { CreateBarChart } from "./charts/BarChartModals";
+import { CreateBarChart } from "./chart_modals/BarChartModals";
 import { CsvContext } from "../../lib/CsvContext";
 import { useChartContext } from "../../lib/ChartContext";
 
