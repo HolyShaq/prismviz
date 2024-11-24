@@ -37,7 +37,7 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
         }}
         setChoice={setXAxis}
         setChoiceMetric={setXMetric}
-        mustBeNumber
+        categorical
       />
 
       <StepModal

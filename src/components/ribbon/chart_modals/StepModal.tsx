@@ -90,7 +90,7 @@ interface StepModalProps {
   onConfirm: () => void;
   setChoice: (choice: string) => void;
   setChoiceMetric?: (choiceMetric: string) => void;
-  mustBeNumber?: boolean;
+  categorical?: boolean;
   optional?: boolean;
 }
 
@@ -101,7 +101,7 @@ const StepModal: React.FC<StepModalProps> = ({
   onConfirm,
   setChoice,
   setChoiceMetric = () => {},
-  mustBeNumber = false,
+  categorical = false,
   optional = false,
 }) => {
   const { csvData } = useContext(CsvContext);
@@ -111,7 +111,7 @@ const StepModal: React.FC<StepModalProps> = ({
 
     const [selected, setSelected] = useState(false);
     const [open, setOpen] = useState(false);
-    const [metric, setMetric] = useState(type === "string" ? "count" : "");
+    const [metric, setMetric] = useState(type === "number" ? "count" : "");
     const checkRef = useRef(null);
 
     return {
@@ -147,21 +147,19 @@ const StepModal: React.FC<StepModalProps> = ({
         minWidth: 150,
         renderHeader: (params: GridColumnHeaderParams) => (
           <div className="flex flex-row space-x-2 items-center">
-            <Checkbox
-              ref={columnSelection[index].ref}
-              checked={columnSelection[index].selected}
-              onChange={() => {
-                select(index);
+            {(categorical || columnSelection[index].type === "number") && (
+              <Checkbox
+                ref={columnSelection[index].ref}
+                checked={columnSelection[index].selected}
+                onChange={() => {
+                  select(index);
 
-                if (
-                  mustBeNumber &&
-                  !columnSelection[index].selected &&
-                  columnSelection[index].type === "string"
-                ) {
-                  columnSelection[index].setOpen(true);
-                }
-              }}
-            />
+                  if (!categorical && !columnSelection[index].selected) {
+                    columnSelection[index].setOpen(true);
+                  }
+                }}
+              />
+            )}
 
             {params.field}
           </div>
