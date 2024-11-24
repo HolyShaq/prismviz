@@ -4,9 +4,13 @@ import { CsvContext } from "../../lib/CsvContext";
 import { useStepContext } from "../../lib/StepContext";
 
 // Material-UI icons
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import SearchOffIcon from '@mui/icons-material/SearchOff';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
+
+// Material UI Icons for proceed and clearing uploaded data
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
 const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
   left = false,
@@ -28,24 +32,27 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
       // Left Ribbon Buttons
       <RibbonButton
         key={0}
-        Icon={RemoveCircleIcon}
+        Icon={SearchOffIcon}
         onClick={() => {}}
         enabled={true}
-        tooltip="Remove Duplicate: Deletes duplicate entries"
+        tooltip="Handle Missing Data: 
+Delete or Replace empty entries"
       />,
       <RibbonButton
         key={1}
-        Icon={CheckCircleIcon}
+        Icon={RemoveCircleIcon}
         onClick={() => {}}
         enabled={true}
-        tooltip="Remove Invalid: Identifies and removes invalid data"
+        tooltip="Remove Duplicate Entries:
+Delete duplicate entries"
       />,
       <RibbonButton
         key={2}
-        Icon={DeleteIcon}
+        Icon={CheckCircleIcon}
         onClick={() => {}}
         enabled={true}
-        tooltip="Remove Empty: Deletes empty entries"
+        tooltip="Validate Column Entry:
+Delete or Replace unsual entries"
       />,
     ],
 
@@ -56,17 +63,19 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
         Icon={DeleteIcon}
         onClick={() => {}}
         enabled={true}
-        tooltip="Delete Rows: Remove selected rows"
+        tooltip="Delete Selected Row/s:
+Delete specific rows"
       />,
       <RibbonButton
         key={1}
-        Icon={CheckCircleIcon}
+        Icon={ArrowCircleRightIcon}
         onClick={() => {
           completeCurrentStep();
           handleNext();
         }}
         enabled={true}
-        tooltip="Proceed: Move to the next step"
+        tooltip="Proceed to Data Visualization:
+Proceed to the next section"
       />,
     ],
   };

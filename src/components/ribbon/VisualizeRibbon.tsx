@@ -13,6 +13,11 @@ import ScatterPlotIcon from "@mui/icons-material/ScatterPlot";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Popover from "@mui/material/Popover";
+import AddchartIcon from "@mui/icons-material/Addchart";
+import FormatShapesIcon from '@mui/icons-material/FormatShapes';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import PreviewIcon from '@mui/icons-material/Preview';
+import PrintIcon from '@mui/icons-material/Print';
 
 // Interfaces
 interface VisualizeRibbonProps {
@@ -110,17 +115,18 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
       <RibbonButton
         ref={addChartRef}
         key={0}
-        Icon={BarChartIcon}
+        Icon={AddchartIcon}
         onClick={() => {
           setIsPopoverOpen(true);
           console.log("Adding a chart...");
         }}
         enabled={true}
-        tooltip="Add a Chart: Visualize your data with a chart"
+        tooltip="Add a Chart:
+Create your own chart and customize it"
       />,
       <RibbonButton
         key={1}
-        Icon={TextFieldsIcon}
+        Icon={FormatShapesIcon}
         onClick={() => {
           addFigure(
             <div className="flex flex-row bg-white justify-center items-center w-64 h-32">
@@ -129,7 +135,16 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
           );
         }}
         enabled={true}
-        tooltip="Add a Textbox: Annotate your visualization"
+        tooltip="Add Remarks:
+Drag and drop text-box for description."
+      />,
+      <RibbonButton
+        key={2}
+        Icon={AutoGraphIcon}
+        onClick={() => {}}
+        enabled={true}
+        tooltip="AI Insights:
+Elevate your data with AI generated insights."
       />,
     ],
 
@@ -137,18 +152,21 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
       // Right Ribbon Buttons
       <RibbonButton
         key={0}
-        Icon={BarChartIcon}
+        Icon={PreviewIcon}
         onClick={() => {}}
         enabled={true}
-        tooltip="Preview: View your chart before finalizing"
+        tooltip="Preview Report:
+See what report looks like."
       />,
       <RibbonButton
         key={1}
-        Icon={CheckCircleIcon}
+        Icon={PrintIcon}
         onClick={() => {}}
         enabled={true}
-        tooltip="Print: Print your chart and annotations"
+        tooltip="Print Report:
+Save your report as PDF or Image"
       />,
+      
     ],
   };
 
