@@ -14,8 +14,14 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
   const { addFigure } = useChartContext();
 
   const [xAxis, setXAxis] = useState("");
+  const [xMetric, setXMetric] = useState("");
   const [yAxis, setYAxis] = useState("");
   const [yAxisModalOpen, setYAxisModalOpen] = useState(false);
+
+  const handleConfirm = () => {
+    console.log("X:", xAxis, xMetric);
+    console.log("Y:", yAxis);
+  };
 
   return (
     <>
@@ -30,6 +36,7 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
           setYAxisModalOpen(true);
         }}
         setChoice={setXAxis}
+        setChoiceMetric={setXMetric}
         mustBeNumber
       />
 
@@ -41,11 +48,12 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
         }}
         onConfirm={() => {
           setYAxisModalOpen(false);
-          addFigure(
-            <div className="flex flex-col items-center justify-center h-64 w-64 bg-white">
-              <p className="text-lg bold">Bar Chart!</p>
-            </div>,
-          );
+          handleConfirm();
+          //addFigure(
+          //  <div className="flex flex-col items-center justify-center h-64 w-64 bg-white">
+          //    <p className="text-lg bold">Bar Chart!</p>
+          //  </div>,
+          //);
         }}
         setChoice={setYAxis}
       />
