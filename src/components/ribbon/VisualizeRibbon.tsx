@@ -6,10 +6,9 @@ import { useChartContext } from "../../lib/ChartContext";
 
 // Material UI
 import BarChartIcon from "@mui/icons-material/BarChart";
-import PieChartIcon from "@mui/icons-material/PieChart";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
-import StackedLineChartIcon from "@mui/icons-material/StackedLineChart";
-import ScatterPlotIcon from "@mui/icons-material/ScatterPlot";
+import DonutLargeIcon from "@mui/icons-material/DonutLarge";
+import TollIcon from "@mui/icons-material/Toll";
+import BubbleChartIcon from "@mui/icons-material/BubbleChart";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Popover from "@mui/material/Popover";
@@ -23,6 +22,7 @@ interface PopoverButtonProps {
   Icon: React.ElementType;
   label: string;
   onClick?: () => void;
+  rotated?: boolean;
 }
 
 // Static Components
@@ -30,6 +30,7 @@ const PopoverButton: React.FC<PopoverButtonProps> = ({
   Icon,
   label,
   onClick,
+  rotated = false,
 }) => {
   return (
     <div
@@ -40,7 +41,7 @@ const PopoverButton: React.FC<PopoverButtonProps> = ({
         hover:bg-[#545469]
         outline-[#545469]"
     >
-      <Icon className="text-6xl" />
+      <Icon className={"text-6xl" + (rotated ? " rotate-90" : "")} />
       <p className="text-sm">{label}</p>
     </div>
   );
@@ -76,20 +77,21 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
           <div className="flex flex-row space-x-6">
             <PopoverButton
               Icon={BarChartIcon}
+              rotated
               label="Bar Chart"
               onClick={() => {
                 setIsBarChartInvoked(true);
                 setIsPopoverOpen(false);
               }}
             />
-            <PopoverButton Icon={PieChartIcon} label="Pie Chart" />
+            <PopoverButton Icon={BarChartIcon} label="Column Chart" />
           </div>
           <div className="flex flex-row space-x-6">
-            <PopoverButton Icon={ShowChartIcon} label="Line Chart" />
-            <PopoverButton Icon={StackedLineChartIcon} label="Area Chart" />
+            <PopoverButton Icon={DonutLargeIcon} label="Donut Chart" />
+            <PopoverButton Icon={TollIcon} label="Radial Chart" />
           </div>
           <div className="flex flex-row space-x-6">
-            <PopoverButton Icon={ScatterPlotIcon} label="Scatter Chart" />
+            <PopoverButton Icon={BubbleChartIcon} label="Bubble Chart" />
           </div>
         </div>
       </Popover>
