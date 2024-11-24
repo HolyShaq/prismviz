@@ -64,12 +64,12 @@ const HomeContent: React.FC = () => {
 
 export default function Home() {
   return (
-    <CsvContextProvider>
       <StepContextProvider>
+        <CsvContextProvider>
         <ChartContextProvider>
           <HomeContent />
         </ChartContextProvider>
+        </CsvContextProvider>
       </StepContextProvider>
-    </CsvContextProvider>
   );
 }
