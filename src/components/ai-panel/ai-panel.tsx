@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { CSSProperties } from "react";
 
 const AIInsights = () => {
+  const [userInput, setUserInput] = useState(""); // State to manage user input
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserInput(event.target.value); // Update state with user's input
+  };
+
+  const handleSubmit = () => {
+    alert(`User's Input: ${userInput}`); // Handle the input value (e.g., display it in an alert)
+  };
+
   return (
-    <div style ={styles.insightsContainer}>
+    <div style={styles.insightsContainer}>
       <h4 style={styles.title}>AI Insights</h4>
       <div style={styles.insightContent}>
         <p>
@@ -21,6 +31,18 @@ const AIInsights = () => {
             expectations.
           </li>
         </ul>
+        <div style={styles.inputContainer}>
+          <input
+            type="text"
+            value={userInput}
+            onChange={handleInputChange} // Update state on input change
+            placeholder="Type your remarks..."
+            style={styles.inputField}
+          />
+          <button onClick={handleSubmit} style={styles.submitButton}>
+            Submit
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -51,7 +73,31 @@ const styles: { [key: string]: CSSProperties } = {
     marginTop: "10px",
     paddingLeft: "20px",
   },
+  inputContainer: {
+    marginTop: "20px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
+  },
+  inputField: {
+    padding: "10px",
+    fontSize: "14px",
+    borderRadius: "5px",
+    border: "1px solid #CCC",
+    outline: "none",
+    width: "100%",
+    color: "black",
+  },
+  submitButton: {
+    padding: "10px",
+    fontSize: "14px",
+    backgroundColor: "#545469",
+    color: "#FFF",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    textAlign: "center",
+  },
 };
-
 
 export default AIInsights;
