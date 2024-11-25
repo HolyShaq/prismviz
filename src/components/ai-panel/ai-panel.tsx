@@ -1,15 +1,45 @@
+
 import React, { useState } from "react";
 import { CSSProperties } from "react";
+// Import Gemini API SDK
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// Initialize Gemini API
+const genAI = new GoogleGenerativeAI(process.env.API_KEY!);
+console.log("API KEY") // Make sure API_KEY is defined in your environment
+console.log(process.env.API_KEY) // Make sure API_KEY is defined in your environment
+console.log(process.env);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 const AIInsights = () => {
   const [userInput, setUserInput] = useState(""); // State to manage user input
+  const [response, setResponse] = useState<string | null>(null); // State for API response
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value); // Update state with user's input
   };
 
-  const handleSubmit = () => {
-    alert(`User's Input: ${userInput}`); // Handle the input value (e.g., display it in an alert)
+  const handleSubmit = async () => {
+    if (!userInput.trim()) {
+      alert("Please enter a prompt.");
+      return;
+    }
+
+    setIsLoading(true); // Set loading state
+    setResponse(null); // Clear previous response
+
+    try {
+      // Send prompt to Gemini API
+      const result = await model.generateContent(userInput);
+      const generatedText = result.response.text();
+      setResponse(generatedText); // Set the response
+    } catch (error) {
+      console.error("Error generating response:", error);
+      setResponse("An error occurred while generating the response. Please try again.");
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
   };
 
   return (
@@ -21,14 +51,7 @@ const AIInsights = () => {
         </p>
         <ul style={styles.insightList}>
           <li>
-            <b>Insight:</b> The Operations department's productivity has dropped
-            30% compared to last quarter, falling below all other departments.
-          </li>
-          <li>
-            <b>Suggestion:</b> Conduct a review to identify bottlenecks, such as
-            workflow inefficiencies or resource shortages. Introduce targeted
-            training sessions or tools to support the team in meeting
-            expectations.
+            <b>Insight:</b> Enter a prompt below to generate AI insights or suggestions.
           </li>
         </ul>
         <div style={styles.inputContainer}>
@@ -36,13 +59,19 @@ const AIInsights = () => {
             type="text"
             value={userInput}
             onChange={handleInputChange} // Update state on input change
-            placeholder="Type your remarks..."
+            placeholder="Type your prompt here..."
             style={styles.inputField}
           />
-          <button onClick={handleSubmit} style={styles.submitButton}>
-            Submit
+          <button onClick={handleSubmit} style={styles.submitButton} disabled={isLoading}>
+            {isLoading ? "Generating..." : "Submit"}
           </button>
         </div>
+        {response && (
+          <div style={styles.responseContainer}>
+            <h5 style={styles.responseTitle}>Generated Insight:</h5>
+            <p style={styles.responseText}>{response}</p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -86,7 +115,7 @@ const styles: { [key: string]: CSSProperties } = {
     border: "1px solid #CCC",
     outline: "none",
     width: "100%",
-    color: "black",
+    color:"black"
   },
   submitButton: {
     padding: "10px",
@@ -97,6 +126,23 @@ const styles: { [key: string]: CSSProperties } = {
     borderRadius: "5px",
     cursor: "pointer",
     textAlign: "center",
+  
+  },
+  responseContainer: {
+    marginTop: "20px",
+    backgroundColor: "#1F1F33",
+    padding: "10px",
+    borderRadius: "5px",
+    color: "#FFF",
+  },
+  responseTitle: {
+    fontSize: "16px",
+    fontWeight: "bold",
+    marginBottom: "5px",
+  },
+  responseText: {
+    fontSize: "14px",
+    lineHeight: "1.4",
   },
 };
 
