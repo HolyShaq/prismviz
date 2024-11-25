@@ -46,12 +46,10 @@ const AIInsights = () => {
     <div style={styles.insightsContainer}>
       <h4 style={styles.title}>AI Insights</h4>
       <div style={styles.insightContent}>
-        <p>
-          <b>Graph:</b> Employee Productivity Across Departments
-        </p>
+      
         <ul style={styles.insightList}>
           <li>
-            <b>Insight:</b> Enter a prompt below to generate AI insights or suggestions.
+           Enter a prompt below to generate AI insights or suggestions.
           </li>
         </ul>
         <div style={styles.inputContainer}>
