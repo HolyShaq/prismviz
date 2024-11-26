@@ -7,6 +7,9 @@ const defaultChartOptions = (
 ) => {
   return {
     responsive: true,
+    animation: {
+      duration: 500, // Make transitions snappier
+    },
     plugins: {
       legend: {
         display: false,

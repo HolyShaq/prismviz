@@ -3,11 +3,13 @@ import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { CsvContext } from "@/lib/CsvContext";
 import {
-  capitalize,
   getCategories,
   filterData,
   getAggregatedData,
+  getColumns,
+  getNumericalColumns,
 } from "@/lib/utils";
+import { ColumnSelection, PropertiesDrawer } from "./PropertiesDrawer";
 import defaultChartOptions from "./defaultChartOpts";
 import { ResizableBox } from "react-resizable";
 
@@ -21,22 +23,41 @@ interface BarProps {
 
 export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
   const { csvData } = useContext(CsvContext);
+  const columns = getColumns();
+  const numericalColumns = getNumericalColumns();
 
+  // Properties Drawer
+  const [open, setOpen] = useState(false);
+
+  // For resizing
   const minDimensions = { width: 300, height: 166 };
-  const [{ width, height }, setDimensions] = useState(minDimensions);
+  const [width, setWidth] = useState(minDimensions.width);
+  const [height, setHeight] = useState(minDimensions.height);
   const onResize = (event: any, { _, size, __ }: any) => {
-    setDimensions({ width: size.width, height: size.height });
+    setWidth(size.width);
+    setHeight(size.height);
   };
 
+  // Involved chart columns
   const [xAxis, setXAxis] = useState(x);
   const [yAxis, setYAxis] = useState(y);
   const [yMetricAxis, setYMetricAxis] = useState(yMetric);
 
-  const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
+  // General Properties
+  const [title, setTitle] = useState("");
+  const [xAxisLabel, setXAxisLabel] = useState("");
+  const [yAxisLabel, setYAxisLabel] = useState("");
 
+  const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
   const labels = getCategories(xAxis!);
+
+  // Color properties
+  //const colorStates = labels.map(() => useState("#36a2eb"));
+  //const colors: string[] = colorStates.map((colorState) => colorState[0]);
+
+  // Data
   const data = labels.map((label) => {
-    const filteredData = filterData(label, xAxis, yAxis!);
+    const filteredData = filterData(csvData, label, xAxis, yAxis!);
     return getAggregatedData(filteredData, yMetricAxis!);
   });
 
@@ -50,16 +71,44 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
   };
 
   return (
-    <ResizableBox
-      width={width}
-      height={height}
-      onResize={onResize}
-      minConstraints={[minDimensions.width, minDimensions.height]}
-      lockAspectRatio={true}
-    >
-      <div className="flex items-center justify-center p-4 w-full h-full bg-white">
-        <Bar options={options} data={barChartData} />
+    <>
+      <div
+        onClick={() => {
+          console.log("gaga");
+          setOpen(true);
+        }}
+      >
+        <ResizableBox
+          width={width}
+          height={height}
+          onResize={onResize}
+          minConstraints={[minDimensions.width, minDimensions.height]}
+          lockAspectRatio={true}
+        >
+          <div className="flex items-center justify-center p-4 w-full h-full bg-white">
+            <Bar options={options} data={barChartData} />
+          </div>
+        </ResizableBox>
       </div>
-    </ResizableBox>
+
+      <PropertiesDrawer open={open} setOpen={setOpen}>
+        <ColumnSelection
+          label="X Axis"
+          axis={xAxis}
+          setAxis={setXAxis}
+          items={columns}
+        />
+
+        <ColumnSelection
+          label="Y Axis"
+          axis={yAxis!}
+          setAxis={setYAxis}
+          metric={yMetricAxis}
+          setMetric={setYMetricAxis}
+          items={numericalColumns}
+          optional
+        />
+      </PropertiesDrawer>
+    </>
   );
 };

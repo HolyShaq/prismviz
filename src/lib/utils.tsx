@@ -6,21 +6,62 @@ export const capitalize = (str: any) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
+// Determine the data type of a string
+export const determineValueType = (str: string) => {
+  // Check if the string is a numerical value
+  const num = parseFloat(str);
+  if (!isNaN(num)) {
+    if (num >= 1000 && num <= 9999) {
+      // assume it's a year if it's a 4-digit number
+      return "date";
+    } else {
+      return "number";
+    }
+  }
+
+  // Check if the string is a date value
+  const date = new Date(str);
+  if (!isNaN(date.getTime())) {
+    return "date";
+  }
+
+  // If none of the above, assume it's a word value
+  return "string";
+};
+
+// Get columns from csvData
+export const getColumns = () => {
+  const { csvData } = useContext(CsvContext);
+  return Object.keys(csvData[0]);
+};
+
+// Get numerical columns from csvData
+export const getNumericalColumns = () => {
+  const { csvData } = useContext(CsvContext);
+  return getColumns().filter(
+    (key) => determineValueType(String(csvData[0][key])) === "number",
+  );
+};
+
 // Get categories (unique values) for a given axis/column
 export const getCategories = (xAxis: string) => {
   const { csvData } = useContext(CsvContext);
   return [
     ...new Set(
       csvData
-        .map((row) => row[xAxis])
-        .sort((a: any, b: any) => Number(a[xAxis]) - Number(b[xAxis])),
+        .sort((a: any, b: any) => Number(a[xAxis]) - Number(b[xAxis]))
+        .map((row) => row[xAxis]),
     ),
   ];
 };
 
 // Get the data for a given yAxis column for all records with xAxis matching the label
-export const filterData = (label: any, xAxis: string, yAxis: string) => {
-  const { csvData } = useContext(CsvContext);
+export const filterData = (
+  csvData: any[],
+  label: any,
+  xAxis: string,
+  yAxis: string,
+) => {
   return csvData.filter((row) => row[xAxis] === label).map((row) => row[yAxis]);
 };
 
