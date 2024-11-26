@@ -1,4 +1,4 @@
-import { Button, Drawer, MenuItem, Select } from "@mui/material";
+import { Input, Button, Drawer, MenuItem, Select } from "@mui/material";
 import { PropsWithChildren } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -19,13 +19,15 @@ export const PropertiesDrawer: React.FC<
           <CloseIcon fontSize="medium" onClick={() => setOpen(false)} />
         </div>
         <span className="text-2xl font-bold">Properties</span>
-        <div className="flex flex-col space-y-2 mt-2">{children}</div>
+        <div className="flex flex-col space-y-4 mt-2">{children}</div>
       </div>
     </Drawer>
   );
 };
 
 // Drawer Children Components
+
+// Column Selection
 interface ColumnSelectionProps {
   label: string;
   axis: string;
@@ -35,7 +37,6 @@ interface ColumnSelectionProps {
   items: string[];
   optional?: boolean;
 }
-
 export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
   label,
   axis,
@@ -60,7 +61,7 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
         )}
       </div>
       <Select
-        className="bg-white"
+        className="bg-white rounded-md"
         value={axis}
         onChange={(event) => setAxis(event.target.value as string)}
       >
@@ -73,7 +74,7 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
 
       {metric && (
         <Select
-          className="bg-white"
+          className="bg-white rounded-md"
           value={metric}
           onChange={(event) => setMetric(event.target.value as string)}
         >
@@ -97,5 +98,27 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
     >
       Add {label}
     </Button>
+  );
+};
+
+// Title Selection
+interface TitleSelectionProps {
+  title: string;
+  setTitle: (title: string) => void;
+}
+export const TitleSelection: React.FC<TitleSelectionProps> = ({
+  title,
+  setTitle,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <span className="font-thin">Title</span>
+      <Input
+        className="bg-white h-14 px-2 py-1 rounded-md"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+        placeholder="Type something"
+      />
+    </div>
   );
 };

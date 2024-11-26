@@ -9,7 +9,11 @@ import {
   getColumns,
   getNumericalColumns,
 } from "@/lib/utils";
-import { ColumnSelection, PropertiesDrawer } from "./PropertiesDrawer";
+import {
+  ColumnSelection,
+  PropertiesDrawer,
+  TitleSelection,
+} from "./PropertiesDrawer";
 import defaultChartOptions from "./defaultChartOpts";
 import { ResizableBox } from "react-resizable";
 
@@ -48,7 +52,8 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
   const [xAxisLabel, setXAxisLabel] = useState("");
   const [yAxisLabel, setYAxisLabel] = useState("");
 
-  const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
+  var options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
+  if (title) options.plugins!.title!.text = title;
   const labels = getCategories(xAxis!);
 
   // Color properties
@@ -108,6 +113,8 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
           items={numericalColumns}
           optional
         />
+
+        <TitleSelection title={title} setTitle={setTitle} />
       </PropertiesDrawer>
     </>
   );
