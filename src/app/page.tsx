@@ -23,7 +23,7 @@ const steps: Step[] = [
 ];
 
 const HomeContent: React.FC = () => {
-  const { currentStep, handleNext, handleBack } = useStepContext();
+  const { currentStep } = useStepContext();
 
   // Render the current step's component
   const StepComponent = steps[currentStep].component;
@@ -64,12 +64,12 @@ const HomeContent: React.FC = () => {
 
 export default function Home() {
   return (
-    <CsvContextProvider>
       <StepContextProvider>
+        <CsvContextProvider>
         <ChartContextProvider>
           <HomeContent />
         </ChartContextProvider>
+        </CsvContextProvider>
       </StepContextProvider>
-    </CsvContextProvider>
   );
 }

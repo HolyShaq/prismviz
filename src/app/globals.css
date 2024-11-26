@@ -197,3 +197,13 @@ a:hover {
   border-color: var(--alert-primary-border);
   color: var(--alert-primary);
 }
+
+/* Stepper Labels */
+.step-label {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.step-label:hover {
+  transform: scale(1.05); /* Slightly enlarge the label on hover */
+  color: var(--primary-hover); /* Change the text color on hover */
+}
