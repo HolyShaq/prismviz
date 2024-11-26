@@ -36,7 +36,13 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
     },
   };
 
-  const labels = [...new Set(csvData.map((row) => row[xAxis]))];
+  const labels = [
+    ...new Set(
+      csvData
+        .sort((a, b) => Number(a[xAxis]) - Number(b[xAxis]))
+        .map((row) => row[xAxis]),
+    ),
+  ];
   const data: any[] = [];
   const getAggregatedData = (label: string | unknown) => {
     const filteredData: any[] = csvData
