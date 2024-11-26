@@ -9,6 +9,7 @@ import {
   getAggregatedData,
 } from "@/lib/utils";
 import defaultChartOptions from "./defaultChartOpts";
+import { ResizableBox } from "react-resizable";
 
 ChartJS.register(...registerables);
 
@@ -20,6 +21,12 @@ interface BarProps {
 
 export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
   const { csvData } = useContext(CsvContext);
+
+  const minDimensions = { width: 300, height: 166 };
+  const [{ width, height }, setDimensions] = useState(minDimensions);
+  const onResize = (event: any, { _, size, __ }: any) => {
+    setDimensions({ width: size.width, height: size.height });
+  };
 
   const [xAxis, setXAxis] = useState(x);
   const [yAxis, setYAxis] = useState(y);
@@ -43,8 +50,16 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
   };
 
   return (
-    <div className="flex items-center justify-center p-4 w-fit h-fit max-h-96 bg-white">
-      <Bar options={options} data={barChartData} />
-    </div>
+    <ResizableBox
+      width={width}
+      height={height}
+      onResize={onResize}
+      minConstraints={[minDimensions.width, minDimensions.height]}
+      lockAspectRatio={true}
+    >
+      <div className="flex items-center justify-center p-4 w-full h-full bg-white">
+        <Bar options={options} data={barChartData} />
+      </div>
+    </ResizableBox>
   );
 };
