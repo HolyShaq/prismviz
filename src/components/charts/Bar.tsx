@@ -2,6 +2,12 @@ import React, { useState, useContext } from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { CsvContext } from "@/lib/CsvContext";
+import {
+  capitalize,
+  getCategories,
+  filterData,
+  getAggregatedData,
+} from "@/lib/utils";
 
 ChartJS.register(...registerables);
 
@@ -18,9 +24,6 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
   const [yAxis, setYAxis] = useState(y);
   const [yMetricAxis, setYMetricAxis] = useState(yMetric);
 
-  const capitalize = (str: any) => {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  };
   const options = {
     responsive: true,
     plugins: {
@@ -36,50 +39,11 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
     },
   };
 
-  const labels = [
-    ...new Set(
-      csvData
-        .sort((a, b) => Number(a[xAxis]) - Number(b[xAxis]))
-        .map((row) => row[xAxis]),
-    ),
-  ];
-  const data: any[] = [];
-  const getAggregatedData = (label: string | unknown) => {
-    const filteredData: any[] = csvData
-      .filter((row) => row[xAxis] === label)
-      .map((row) => row[yAxis!]);
-
-    switch (yMetricAxis) {
-      case "count":
-        return filteredData.length;
-      case "sum":
-        return filteredData.reduce((acc, val) => acc + Number(val), 0);
-      case "average":
-        return (
-          filteredData.reduce((acc, val) => acc + Number(val), 0) /
-          filteredData.length
-        );
-      case "min":
-        return Math.min(...filteredData.map((val) => Number(val)));
-      case "max":
-        return Math.max(...filteredData.map((val) => Number(val)));
-      case "median":
-        const sortedData = filteredData.sort((a, b) => a - b);
-        const middleIndex = Math.floor(sortedData.length / 2);
-        return sortedData[middleIndex];
-      case "mode":
-        const counts: { [key: string]: number } = {};
-        filteredData.forEach((val) => {
-          counts[val] = (counts[val] || 0) + 1;
-        });
-        const maxCount = Math.max(...Object.values(counts));
-        return Object.keys(counts).find((key) => counts[key] === maxCount);
-      default:
-        return filteredData.length;
-    }
-  };
-
-  labels.map((label) => data.push(getAggregatedData(label)));
+  const labels = getCategories(xAxis!);
+  const data = labels.map((label) => {
+    const filteredData = filterData(label, xAxis, yAxis!);
+    return getAggregatedData(filteredData, yMetricAxis!);
+  });
 
   const barChartData = {
     labels: labels,
