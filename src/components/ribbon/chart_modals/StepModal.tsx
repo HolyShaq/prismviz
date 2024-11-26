@@ -73,13 +73,13 @@ const PopoverMetric: React.FC<PopeverMetric> = ({
           setMetric(event.target.value as string);
         }}
       >
-        <MenuItem value="count">Count</MenuItem>
-        <MenuItem value="sum">Sum</MenuItem>
         <MenuItem value="average">Average</MenuItem>
+        <MenuItem value="sum">Sum</MenuItem>
         <MenuItem value="minimum">Minimum</MenuItem>
         <MenuItem value="maximum">Maximum</MenuItem>
         <MenuItem value="median">Median</MenuItem>
         <MenuItem value="mode">Mode</MenuItem>
+        <MenuItem value="count">Count</MenuItem>
       </Select>
     </Popover>
   );
@@ -107,13 +107,13 @@ const StepModal: React.FC<StepModalProps> = ({
   optional = false,
 }) => {
   const { csvData } = useContext(CsvContext);
-  const [metric, setMetric] = useState("count");
+  const [metric, setMetric] = useState("average");
   const columnSelection = Object.keys(csvData[0]).map((key, index) => {
     const type = determineValueType(String(csvData[0][key]));
 
     const [selected, setSelected] = useState(false);
     const [open, setOpen] = useState(false);
-    const [metric, setMetric] = useState(type === "number" ? "count" : "");
+    const [metric, setMetric] = useState(type === "number" ? "average" : "");
     const checkRef = useRef(null);
 
     return {
