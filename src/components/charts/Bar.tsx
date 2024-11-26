@@ -26,9 +26,16 @@ interface BarProps {
   y?: string;
   yMetric?: string;
   id: string;
+  columnChart?: boolean;
 }
 
-export const BarChart: React.FC<BarProps> = ({ x, y, yMetric, id }) => {
+export const BarChart: React.FC<BarProps> = ({
+  x,
+  y,
+  yMetric,
+  id,
+  columnChart = false,
+}) => {
   const { csvData } = useContext(CsvContext);
   const columns = getColumns();
   const numericalColumns = getNumericalColumns();
@@ -57,7 +64,7 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric, id }) => {
 
   var options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
   if (title) options.plugins.title.text = title; // Set title if it exists
-  options.indexAxis = "y"; // Set index axis to y (to make the chart vertical)
+  if (!columnChart) options.indexAxis = "y"; // Set index axis to y (to make the chart vertical)
   const labels = getCategories(xAxis!);
 
   // Color properties

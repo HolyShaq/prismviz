@@ -7,11 +7,13 @@ import { v4 as uuidv4 } from "uuid";
 interface CreateBarChartProps {
   invoked: boolean;
   setInvoked: (invoked: boolean) => void;
+  columnChart?: boolean;
 }
 
 export const CreateBarChart: React.FC<CreateBarChartProps> = ({
   invoked,
   setInvoked,
+  columnChart = false,
 }) => {
   const { addFigure } = useChartContext();
 
@@ -27,7 +29,13 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
       console.log("Adding bar chart with ID:", chartId);
       addFigure(
         chartId,
-        <BarChart id={chartId} x={xAxis} y={yAxis} yMetric={yMetric} />,
+        <BarChart
+          id={chartId}
+          x={xAxis}
+          y={yAxis}
+          yMetric={yMetric}
+          columnChart={columnChart}
+        />,
       );
       setDone(false);
       setXAxis("");
