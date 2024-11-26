@@ -88,23 +88,20 @@ export const BarChart: React.FC<BarProps> = ({
 
   return (
     <>
-      <div
-        onClick={() => {
-          setOpen(true);
-        }}
+      <ResizableBox
+        width={width}
+        height={height}
+        onResize={onResize}
+        minConstraints={[minDimensions.width, minDimensions.height]}
+        lockAspectRatio={true}
       >
-        <ResizableBox
-          width={width}
-          height={height}
-          onResize={onResize}
-          minConstraints={[minDimensions.width, minDimensions.height]}
-          lockAspectRatio={true}
+        <div
+          className="flex items-center justify-center p-4 w-full h-full bg-white z-50"
+          onClick={() => setOpen(true)}
         >
-          <div className="flex items-center justify-center p-4 w-full h-full bg-white z-50">
-            <Bar options={options} data={barChartData} />
-          </div>
-        </ResizableBox>
-      </div>
+          <Bar options={options} data={barChartData} />
+        </div>
+      </ResizableBox>
 
       <PropertiesDrawer id={id} open={open} setOpen={setOpen}>
         <ColumnSelection

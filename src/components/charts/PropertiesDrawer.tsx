@@ -86,11 +86,11 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
         >
           <MenuItem value="average">Average</MenuItem>
           <MenuItem value="sum">Sum</MenuItem>
+          <MenuItem value="count">Count</MenuItem>
           <MenuItem value="minimum">Minimum</MenuItem>
           <MenuItem value="maximum">Maximum</MenuItem>
           <MenuItem value="median">Median</MenuItem>
           <MenuItem value="mode">Mode</MenuItem>
-          <MenuItem value="count">Count</MenuItem>
         </Select>
       )}
     </div>
