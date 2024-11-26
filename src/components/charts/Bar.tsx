@@ -10,6 +10,7 @@ import {
   getNumericalColumns,
 } from "@/lib/utils";
 import {
+  ColorSelection,
   ColumnSelection,
   PropertiesDrawer,
   TitleSelection,
@@ -57,8 +58,7 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
   const labels = getCategories(xAxis!);
 
   // Color properties
-  //const colorStates = labels.map(() => useState("#36a2eb"));
-  //const colors: string[] = colorStates.map((colorState) => colorState[0]);
+  const [color, setColor] = useState("#36a2eb");
 
   // Data
   const data = labels.map((label) => {
@@ -71,6 +71,7 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
     datasets: [
       {
         data: data,
+        backgroundColor: color,
       },
     ],
   };
@@ -115,6 +116,8 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
         />
 
         <TitleSelection title={title} setTitle={setTitle} />
+
+        <ColorSelection color={color} setColor={setColor} />
       </PropertiesDrawer>
     </>
   );

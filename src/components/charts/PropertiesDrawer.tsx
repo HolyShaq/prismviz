@@ -1,4 +1,5 @@
 import { Input, Button, Drawer, MenuItem, Select } from "@mui/material";
+import { MuiColorInput } from "mui-color-input";
 import { PropsWithChildren } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -118,6 +119,27 @@ export const TitleSelection: React.FC<TitleSelectionProps> = ({
         value={title}
         onChange={(event) => setTitle(event.target.value)}
         placeholder="Type something"
+      />
+    </div>
+  );
+};
+
+// Color Selection
+interface ColorSelectionProps {
+  color: string;
+  setColor: (color: string) => void;
+}
+export const ColorSelection: React.FC<ColorSelectionProps> = ({
+  color,
+  setColor,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <span className="font-thin">Color</span>
+      <MuiColorInput
+        className="bg-white h-14 rounded-md"
+        value={color}
+        onChange={setColor}
       />
     </div>
   );
