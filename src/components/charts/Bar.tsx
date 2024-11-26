@@ -8,6 +8,7 @@ import {
   filterData,
   getAggregatedData,
 } from "@/lib/utils";
+import defaultChartOptions from "./defaultChartOpts";
 
 ChartJS.register(...registerables);
 
@@ -24,20 +25,7 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
   const [yAxis, setYAxis] = useState(y);
   const [yMetricAxis, setYMetricAxis] = useState(yMetric);
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: true,
-        text:
-          (yAxis ? capitalize(yMetricAxis) + " " + yAxis + " per " : "") +
-          xAxis,
-      },
-    },
-  };
+  const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
 
   const labels = getCategories(xAxis!);
   const data = labels.map((label) => {
@@ -50,7 +38,6 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
     datasets: [
       {
         data: data,
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
     ],
   };
