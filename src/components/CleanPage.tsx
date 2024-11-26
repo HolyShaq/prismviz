@@ -6,7 +6,6 @@ import { CsvContext } from "../lib/CsvContext";
 const CleanPage: React.FC = () => {
   const { csvData } = useContext(CsvContext); // Access CSV data
 
-
   if (csvData.length === 0) {
     return (
       <Typography
@@ -36,11 +35,11 @@ const CleanPage: React.FC = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        height: "100%", // Full screen height
+        maxHeight: "100%",
         backgroundColor: "var(--neutral-white-10)",
       }}
     >
-
       {/* Ribbon */}
       <Box
         sx={{
@@ -48,8 +47,7 @@ const CleanPage: React.FC = () => {
           backgroundColor: "var(--neutral-white-20)",
           boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.1)",
         }}
-      >
-      </Box>
+      ></Box>
 
       {/* DataGrid */}
       <Box
@@ -84,7 +82,6 @@ const CleanPage: React.FC = () => {
           }}
         />
       </Box>
-
     </Box>
   );
 };

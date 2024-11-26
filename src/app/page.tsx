@@ -29,7 +29,7 @@ const HomeContent: React.FC = () => {
   const StepComponent = steps[currentStep].component;
 
   return (
-    <div className="flex flex-col h-screen bg-primary-main text-neutral-white-10">
+    <div className="flex flex-col h-screen max-h-screen overflow-y-hidden bg-primary-main text-neutral-white-10">
       {/* Navigation Bar  */}
       <div className="flex items-center px-6 py-3 bg-primary-hover shadow-md">
         <img src="/prismicon.ico" alt="logo" className="w-12 h-12" />
@@ -47,13 +47,13 @@ const HomeContent: React.FC = () => {
         </div>
       </div>
       {/* Main Content */}
-      <div className="flex h-full max-h-full bg-primary-main text-neutral-white-10">
+      <div className="flex flex-grow max-h-[calc(100vh-108px)] bg-primary-main text-neutral-white-10">
         {/* Sidebar */}
         <div className="h-full">
           <Sidebar steps={steps} />
         </div>
         {/* Step Component */}
-        <div className="flex flex-col flex-grow p-6 max-h-full overflow-hidden">
+        <div className="flex flex-col p-6 w-full max-h-full overflow-y-auto">
           <StepComponent />
         </div>
       </div>
