@@ -1,26 +1,31 @@
 import { Input, Button, Drawer, MenuItem, Select } from "@mui/material";
 import { MuiColorInput } from "mui-color-input";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useContext } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useChartContext } from "@/lib/ChartContext";
 
 interface PropertiesDrawerProps {
   children: React.ReactNode;
   open: boolean;
   setOpen: (open: boolean) => void;
+  id: string;
 }
 
 export const PropertiesDrawer: React.FC<
   PropsWithChildren<PropertiesDrawerProps>
-> = ({ children, open, setOpen }) => {
+> = ({ children, open, setOpen, id }) => {
   return (
     <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-      <div className="w-[250px] h-full p-4 bg-primary-pressed text-white">
+      <div className="flex flex-col w-[250px] h-full p-4 bg-primary-pressed text-white">
         <div className="flex flex-row justify-end mt-[-10px] mr-[-10px]">
           <CloseIcon fontSize="medium" onClick={() => setOpen(false)} />
         </div>
         <span className="text-2xl font-bold">Properties</span>
-        <div className="flex flex-col space-y-4 mt-2">{children}</div>
+        <div className="flex flex-col justify-between flex-grow">
+          <div className="justify-start space-y-4 mt-2">{children}</div>
+          <ChartDeletion id={id} />
+        </div>
       </div>
     </Drawer>
   );
@@ -91,6 +96,7 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
     </div>
   ) : (
     <Button
+      className="w-full"
       variant="contained"
       onClick={() => {
         setAxis(items[0]);
@@ -141,6 +147,24 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
         value={color}
         onChange={setColor}
       />
+    </div>
+  );
+};
+
+// Chart Deletion
+export const ChartDeletion: React.FC<{ id: string }> = (id) => {
+  const { removeFigure } = useChartContext();
+  return (
+    <div className="justify-self-end">
+      <Button
+        className="w-full"
+        variant="contained"
+        color="error"
+        startIcon={<DeleteIcon />}
+        onClick={() => removeFigure(id.id)}
+      >
+        Delete Chart
+      </Button>
     </div>
   );
 };

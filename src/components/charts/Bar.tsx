@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { CsvContext } from "@/lib/CsvContext";
@@ -10,6 +10,7 @@ import {
   getNumericalColumns,
 } from "@/lib/utils";
 import {
+  ChartDeletion,
   ColorSelection,
   ColumnSelection,
   PropertiesDrawer,
@@ -24,9 +25,10 @@ interface BarProps {
   x: string;
   y?: string;
   yMetric?: string;
+  id: string;
 }
 
-export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
+export const BarChart: React.FC<BarProps> = ({ x, y, yMetric, id }) => {
   const { csvData } = useContext(CsvContext);
   const columns = getColumns();
   const numericalColumns = getNumericalColumns();
@@ -54,7 +56,8 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
   const [yAxisLabel, setYAxisLabel] = useState("");
 
   var options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
-  if (title) options.plugins!.title!.text = title;
+  if (title) options.plugins.title.text = title; // Set title if it exists
+  options.indexAxis = "y"; // Set index axis to y (to make the chart vertical)
   const labels = getCategories(xAxis!);
 
   // Color properties
@@ -80,7 +83,6 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
     <>
       <div
         onClick={() => {
-          console.log("gaga");
           setOpen(true);
         }}
       >
@@ -91,13 +93,13 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
           minConstraints={[minDimensions.width, minDimensions.height]}
           lockAspectRatio={true}
         >
-          <div className="flex items-center justify-center p-4 w-full h-full bg-white">
+          <div className="flex items-center justify-center p-4 w-full h-full bg-white z-50">
             <Bar options={options} data={barChartData} />
           </div>
         </ResizableBox>
       </div>
 
-      <PropertiesDrawer open={open} setOpen={setOpen}>
+      <PropertiesDrawer id={id} open={open} setOpen={setOpen}>
         <ColumnSelection
           label="X Axis"
           axis={xAxis}
@@ -116,7 +118,6 @@ export const BarChart: React.FC<BarProps> = ({ x, y, yMetric }) => {
         />
 
         <TitleSelection title={title} setTitle={setTitle} />
-
         <ColorSelection color={color} setColor={setColor} />
       </PropertiesDrawer>
     </>

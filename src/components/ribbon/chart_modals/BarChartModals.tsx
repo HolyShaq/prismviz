@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import StepModal from "./StepModal";
 import { useChartContext } from "@/lib/ChartContext";
 import { BarChart } from "../../charts/Bar";
+import { v4 as uuidv4 } from "uuid";
 
 interface CreateBarChartProps {
   invoked: boolean;
@@ -18,12 +19,16 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
   const [yAxis, setYAxis] = useState("");
   const [yMetric, setYMetric] = useState("");
   const [yAxisModalOpen, setYAxisModalOpen] = useState(false);
-  const isMounted = useRef(false);
   const [done, setDone] = useState(false);
 
   useEffect(() => {
     if (done) {
-      addFigure(<BarChart x={xAxis} y={yAxis} yMetric={yMetric} />);
+      const chartId = uuidv4();
+      console.log("Adding bar chart with ID:", chartId);
+      addFigure(
+        chartId,
+        <BarChart id={chartId} x={xAxis} y={yAxis} yMetric={yMetric} />,
+      );
       setDone(false);
       setXAxis("");
       setYAxis("");
