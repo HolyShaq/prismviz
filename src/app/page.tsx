@@ -11,6 +11,7 @@ import SplashScreen from "../components/SplashScreen";
 import { CsvContextProvider } from "../lib/CsvContext";
 import { StepContextProvider, useStepContext } from "../lib/StepContext";
 import { ChartContextProvider } from "../lib/ChartContext";
+import { DataCleaningProvider } from "../lib/DataCleaningContext";
 
 // Main HomeContent Component (Dashboard)
 const HomeContent: React.FC = () => {
@@ -62,7 +63,7 @@ const Page: React.FC = () => {
     const splashTimeout = setTimeout(() => {
       setShowSplash(false);
       setShowHero(true);
-    }, 5000); // Adjust based on your animation duration
+    }, 1000); // Adjust based on your animation duration
 
     return () => clearTimeout(splashTimeout);
   }, []);
@@ -89,7 +90,9 @@ export default function Home() {
     <StepContextProvider>
       <CsvContextProvider>
         <ChartContextProvider>
+          <DataCleaningProvider>
           <Page />
+          </DataCleaningProvider>
         </ChartContextProvider>
       </CsvContextProvider>
     </StepContextProvider>
