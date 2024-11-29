@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import RibbonButton from "./RibbonButton";
 import { useStepContext } from "../../lib/StepContext";
-import { CsvContext } from "../../lib/CsvContext";
 import { DataCleaningContext } from "../../lib/DataCleaningContext";
 
 // Material-UI icons

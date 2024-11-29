@@ -38,10 +38,9 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
     const [openModal, setOpenModal] = useState(false);
     const [openPreviewModal, setOpenPreviewModal] = useState(false); // State for preview modal
     const [missingDataOption, setMissingDataOption] = useState<string>("");
-    const [removeEmptyRows, setRemoveEmptyRows] = useState(false);
     const [previewData, setPreviewData] = useState<Record<string, unknown>[]>([]); // For holding the preview data
     const [openRemovePreviewModal, setOpenRemovePreviewModal] = useState(false); // Modal for row removal preview
-    const [rowsWithMissingData, setRowsWithMissingData] = useState<any[]>([]); // Rows with missing data to be removed
+    const [rowsWithMissingData, setRowsWithMissingData] = useState<Record<string, unknown>[]>([]);
 
     // Function to identify rows with missing data
     const findRowsWithMissingData = () => {
