@@ -5,18 +5,14 @@ import Papa from "papaparse";
 import { Box, Modal, Typography, Button } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { CsvContext } from "../lib/CsvContext";
-import { useStepContext } from "../lib/StepContext";
 import UploadFileIcon from "@mui/icons-material/UploadFile"; // Import an upload icon
 
 const UploadPage: React.FC = () => {
-  const { csvFile, setCsvFile, csvData, handleFileLoaded, clearFile } =
-    useContext(CsvContext);
-  const { completeCurrentStep, setCurrentStep, setCompletedSteps } =
-    useStepContext();
+  const { csvFile, csvData, handleFileLoaded } = useContext(CsvContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [uploadedData, setUploadedData] = useState<Record<string, unknown>[]>(
-    []
+    [],
   );
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,13 +46,13 @@ const UploadPage: React.FC = () => {
         minWidth: 150,
       }))
     : uploadedData.length
-    ? Object.keys(uploadedData[0]).map((key) => ({
-        field: key,
-        headerName: key,
-        flex: 1,
-        minWidth: 100,
-      }))
-    : [];
+      ? Object.keys(uploadedData[0]).map((key) => ({
+          field: key,
+          headerName: key,
+          flex: 1,
+          minWidth: 100,
+        }))
+      : [];
 
   return (
     <div className="flex flex-col h-full w-full bg-primary-main text-neutral-white10">

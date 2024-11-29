@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { CsvContext } from "../lib/CsvContext";
 
 // Capitalize the first letter of a string
-export const capitalize = (str: any) => {
+export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
@@ -30,26 +30,29 @@ export const determineValueType = (str: string) => {
 };
 
 // Get columns from csvData
-export const getColumns = () => {
+export const useColumns = () => {
   const { csvData } = useContext(CsvContext);
   return Object.keys(csvData[0]);
 };
 
 // Get numerical columns from csvData
-export const getNumericalColumns = () => {
+export const useNumericalColumns = () => {
   const { csvData } = useContext(CsvContext);
-  return getColumns().filter(
+  return useColumns().filter(
     (key) => determineValueType(String(csvData[0][key])) === "number",
   );
 };
 
 // Get categories (unique values) for a given axis/column
-export const getCategories = (xAxis: string) => {
+export const useCategories = (xAxis: string) => {
   const { csvData } = useContext(CsvContext);
   return [
     ...new Set(
       csvData
-        .sort((a: any, b: any) => Number(a[xAxis]) - Number(b[xAxis]))
+        .sort(
+          (a: Record<string, unknown>, b: Record<string, unknown>) =>
+            Number(a[xAxis]) - Number(b[xAxis]),
+        )
         .map((row) => row[xAxis]),
     ),
   ];
@@ -57,8 +60,8 @@ export const getCategories = (xAxis: string) => {
 
 // Get the data for a given yAxis column for all records with xAxis matching the label
 export const filterData = (
-  csvData: any[],
-  label: any,
+  csvData: Record<string, unknown>[],
+  label: unknown,
   xAxis: string,
   yAxis: string,
 ) => {
@@ -66,15 +69,18 @@ export const filterData = (
 };
 
 // Get aggregated data for a given axis/column based on a given metric
-export const getAggregatedData = (filteredData: any[], yMetricAxis: string) => {
+export const getAggregatedData = (
+  filteredData: unknown[],
+  yMetricAxis: string,
+) => {
   switch (yMetricAxis) {
     case "count":
       return filteredData.length;
     case "sum":
-      return filteredData.reduce((acc, val) => acc + Number(val), 0);
+      return filteredData.reduce((acc: number, val) => acc + Number(val), 0);
     case "average":
       return (
-        filteredData.reduce((acc, val) => acc + Number(val), 0) /
+        filteredData.reduce((acc: number, val) => acc + Number(val), 0) /
         filteredData.length
       );
     case "min":
@@ -82,12 +88,14 @@ export const getAggregatedData = (filteredData: any[], yMetricAxis: string) => {
     case "max":
       return Math.max(...filteredData.map((val) => Number(val)));
     case "median":
-      const sortedData = filteredData.sort((a, b) => a - b);
+      const sortedData = filteredData
+        .map(Number)
+        .sort((a: number, b: number) => a - b);
       const middleIndex = Math.floor(sortedData.length / 2);
       return sortedData[middleIndex];
     case "mode":
       const counts: { [key: string]: number } = {};
-      filteredData.forEach((val) => {
+      (filteredData as []).forEach((val) => {
         counts[val] = (counts[val] || 0) + 1;
       });
       const maxCount = Math.max(...Object.values(counts));

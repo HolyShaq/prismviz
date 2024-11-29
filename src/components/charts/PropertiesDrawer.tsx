@@ -1,6 +1,6 @@
 import { Input, Button, Drawer, MenuItem, Select } from "@mui/material";
 import { MuiColorInput } from "mui-color-input";
-import { PropsWithChildren, useContext } from "react";
+import { PropsWithChildren } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useChartContext } from "@/lib/ChartContext";
