@@ -22,7 +22,7 @@ const defaultChartOptions = (
           xAxis,
       },
     },
-    indexAxis: "x",
+    indexAxis: "x" as "x" | "y",
   };
 };
 

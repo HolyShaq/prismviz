@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import StepModal from "./StepModal";
 import { useChartContext } from "@/lib/ChartContext";
 import { BarChart } from "../../charts/Bar";

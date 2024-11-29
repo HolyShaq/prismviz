@@ -1,23 +1,22 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, SyntheticEvent } from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { CsvContext } from "@/lib/CsvContext";
 import {
-  getCategories,
+  useCategories,
   filterData,
   getAggregatedData,
-  getColumns,
-  getNumericalColumns,
+  useColumns,
+  useNumericalColumns,
 } from "@/lib/utils";
 import {
-  ChartDeletion,
   ColorSelection,
   ColumnSelection,
   PropertiesDrawer,
   TitleSelection,
 } from "./PropertiesDrawer";
 import defaultChartOptions from "./defaultChartOpts";
-import { ResizableBox } from "react-resizable";
+import { ResizableBox, ResizeCallbackData } from "react-resizable";
 
 ChartJS.register(...registerables);
 
@@ -37,8 +36,8 @@ export const BarChart: React.FC<BarProps> = ({
   columnChart = false,
 }) => {
   const { csvData } = useContext(CsvContext);
-  const columns = getColumns();
-  const numericalColumns = getNumericalColumns();
+  const columns = useColumns();
+  const numericalColumns = useNumericalColumns();
 
   // Properties Drawer
   const [open, setOpen] = useState(false);
@@ -47,9 +46,11 @@ export const BarChart: React.FC<BarProps> = ({
   const minDimensions = { width: 300, height: 166 };
   const [width, setWidth] = useState(minDimensions.width);
   const [height, setHeight] = useState(minDimensions.height);
-  const onResize = (event: any, { _, size, __ }: any) => {
-    setWidth(size.width);
-    setHeight(size.height);
+  const onResize = (_e: SyntheticEvent, { size }: ResizeCallbackData) => {
+    if (size) {
+      setWidth(size.width);
+      setHeight(size.height);
+    }
   };
 
   // Involved chart columns
@@ -59,13 +60,11 @@ export const BarChart: React.FC<BarProps> = ({
 
   // General Properties
   const [title, setTitle] = useState("");
-  const [xAxisLabel, setXAxisLabel] = useState("");
-  const [yAxisLabel, setYAxisLabel] = useState("");
 
-  var options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
+  const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
   if (title) options.plugins.title.text = title; // Set title if it exists
-  if (!columnChart) options.indexAxis = "y"; // Set index axis to y (to make the chart vertical)
-  const labels = getCategories(xAxis!);
+  if (!columnChart) options.indexAxis = "y" as "x" | "y"; // Set index axis to y (to make the chart vertical)
+  const labels = useCategories(xAxis!);
 
   // Color properties
   const [color, setColor] = useState("#36a2eb");

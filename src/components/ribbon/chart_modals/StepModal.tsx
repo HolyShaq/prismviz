@@ -8,7 +8,6 @@ import {
   MenuItem,
   Popover,
 } from "@mui/material";
-import Fade from "@mui/material/Fade";
 import Slide from "@mui/material/Slide";
 import { DataGrid, GridColDef, GridColumnHeaderParams } from "@mui/x-data-grid";
 import { CsvContext } from "../../../lib/CsvContext";
@@ -107,38 +106,62 @@ const StepModal: React.FC<StepModalProps> = ({
   optional = false,
 }) => {
   const { csvData } = useContext(CsvContext);
-  const [metric, setMetric] = useState("average");
   const columnSelection = Object.keys(csvData[0]).map((key, index) => {
     const type = determineValueType(String(csvData[0][key]));
-
-    const [selected, setSelected] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [metric, setMetric] = useState(type === "number" ? "average" : "");
-    const checkRef = useRef(null);
-
     return {
       index: index,
       name: key,
       type: type,
-      selected: selected,
-      setSelected: setSelected,
-      open: open,
-      setOpen: setOpen,
-      metric: metric,
-      setMetric: setMetric,
-      ref: checkRef,
     };
   });
+
+  // Column States
+  const [selectedColumns, setSelectedColumns] = useState(
+    columnSelection.map(() => false),
+  );
+  const [openColumns, setOpenColumns] = useState(
+    columnSelection.map(() => false),
+  );
+  const [metricColumns, setMetricColumns] = useState<string[]>(
+    columnSelection.map((column) =>
+      column.type === "number" ? "average" : "",
+    ),
+  );
+  const checkRefColumns = useRef(columnSelection.map(() => null));
+
+  // Use alongside with column states to easily set states
+  const setBool = (
+    method: React.Dispatch<React.SetStateAction<boolean[]>>,
+    index: number,
+    value: boolean,
+  ) => {
+    method((prevState) => {
+      const newState = [...prevState];
+      newState[index] = value;
+      return newState;
+    });
+  };
+  const setString = (
+    method: React.Dispatch<React.SetStateAction<string[]>>,
+    index: number,
+    value: string,
+  ) => {
+    method((prevState) => {
+      const newState = [...prevState];
+      newState[index] = value;
+      return newState;
+    });
+  };
 
   const select = (index: number) => {
     // Deselect all columns except the selected one
     Object.keys(csvData[0])
       .filter((_, i) => i !== index)
       .map((_, i) => {
-        columnSelection[i].setSelected(false);
+        setBool(setSelectedColumns, i, false);
       });
     // Toggle the selected column
-    columnSelection[index].setSelected(!columnSelection[index].selected);
+    setBool(setSelectedColumns, index, !selectedColumns[index]);
   };
 
   const columns: GridColDef[] = csvData.length
@@ -151,13 +174,12 @@ const StepModal: React.FC<StepModalProps> = ({
           <div className="flex flex-row space-x-2 items-center">
             {(categorical || columnSelection[index].type === "number") && (
               <Checkbox
-                ref={columnSelection[index].ref}
-                checked={columnSelection[index].selected}
+                ref={checkRefColumns.current[index]}
+                checked={selectedColumns[index]}
                 onChange={() => {
                   select(index);
-
-                  if (!categorical && !columnSelection[index].selected) {
-                    columnSelection[index].setOpen(true);
+                  if (!categorical && !selectedColumns[index]) {
+                    setBool(setOpenColumns, index, true);
                   }
                 }}
               />
@@ -202,18 +224,20 @@ const StepModal: React.FC<StepModalProps> = ({
               <Button
                 onClick={() => {
                   columnSelection
-                    .filter((col) => col.selected)
-                    .map((col) => {
-                      col.setSelected(false);
+                    .filter((_col, index) => selectedColumns[index])
+                    .map((col, index) => {
+                      setBool(setSelectedColumns, index, false);
                       setChoice(col.name);
-                      setChoiceMetric(col.metric);
+                      setChoiceMetric(metricColumns[index]);
                     });
                   onConfirm();
                 }}
                 disabled={
                   optional
                     ? false
-                    : !columnSelection.some((col) => col.selected)
+                    : !columnSelection.some(
+                        (_col, index) => selectedColumns[index],
+                      )
                 }
                 color="primary"
                 variant="contained"
@@ -225,15 +249,17 @@ const StepModal: React.FC<StepModalProps> = ({
               </Button>
             </div>
 
-            {columnSelection.map((col, index) => {
+            {columnSelection.map((_col, index) => {
               return (
                 <PopoverMetric
                   key={index}
-                  anchorEl={col.ref.current}
-                  open={col.open}
-                  setOpen={col.setOpen}
-                  metric={col.metric}
-                  setMetric={col.setMetric}
+                  anchorEl={checkRefColumns.current[index]}
+                  open={openColumns[index]}
+                  setOpen={(open) => setBool(setOpenColumns, index, open)}
+                  metric={metricColumns[index]}
+                  setMetric={(metric) =>
+                    setString(setMetricColumns, index, metric)
+                  }
                 />
               );
             })}

@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useContext } from "react";
+import React from "react";
 import UploadRibbon from "./UploadRibbon";
 import CleanRibbon from "./CleanRibbon";
 import VisualizeRibbon from "./VisualizeRibbon";
-import { CsvContext } from "../../lib/CsvContext"; // Assuming you use `` for CsvContext
 import { useStepContext } from "../../lib/StepContext";
 
 const Ribbon: React.FC = () => {

@@ -1,7 +1,6 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useRef } from "react";
 import RibbonButton from "./RibbonButton";
 import { CreateBarChart } from "./chart_modals/BarChartModals";
-import { CsvContext } from "../../lib/CsvContext";
 import { useChartContext } from "../../lib/ChartContext";
 
 // Material UI
@@ -9,8 +8,6 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import DonutLargeIcon from "@mui/icons-material/DonutLarge";
 import TollIcon from "@mui/icons-material/Toll";
 import BubbleChartIcon from "@mui/icons-material/BubbleChart";
-import TextFieldsIcon from "@mui/icons-material/TextFields";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Popover from "@mui/material/Popover";
 import AddchartIcon from "@mui/icons-material/Addchart";
 import FormatShapesIcon from "@mui/icons-material/FormatShapes";
@@ -138,6 +135,7 @@ Create your own chart and customize it"
         Icon={FormatShapesIcon}
         onClick={() => {
           addFigure(
+            "",
             <div className="flex flex-row bg-white justify-center items-center w-64 h-32">
               <p className="text-sm">Text</p>
             </div>,
