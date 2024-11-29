@@ -1,11 +1,17 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  ReactNode,
+} from "react";
 
 type ChartContextType = {
-  figures: ReactNode[];
-  addFigure: (figure: ReactNode) => void;
-  removeFigure: (index: number) => void;
+  figures: { [key: string]: ReactNode };
+  addFigure: (id: string, figure: ReactNode) => void;
+  removeFigure: (index: string) => void;
 };
 
 export const ChartContext = createContext<ChartContextType | undefined>(
@@ -15,14 +21,21 @@ export const ChartContext = createContext<ChartContextType | undefined>(
 export const ChartContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [figures, setFigures] = useState<ReactNode[]>([]);
+  const [figures, setFigures] = useState<{ [key: string]: ReactNode }>({});
 
-  const addFigure = (figure: ReactNode) => {
-    setFigures((prevFigures) => [...prevFigures, figure]);
+  const addFigure = (id: string, figure: ReactNode) => {
+    setFigures((prevFigures) => ({
+      ...prevFigures,
+      [id]: figure,
+    }));
   };
 
-  const removeFigure = (index: number) => {
-    setFigures((prevFigures) => prevFigures.filter((_, i) => i !== index));
+  const removeFigure = (idToRemove: string) => {
+    setFigures((prevFigures) => {
+      const newFigures = { ...prevFigures };
+      delete newFigures[idToRemove];
+      return newFigures;
+    });
   };
 
   return (

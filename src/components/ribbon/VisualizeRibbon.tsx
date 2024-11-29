@@ -13,10 +13,10 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Popover from "@mui/material/Popover";
 import AddchartIcon from "@mui/icons-material/Addchart";
-import FormatShapesIcon from '@mui/icons-material/FormatShapes';
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
-import PreviewIcon from '@mui/icons-material/Preview';
-import PrintIcon from '@mui/icons-material/Print';
+import FormatShapesIcon from "@mui/icons-material/FormatShapes";
+import AutoGraphIcon from "@mui/icons-material/AutoGraph";
+import PreviewIcon from "@mui/icons-material/Preview";
+import PrintIcon from "@mui/icons-material/Print";
 
 // Interfaces
 interface VisualizeRibbonProps {
@@ -61,6 +61,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
   const { addFigure } = useChartContext();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [isBarChartInvoked, setIsBarChartInvoked] = useState(false);
+  const [isColumnChartInvoked, setIsColumnChartInvoked] = useState(false);
 
   // Components
   const AddChartPopover: React.FC = () => {
@@ -89,7 +90,14 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
                 setIsPopoverOpen(false);
               }}
             />
-            <PopoverButton Icon={BarChartIcon} label="Column Chart" />
+            <PopoverButton
+              Icon={BarChartIcon}
+              label="Column Chart"
+              onClick={() => {
+                setIsColumnChartInvoked(true);
+                setIsPopoverOpen(false);
+              }}
+            />
           </div>
           <div className="flex flex-row space-x-6">
             <PopoverButton Icon={DonutLargeIcon} label="Donut Chart" />
@@ -178,6 +186,11 @@ Save your report as PDF or Image"
       <CreateBarChart
         invoked={isBarChartInvoked}
         setInvoked={setIsBarChartInvoked}
+      />
+      <CreateBarChart
+        invoked={isColumnChartInvoked}
+        setInvoked={setIsColumnChartInvoked}
+        columnChart={true}
       />
     </>
   );

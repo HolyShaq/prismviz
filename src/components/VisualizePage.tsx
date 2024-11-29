@@ -26,9 +26,9 @@ const VisualizePage: React.FC = () => {
 
   return (
     <div className="h-full w-full max-h-full max-w-full">
-      <div className="flex flex-col space-y-2 justify-center pb-6">
-        {figures.map((figure, index) => (
-          <React.Fragment key={index}>{figure}</React.Fragment>
+      <div className="flex flex-col space-y-2 justify-center pb-64">
+        {Object.keys(figures).map((id) => (
+          <React.Fragment key={id}>{figures[id]}</React.Fragment>
         ))}
       </div>
     </div>
