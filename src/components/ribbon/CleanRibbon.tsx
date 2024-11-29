@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import RibbonButton from "./RibbonButton";
 import { useStepContext } from "../../lib/StepContext";
 import { CsvContext } from "../../lib/CsvContext";
+import { DataCleaningContext } from "../../lib/DataCleaningContext";
 
 // Material-UI icons
 import SearchOffIcon from "@mui/icons-material/SearchOff";
@@ -23,9 +24,7 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
     setCleanStepCompleted,
     cleanStepCompleted,
   } = useStepContext(); // Access cleaning step context
-  const { handleMissingData, removeDuplicates, validateColumns } =
-    useContext(CsvContext); // Access cleaning methods from CsvContext
-
+  const { handleMissingData, removeDuplicates, validateColumns, } = useContext(DataCleaningContext); // Access data cleaning methods from DataCleaningContext
   type CleanButtonSetType = {
     left: Array<React.ReactElement<typeof RibbonButton>>;
     right: Array<React.ReactElement<typeof RibbonButton>>;
