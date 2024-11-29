@@ -276,3 +276,36 @@ a:hover {
   bottom: 0;
   transform: rotate(45deg);
 }
+
+/* Keyframes for Fade In */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Keyframes for Fade Out */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+/* Utility Classes for Animation */
+.animate-fade-in {
+  animation: fadeIn 1s ease-in-out forwards;
+}
+
+.animate-fade-out {
+  animation: fadeOut 1s ease-in-out forwards;
+}
