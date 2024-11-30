@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import RibbonButton from "./RibbonButton";
 import { CreateBarChart } from "./chart_modals/BarChartModals";
+import { CreateDonutChart } from "./chart_modals/DonutChartModals";
 import { useChartContext } from "../../lib/ChartContext";
 
 // Material UI
@@ -59,6 +60,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [isBarChartInvoked, setIsBarChartInvoked] = useState(false);
   const [isColumnChartInvoked, setIsColumnChartInvoked] = useState(false);
+  const [isDonutChartInvoked, setIsDonutChartInvoked] = useState(false);
 
   // Components
   const AddChartPopover: React.FC = () => {
@@ -97,7 +99,14 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
             />
           </div>
           <div className="flex flex-row space-x-6">
-            <PopoverButton Icon={DonutLargeIcon} label="Donut Chart" />
+            <PopoverButton
+              Icon={DonutLargeIcon}
+              label="Donut Chart"
+              onClick={() => {
+                setIsDonutChartInvoked(true);
+                setIsPopoverOpen(false);
+              }}
+            />
             <PopoverButton Icon={TollIcon} label="Radial Chart" />
           </div>
           <div className="flex flex-row space-x-6">
@@ -180,15 +189,26 @@ Save your report as PDF or Image"
     <>
       {left ? VisualizeButtonSet.left.map((button) => button) : null}
       {right ? VisualizeButtonSet.right.map((button) => button) : null}
+
       <AddChartPopover />
+
+      {/* Bar Chart Modals */}
       <CreateBarChart
         invoked={isBarChartInvoked}
         setInvoked={setIsBarChartInvoked}
       />
+
+      {/* Column Chart Modals */}
       <CreateBarChart
         invoked={isColumnChartInvoked}
         setInvoked={setIsColumnChartInvoked}
         columnChart={true}
+      />
+
+      {/* Donut Chart Modal */}
+      <CreateDonutChart
+        invoked={isDonutChartInvoked}
+        setInvoked={setIsDonutChartInvoked}
       />
     </>
   );
