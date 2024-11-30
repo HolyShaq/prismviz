@@ -2,7 +2,7 @@ import { capitalize } from "@/lib/utils";
 
 const defaultChartOptions = (
   xAxis: string,
-  yAxis: string,
+  yAxis: string = "",
   yMetricAxis: string,
 ) => {
   return {
@@ -14,6 +14,7 @@ const defaultChartOptions = (
     plugins: {
       legend: {
         display: false,
+        position: "top" as "top" | "right" | "bottom" | "left",
       },
       title: {
         display: true,

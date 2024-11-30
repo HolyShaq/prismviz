@@ -1,4 +1,11 @@
-import { Input, Button, Drawer, MenuItem, Select } from "@mui/material";
+import {
+  Input,
+  Button,
+  Drawer,
+  MenuItem,
+  Select,
+  Checkbox,
+} from "@mui/material";
 import { MuiColorInput } from "mui-color-input";
 import { PropsWithChildren } from "react";
 import CloseIcon from "@mui/icons-material/Close";
@@ -147,6 +154,46 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
         value={color}
         onChange={setColor}
       />
+    </div>
+  );
+};
+
+// Legend Selection
+interface LegendOptionProps {
+  showLegend: boolean;
+  setShowLegend: (show: boolean) => void;
+  legendPosition: string;
+  setLegendPosition: (legend: string) => void;
+}
+export const LegendOption: React.FC<LegendOptionProps> = ({
+  showLegend,
+  setShowLegend,
+  legendPosition: legend,
+  setLegendPosition: setLegend,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <div className="flex flex-row space-x-1 items-center">
+        <span className={"font-thin " + (showLegend ? "" : "opacity-50")}>
+          Legend
+        </span>
+        <Checkbox
+          checked={showLegend}
+          onChange={() => setShowLegend(!showLegend)}
+        />
+      </div>
+      {showLegend && (
+        <Select
+          className="bg-white rounded-md"
+          value={legend}
+          onChange={(event) => setLegend(event.target.value as string)}
+        >
+          <MenuItem value="top">Top</MenuItem>
+          <MenuItem value="bottom">Bottom</MenuItem>
+          <MenuItem value="left">Left</MenuItem>
+          <MenuItem value="right">Right</MenuItem>
+        </Select>
+      )}
     </div>
   );
 };
