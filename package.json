@@ -30,10 +30,11 @@
     "react-query": "^3.39.3",
     "react-resizable": "^3.0.5",
     "react-to-print": "^3.0.2",
-    "uuid": "^11.0.3",
-    "shadcn": "^2.1.6"
+    "shadcn": "^2.1.6",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
+    "@types/chart.js": "^2.9.41",
     "@types/lodash": "^4.17.13",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.15",

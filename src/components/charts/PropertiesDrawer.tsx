@@ -5,6 +5,7 @@ import {
   MenuItem,
   Select,
   Checkbox,
+  Slider,
 } from "@mui/material";
 import { MuiColorInput } from "mui-color-input";
 import { PropsWithChildren } from "react";
@@ -194,6 +195,56 @@ export const LegendOption: React.FC<LegendOptionProps> = ({
           <MenuItem value="right">Right</MenuItem>
         </Select>
       )}
+    </div>
+  );
+};
+
+// Circumference Slider
+interface CircumferenceSliderProps {
+  circumference: number;
+  setCircumference: (circumference: number) => void;
+}
+
+export const CircumferenceSlider: React.FC<CircumferenceSliderProps> = ({
+  circumference,
+  setCircumference,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <span className="font-thin">Circumference</span>
+      <div className="px-4">
+        <Slider
+          sx={{
+            "& .MuiSlider-markLabel": {
+              color: "white",
+            },
+          }}
+          value={circumference}
+          onChange={(_event, value) => setCircumference(value as number)}
+          valueLabelDisplay="auto"
+          min={90}
+          max={360}
+          step={10}
+          marks={[
+            {
+              value: 90,
+              label: "90°",
+            },
+            {
+              value: 180,
+              label: "180°",
+            },
+            {
+              value: 270,
+              label: "270°",
+            },
+            {
+              value: 360,
+              label: "360°",
+            },
+          ]}
+        />
+      </div>
     </div>
   );
 };

@@ -26,7 +26,6 @@ export const CreateBarChart: React.FC<CreateBarChartProps> = ({
   useEffect(() => {
     if (done) {
       const chartId = uuidv4();
-      console.log("Adding bar chart with ID:", chartId);
       addFigure(
         chartId,
         <BarChart

@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import RibbonButton from "./RibbonButton";
 import { CreateBarChart } from "./chart_modals/BarChartModals";
 import { CreateDonutChart } from "./chart_modals/DonutChartModals";
+import { CreateRadialChart } from "./chart_modals/RadialChartModals";
 import { useChartContext } from "../../lib/ChartContext";
 
 // Material UI
@@ -61,6 +62,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
   const [isBarChartInvoked, setIsBarChartInvoked] = useState(false);
   const [isColumnChartInvoked, setIsColumnChartInvoked] = useState(false);
   const [isDonutChartInvoked, setIsDonutChartInvoked] = useState(false);
+  const [isRadialChartInvoked, setIsRadialChartInvoked] = useState(false);
 
   // Components
   const AddChartPopover: React.FC = () => {
@@ -107,7 +109,14 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
                 setIsPopoverOpen(false);
               }}
             />
-            <PopoverButton Icon={TollIcon} label="Radial Chart" />
+            <PopoverButton
+              Icon={TollIcon}
+              label="Radial Chart"
+              onClick={() => {
+                setIsRadialChartInvoked(true);
+                setIsPopoverOpen(false);
+              }}
+            />
           </div>
           <div className="flex flex-row space-x-6">
             <PopoverButton Icon={BubbleChartIcon} label="Bubble Chart" />
@@ -209,6 +218,12 @@ Save your report as PDF or Image"
       <CreateDonutChart
         invoked={isDonutChartInvoked}
         setInvoked={setIsDonutChartInvoked}
+      />
+
+      {/* Radial Chart Modal */}
+      <CreateRadialChart
+        invoked={isRadialChartInvoked}
+        setInvoked={setIsRadialChartInvoked}
       />
     </>
   );

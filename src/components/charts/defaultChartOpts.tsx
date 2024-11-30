@@ -22,6 +22,9 @@ const defaultChartOptions = (
           (yAxis ? capitalize(yMetricAxis) + " " + yAxis + " per " : "") +
           xAxis,
       },
+      tooltip: {
+        callbacks: {},
+      },
     },
     indexAxis: "x" as "x" | "y",
   };
