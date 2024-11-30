@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import {
   Modal,
   Box,
@@ -127,7 +127,14 @@ const StepModal: React.FC<StepModalProps> = ({
       column.type === "number" ? "average" : "",
     ),
   );
-  const checkRefColumns = useRef(columnSelection.map(() => null));
+  const checkRefColumns = useRef(new Map());
+
+  function getMap() {
+    if (!checkRefColumns.current) {
+      checkRefColumns.current = new Map();
+    }
+    return checkRefColumns.current;
+  }
 
   // Use alongside with column states to easily set states
   const setBool = (
@@ -153,6 +160,18 @@ const StepModal: React.FC<StepModalProps> = ({
     });
   };
 
+  // Update selected choice and metric
+  const [done, setDone] = useState(false);
+  useEffect(() => {
+    if (done) {
+      const selectedIndex = selectedColumns.indexOf(true);
+      setChoice(columnSelection[selectedIndex].name);
+      setChoiceMetric(metricColumns[selectedIndex]);
+      onConfirm();
+      setDone(false);
+    }
+  }, [done]);
+
   const select = (index: number) => {
     // Deselect all columns except the selected one
     Object.keys(csvData[0])
@@ -174,7 +193,9 @@ const StepModal: React.FC<StepModalProps> = ({
           <div className="flex flex-row space-x-2 items-center">
             {(categorical || columnSelection[index].type === "number") && (
               <Checkbox
-                ref={checkRefColumns.current[index]}
+                ref={(node) => {
+                  getMap().set(index, node);
+                }}
                 checked={selectedColumns[index]}
                 onChange={() => {
                   select(index);
@@ -223,14 +244,8 @@ const StepModal: React.FC<StepModalProps> = ({
             <div className="flex flex-row space-x-4 justify-end mt-4">
               <Button
                 onClick={() => {
-                  columnSelection
-                    .filter((_col, index) => selectedColumns[index])
-                    .map((col, index) => {
-                      setBool(setSelectedColumns, index, false);
-                      setChoice(col.name);
-                      setChoiceMetric(metricColumns[index]);
-                    });
-                  onConfirm();
+                  columnSelection;
+                  setDone(true);
                 }}
                 disabled={
                   optional
@@ -253,7 +268,7 @@ const StepModal: React.FC<StepModalProps> = ({
               return (
                 <PopoverMetric
                   key={index}
-                  anchorEl={checkRefColumns.current[index]}
+                  anchorEl={getMap().get(index)}
                   open={openColumns[index]}
                   setOpen={(open) => setBool(setOpenColumns, index, open)}
                   metric={metricColumns[index]}
