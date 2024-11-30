@@ -104,14 +104,14 @@ export const BarChart: React.FC<BarProps> = ({
 
       <PropertiesDrawer id={id} open={open} setOpen={setOpen}>
         <ColumnSelection
-          label="X Axis"
+          label={columnChart ? "X Axis" : "Y Axis"}
           axis={xAxis}
           setAxis={setXAxis}
           items={columns}
         />
 
         <ColumnSelection
-          label="Y Axis"
+          label={columnChart ? "Y Axis" : "X Axis"}
           axis={yAxis!}
           setAxis={setYAxis}
           metric={yMetricAxis}
