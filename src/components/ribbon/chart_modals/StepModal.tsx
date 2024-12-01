@@ -36,7 +36,7 @@ function determineValueType(str: string) {
 }
 
 // Popover for selecting metric for string columns
-interface PopeverMetric {
+interface PopoverMetric {
   anchorEl: Element | null;
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -44,7 +44,7 @@ interface PopeverMetric {
   setMetric: (metric: string) => void;
 }
 
-const PopoverMetric: React.FC<PopeverMetric> = ({
+const PopoverMetric: React.FC<PopoverMetric> = ({
   anchorEl,
   open,
   setOpen,

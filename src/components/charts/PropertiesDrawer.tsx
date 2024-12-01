@@ -25,14 +25,16 @@ export const PropertiesDrawer: React.FC<
 > = ({ children, open, setOpen, id }) => {
   return (
     <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-      <div className="flex flex-col w-[250px] h-full p-4 bg-primary-pressed text-white">
+      <div className="flex flex-col w-[250px] h-fit p-4 bg-primary-pressed text-white">
         <div className="flex flex-row justify-end mt-[-10px] mr-[-10px]">
           <CloseIcon fontSize="medium" onClick={() => setOpen(false)} />
         </div>
         <span className="text-2xl font-bold">Properties</span>
         <div className="flex flex-col justify-between flex-grow">
-          <div className="justify-start space-y-4 mt-2">{children}</div>
-          <ChartDeletion id={id} />
+          <div className="justify-start space-y-4 mt-2 h-full">{children}</div>
+          <div className="mt-12 bg-primary-pressed">
+            <ChartDeletion id={id} />
+          </div>
         </div>
       </div>
     </Drawer>
@@ -49,6 +51,7 @@ interface ColumnSelectionProps {
   metric?: string;
   setMetric?: (metric: string) => void;
   items: string[];
+  aggregated?: boolean;
   optional?: boolean;
 }
 export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
@@ -58,6 +61,7 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
   metric = null,
   setMetric = () => {},
   items,
+  aggregated = true,
   optional = false,
 }) => {
   return axis ? (
@@ -86,7 +90,7 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
         ))}
       </Select>
 
-      {metric && (
+      {metric && aggregated && (
         <Select
           className="bg-white rounded-md"
           value={metric}
@@ -212,7 +216,7 @@ export const CircumferenceSlider: React.FC<CircumferenceSliderProps> = ({
   return (
     <div className="flex flex-col space-y-1">
       <span className="font-thin">Circumference</span>
-      <div className="px-4">
+      <div className="px-6">
         <Slider
           sx={{
             "& .MuiSlider-markLabel": {
@@ -244,6 +248,115 @@ export const CircumferenceSlider: React.FC<CircumferenceSliderProps> = ({
             },
           ]}
         />
+      </div>
+    </div>
+  );
+};
+
+// Sample Option for Bubble Chart
+interface SampleOptionProps {
+  enabled: boolean;
+  setEnabled: (enabled: boolean) => void;
+  sampleSize: number;
+  setSampleSize: (sampleSize: number) => void;
+}
+export const SampleOption: React.FC<SampleOptionProps> = ({
+  enabled,
+  setEnabled,
+  sampleSize,
+  setSampleSize,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <div className="flex flex-row space-x-1 items-center">
+        <span className={"font-thin " + (enabled ? "" : "opacity-50")}>
+          Sample Size
+        </span>
+        <Checkbox checked={enabled} onChange={() => setEnabled(!enabled)} />
+      </div>
+      <div className="flex flex-col space-y-1">
+        <div className="px-6">
+          <Slider
+            sx={{
+              "& .MuiSlider-markLabel": {
+                color: "white",
+              },
+            }}
+            value={sampleSize}
+            onChange={(_event, value) => setSampleSize(value as number)}
+            valueLabelDisplay="auto"
+            min={10}
+            max={100}
+            step={5}
+            disabled={!enabled}
+            marks={[
+              {
+                value: 10,
+                label: "10",
+              },
+              {
+                value: 100,
+                label: "100",
+              },
+            ]}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Scale Radius Checkbox
+interface scaleRadiusProps {
+  enabled: boolean;
+  setEnabled: (enabled: boolean) => void;
+  radiusRange: [number, number];
+  setRadiusRange: (range: [number, number]) => void;
+}
+export const ScaleRadius: React.FC<scaleRadiusProps> = ({
+  enabled,
+  setEnabled,
+  radiusRange,
+  setRadiusRange,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <div className="flex flex-row space-x-1 items-center">
+        <span className={"font-thin " + (enabled ? "" : "opacity-50")}>
+          Scale Radius
+        </span>
+        <Checkbox checked={enabled} onChange={() => setEnabled(!enabled)} />
+      </div>
+
+      <div className="flex flex-col space-y-1">
+        <div className="px-6">
+          <Slider
+            sx={{
+              "& .MuiSlider-markLabel": {
+                color: "white",
+              },
+            }}
+            value={radiusRange}
+            onChange={(_event, value, activeThumb) =>
+              setRadiusRange(value as [number, number])
+            }
+            valueLabelDisplay="auto"
+            min={1}
+            max={50}
+            step={1}
+            disabled={!enabled}
+            marks={[
+              {
+                value: 1,
+                label: "1",
+              },
+              {
+                value: 50,
+                label: "50",
+              },
+            ]}
+          />
+        </div>
       </div>
     </div>
   );
