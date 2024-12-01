@@ -56,7 +56,7 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
   const [open, setOpen] = useState(false);
 
   // For resizing
-  const minDimensions = { width: 300, height: 166 };
+  const minDimensions = { width: 400, height: 266 };
   const [width, setWidth] = useState(minDimensions.width);
   const [height, setHeight] = useState(minDimensions.height);
   const onResize = (_e: SyntheticEvent, { size }: ResizeCallbackData) => {

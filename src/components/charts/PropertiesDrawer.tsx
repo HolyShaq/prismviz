@@ -24,15 +24,24 @@ export const PropertiesDrawer: React.FC<
   PropsWithChildren<PropertiesDrawerProps>
 > = ({ children, open, setOpen, id }) => {
   return (
-    <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-      <div className="flex flex-col w-[250px] h-fit p-4 bg-primary-pressed text-white">
+    <Drawer
+      PaperProps={{
+        sx: {
+          backgroundColor: "#545469",
+        },
+      }}
+      anchor="right"
+      open={open}
+      onClose={() => setOpen(false)}
+    >
+      <div className="flex flex-col w-[250px] h-full p-4 pb-0 text-white">
         <div className="flex flex-row justify-end mt-[-10px] mr-[-10px]">
           <CloseIcon fontSize="medium" onClick={() => setOpen(false)} />
         </div>
         <span className="text-2xl font-bold">Properties</span>
         <div className="flex flex-col justify-between flex-grow">
           <div className="justify-start space-y-4 mt-2 h-full">{children}</div>
-          <div className="mt-12 bg-primary-pressed">
+          <div className="mt-16 mb-4">
             <ChartDeletion id={id} />
           </div>
         </div>
