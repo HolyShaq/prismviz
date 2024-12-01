@@ -146,6 +146,8 @@ export const RadialChart: React.FC<RadialChartProps> = ({
           label="Circumference"
           axis={circumference}
           setAxis={setCircumference}
+          metric={circumferenceMetric}
+          setMetric={setCircumferenceMetric}
           items={numericalColumns}
           optional
         />
