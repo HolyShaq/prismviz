@@ -26,6 +26,25 @@ const defaultChartOptions = (
         callbacks: {},
       },
     },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: xAxis,
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: yAxis,
+        },
+      },
+    } as
+      | {
+          x: { title: { display: boolean; text: string } };
+          y: { title: { display: boolean; text: string } };
+        }
+      | undefined,
     indexAxis: "x" as "x" | "y",
   };
 };

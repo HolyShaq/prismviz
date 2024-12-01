@@ -14,9 +14,10 @@ import {
   ColumnSelection,
   LegendOption,
   PropertiesDrawer,
-  TitleSelection,
+  AxisLabelSelection,
   SampleOption,
   ScaleRadius,
+  TitleSelection,
 } from "./PropertiesDrawer";
 import defaultChartOptions from "./defaultChartOpts";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
@@ -77,6 +78,10 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
 
   // General Properties
   const [title, setTitle] = useState("");
+  const [xLabel, setXLabel] = useState("");
+  const [xLabelShow, setXLabelShow] = useState(true);
+  const [yLabel, setYLabel] = useState("");
+  const [yLabelShow, setYLabelShow] = useState(true);
   const [showLegend, setShowLegend] = useState(true);
   const [legendPosition, setLegendPosition] = useState("top");
   const [sampleEnabled, setSampleEnabled] = useState(false);
@@ -86,6 +91,10 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
 
   const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
   options.plugins.title.text = "Bubble Chart";
+  if (xLabel) options.scales!.x.title.text = xLabel; // Set x axis label if it exists
+  if (yLabel) options.scales!.y.title.text = yLabel; // Set y axis label if it exists
+  if (!xLabelShow) options.scales!.x.title.display = false; // Hide x axis label if disabled
+  if (!yLabelShow) options.scales!.y.title.display = false; // Hide y axis label if disabled
   options.plugins!.legend! = {
     display: showLegend,
     position: legendPosition as "top" | "right" | "bottom" | "left",
@@ -218,6 +227,16 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
         />
 
         <TitleSelection title={title} setTitle={setTitle} />
+        <AxisLabelSelection
+          xLabel={xLabel}
+          setXLabel={setXLabel}
+          xLabelShow={xLabelShow}
+          setXLabelShow={setXLabelShow}
+          yLabel={yLabel}
+          setYLabel={setYLabel}
+          yLabelShow={yLabelShow}
+          setYLabelShow={setYLabelShow}
+        />
         <LegendOption
           showLegend={showLegend}
           setShowLegend={setShowLegend}

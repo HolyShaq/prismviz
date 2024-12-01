@@ -151,6 +151,60 @@ export const TitleSelection: React.FC<TitleSelectionProps> = ({
   );
 };
 
+// Axis Label Selection
+interface AxisLabelSelectionProps {
+  xLabel: string;
+  setXLabel: (axisLabel: string) => void;
+  xLabelShow: boolean;
+  setXLabelShow: (show: boolean) => void;
+  yLabel: string;
+  setYLabel: (axisLabel: string) => void;
+  yLabelShow: boolean;
+  setYLabelShow: (show: boolean) => void;
+}
+export const AxisLabelSelection: React.FC<AxisLabelSelectionProps> = ({
+  xLabel,
+  setXLabel,
+  xLabelShow,
+  setXLabelShow,
+  yLabel,
+  setYLabel,
+  yLabelShow,
+  setYLabelShow,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <span className="font-thin">Axis Label</span>
+      <div className="flex flex-row space-x-1">
+        <Input
+          className={`bg-white h-14 px-2 py-1 rounded-md ${!xLabelShow ? "opacity-50" : ""}`}
+          value={xLabel}
+          onChange={(event) => setXLabel(event.target.value)}
+          placeholder="X-Axis"
+          disabled={!xLabelShow}
+        />
+        <Checkbox
+          checked={xLabelShow}
+          onChange={() => setXLabelShow(!xLabelShow)}
+        />
+      </div>
+      <div className="flex flex-row space-x-1">
+        <Input
+          className={`bg-white h-14 px-2 py-1 rounded-md ${!yLabelShow ? "opacity-50" : ""}`}
+          value={yLabel}
+          onChange={(event) => setYLabel(event.target.value)}
+          placeholder="Y-Axis"
+          disabled={!yLabelShow}
+        />
+        <Checkbox
+          checked={yLabelShow}
+          onChange={() => setYLabelShow(!yLabelShow)}
+        />
+      </div>
+    </div>
+  );
+};
+
 // Color Selection
 interface ColorSelectionProps {
   color: string;

@@ -79,6 +79,7 @@ export const RadialChart: React.FC<RadialChartProps> = ({
   options.plugins!.tooltip!.callbacks = {
     title: () => "",
   };
+  options.scales = undefined;
   const labels = useCategories(column!).map((val) => String(val));
 
   options.plugins.legend = {

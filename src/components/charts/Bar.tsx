@@ -10,6 +10,7 @@ import {
   useNumericalColumns,
 } from "@/lib/utils";
 import {
+  AxisLabelSelection,
   ColorSelection,
   ColumnSelection,
   PropertiesDrawer,
@@ -60,10 +61,27 @@ export const BarChart: React.FC<BarProps> = ({
 
   // General Properties
   const [title, setTitle] = useState("");
+  const [xLabel, setXLabel] = useState("");
+  const [xLabelShow, setXLabelShow] = useState(true);
+  const [yLabel, setYLabel] = useState("");
+  const [yLabelShow, setYLabelShow] = useState(true);
 
   const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
   if (title) options.plugins.title.text = title; // Set title if it exists
-  if (!columnChart) options.indexAxis = "y" as "x" | "y"; // Set index axis to y (to make the chart vertical)
+  if (xLabel) options.scales!.x.title.text = xLabel; // Set x axis label if it exists
+  if (yLabel) options.scales!.y.title.text = yLabel; // Set y axis label if it exists
+  if (!xLabelShow) options.scales!.x.title.display = false; // Hide x axis label if disabled
+  if (!yLabelShow) options.scales!.y.title.display = false; // Hide y axis label if disabled
+
+  if (!columnChart) {
+    // Swap x and y axis for column charts
+    const _x = options.scales!.x;
+    const _y = options.scales!.y;
+    options.scales!.x = _y;
+    options.scales!.y = _x;
+    options.indexAxis = "y" as "x" | "y"; // Set index axis to y (to make the chart vertical)
+  }
+
   const labels = useCategories(xAxis!);
 
   // Color properties
@@ -121,6 +139,18 @@ export const BarChart: React.FC<BarProps> = ({
         />
 
         <TitleSelection title={title} setTitle={setTitle} />
+
+        <AxisLabelSelection
+          xLabel={xLabel}
+          setXLabel={setXLabel}
+          xLabelShow={xLabelShow}
+          setXLabelShow={setXLabelShow}
+          yLabel={yLabel}
+          setYLabel={setYLabel}
+          yLabelShow={yLabelShow}
+          setYLabelShow={setYLabelShow}
+        />
+
         <ColorSelection color={color} setColor={setColor} />
       </PropertiesDrawer>
     </>

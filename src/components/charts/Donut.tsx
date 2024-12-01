@@ -58,6 +58,8 @@ export const DonutChart: React.FC<DonutProps> = ({ columnInitial, id }) => {
     display: showLegend,
     position: legendPosition as "top" | "right" | "bottom" | "left",
   };
+  // Remove axis labels
+  options.scales = undefined;
   const labels = useCategories(column!);
 
   // Data
