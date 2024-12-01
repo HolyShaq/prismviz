@@ -165,8 +165,8 @@ const StepModal: React.FC<StepModalProps> = ({
   useEffect(() => {
     if (done) {
       const selectedIndex = selectedColumns.indexOf(true);
-      setChoice(columnSelection[selectedIndex].name);
-      setChoiceMetric(metricColumns[selectedIndex]);
+      selectedIndex !== -1 && setChoice(columnSelection[selectedIndex].name);
+      selectedIndex !== -1 && setChoiceMetric(metricColumns[selectedIndex]);
       onConfirm();
       setDone(false);
     }
