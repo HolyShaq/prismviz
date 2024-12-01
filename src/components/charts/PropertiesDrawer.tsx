@@ -278,7 +278,7 @@ export const CircumferenceSlider: React.FC<CircumferenceSliderProps> = ({
 }) => {
   return (
     <div className="flex flex-col space-y-1">
-      <span className="font-thin">Circumference</span>
+      <span className="font-thin">Max Circumference</span>
       <div className="px-6">
         <Slider
           sx={{
