@@ -1,5 +1,5 @@
 import React, { useState, useContext, SyntheticEvent } from "react";
-import { Bar, Bubble } from "react-chartjs-2";
+import { Bubble } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { CsvContext } from "@/lib/CsvContext";
 import {
@@ -10,7 +10,6 @@ import {
   useNumericalColumns,
 } from "@/lib/utils";
 import {
-  ColorSelection,
   ColumnSelection,
   LegendOption,
   PropertiesDrawer,
@@ -21,7 +20,6 @@ import {
 } from "./PropertiesDrawer";
 import defaultChartOptions from "./defaultChartOpts";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
-import { Box, Button, Modal, Slider, Switch } from "@mui/material";
 
 ChartJS.register(...registerables);
 
@@ -45,7 +43,6 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
   yMetric,
   radius,
   radiusMetric,
-  aggregatedInitial = true,
   sampleSizeInitial = 30,
   id,
 }) => {
@@ -78,6 +75,7 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
 
   // General Properties
   const [title, setTitle] = useState("");
+  const [titleShow, setTitleShow] = useState(true);
   const [xLabel, setXLabel] = useState("");
   const [xLabelShow, setXLabelShow] = useState(true);
   const [yLabel, setYLabel] = useState("");
@@ -91,6 +89,7 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
 
   const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
   options.plugins.title.text = "Bubble Chart";
+  if (!titleShow) options.plugins.title.display = false; // Hide title if disabled
   if (xLabel) options.scales!.x.title.text = xLabel; // Set x axis label if it exists
   if (yLabel) options.scales!.y.title.text = yLabel; // Set y axis label if it exists
   if (!xLabelShow) options.scales!.x.title.display = false; // Hide x axis label if disabled
@@ -99,6 +98,8 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
     display: showLegend,
     position: legendPosition as "top" | "right" | "bottom" | "left",
   };
+
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   if (scaleRadius) {
     options.plugins!.tooltip!.callbacks = {
       label: (context: any) => {
@@ -226,7 +227,13 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
           setRadiusRange={setRadiusRange}
         />
 
-        <TitleSelection title={title} setTitle={setTitle} />
+        <TitleSelection
+          title={title}
+          setTitle={setTitle}
+          titleShow={titleShow}
+          setTitleShow={setTitleShow}
+        />
+
         <AxisLabelSelection
           xLabel={xLabel}
           setXLabel={setXLabel}

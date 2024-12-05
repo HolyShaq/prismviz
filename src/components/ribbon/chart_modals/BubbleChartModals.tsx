@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import StepModal from "./StepModal";
 import { useChartContext } from "@/lib/ChartContext";
-import { BarChart } from "../../charts/Bar";
 import { v4 as uuidv4 } from "uuid";
 import { BubbleChart } from "@/components/charts/Bubble";
-import { Box, Button, Modal, Slider, Switch } from "@mui/material";
-import { sampleSize } from "lodash";
 
 interface CreateBubbleChartProps {
   invoked: boolean;

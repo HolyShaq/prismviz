@@ -1,16 +1,9 @@
 import React, { useState, useContext, SyntheticEvent } from "react";
-import { Doughnut, Pie } from "react-chartjs-2";
+import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, registerables } from "chart.js";
 import { CsvContext } from "@/lib/CsvContext";
+import { filterData, useCategories, useColumns } from "@/lib/utils";
 import {
-  useCategories,
-  filterData,
-  getAggregatedData,
-  useColumns,
-  useNumericalColumns,
-} from "@/lib/utils";
-import {
-  ColorSelection,
   ColumnSelection,
   LegendOption,
   PropertiesDrawer,
@@ -49,11 +42,13 @@ export const DonutChart: React.FC<DonutProps> = ({ columnInitial, id }) => {
 
   // General Properties
   const [title, setTitle] = useState("");
+  const [titleShow, setTitleShow] = useState(true);
   const [showLegend, setShowLegend] = useState(true);
   const [legendPosition, setLegendPosition] = useState("top");
 
   const options = defaultChartOptions(column, "", "");
   if (title) options.plugins!.title!.text = title;
+  if (!titleShow) options.plugins.title.display = false; // Hide title if disabled
   options.plugins!.legend! = {
     display: showLegend,
     position: legendPosition as "top" | "right" | "bottom" | "left",
@@ -102,7 +97,12 @@ export const DonutChart: React.FC<DonutProps> = ({ columnInitial, id }) => {
           items={columns}
         />
 
-        <TitleSelection title={title} setTitle={setTitle} />
+        <TitleSelection
+          title={title}
+          setTitle={setTitle}
+          titleShow={titleShow}
+          setTitleShow={setTitleShow}
+        />
         <LegendOption
           showLegend={showLegend}
           setShowLegend={setShowLegend}

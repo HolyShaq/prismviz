@@ -61,6 +61,7 @@ export const BarChart: React.FC<BarProps> = ({
 
   // General Properties
   const [title, setTitle] = useState("");
+  const [titleShow, setTitleShow] = useState(true);
   const [xLabel, setXLabel] = useState("");
   const [xLabelShow, setXLabelShow] = useState(true);
   const [yLabel, setYLabel] = useState("");
@@ -68,6 +69,7 @@ export const BarChart: React.FC<BarProps> = ({
 
   const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
   if (title) options.plugins.title.text = title; // Set title if it exists
+  if (!titleShow) options.plugins.title.display = false; // Hide title if disabled
   if (xLabel) options.scales!.x.title.text = xLabel; // Set x axis label if it exists
   if (yLabel) options.scales!.y.title.text = yLabel; // Set y axis label if it exists
   if (!xLabelShow) options.scales!.x.title.display = false; // Hide x axis label if disabled
@@ -138,7 +140,12 @@ export const BarChart: React.FC<BarProps> = ({
           optional
         />
 
-        <TitleSelection title={title} setTitle={setTitle} />
+        <TitleSelection
+          title={title}
+          setTitle={setTitle}
+          titleShow={titleShow}
+          setTitleShow={setTitleShow}
+        />
 
         <AxisLabelSelection
           xLabel={xLabel}

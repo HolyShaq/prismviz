@@ -133,14 +133,24 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
 interface TitleSelectionProps {
   title: string;
   setTitle: (title: string) => void;
+  titleShow: boolean;
+  setTitleShow: (show: boolean) => void;
 }
 export const TitleSelection: React.FC<TitleSelectionProps> = ({
   title,
   setTitle,
+  titleShow,
+  setTitleShow,
 }) => {
   return (
     <div className="flex flex-col space-y-1">
-      <span className="font-thin">Title</span>
+      <div className="flex flex-row space-x-1 items-center">
+        <span className="font-thin">Title</span>
+        <Checkbox
+          checked={titleShow}
+          onChange={() => setTitleShow(!titleShow)}
+        />
+      </div>
       <Input
         className="bg-white h-14 px-2 py-1 rounded-md"
         value={title}
@@ -400,7 +410,7 @@ export const ScaleRadius: React.FC<scaleRadiusProps> = ({
               },
             }}
             value={radiusRange}
-            onChange={(_event, value, activeThumb) =>
+            onChange={(_event, value) =>
               setRadiusRange(value as [number, number])
             }
             valueLabelDisplay="auto"

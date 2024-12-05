@@ -61,6 +61,7 @@ export const RadialChart: React.FC<RadialChartProps> = ({
 
   // General Properties
   const [title, setTitle] = useState("");
+  const [titleShow, setTitleShow] = useState(true);
   const [showLegend, setShowLegend] = useState(true);
   const [legendPosition, setLegendPosition] = useState("top");
   const [maxCircumference, setMaxCircumference] = useState(270);
@@ -71,6 +72,7 @@ export const RadialChart: React.FC<RadialChartProps> = ({
     circumferenceMetric!,
   );
   if (title) options.plugins.title.text = title; // Set title if it exists
+  if (!titleShow) options.plugins.title.display = false; // Hide title if disabled
   options.plugins!.legend! = {
     ...options.plugins!.legend!,
     display: showLegend,
@@ -82,6 +84,7 @@ export const RadialChart: React.FC<RadialChartProps> = ({
   options.scales = undefined;
   const labels = useCategories(column!).map((val) => String(val));
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   options.plugins.legend = {
     ...options.plugins.legend,
     ...{
@@ -152,7 +155,13 @@ export const RadialChart: React.FC<RadialChartProps> = ({
           optional
         />
 
-        <TitleSelection title={title} setTitle={setTitle} />
+        <TitleSelection
+          title={title}
+          setTitle={setTitle}
+          titleShow={titleShow}
+          setTitleShow={setTitleShow}
+        />
+
         <LegendOption
           showLegend={showLegend}
           setShowLegend={setShowLegend}

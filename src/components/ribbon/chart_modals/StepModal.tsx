@@ -165,8 +165,10 @@ const StepModal: React.FC<StepModalProps> = ({
   useEffect(() => {
     if (done) {
       const selectedIndex = selectedColumns.indexOf(true);
-      selectedIndex !== -1 && setChoice(columnSelection[selectedIndex].name);
-      selectedIndex !== -1 && setChoiceMetric(metricColumns[selectedIndex]);
+      if (selectedIndex !== -1) {
+        setChoice(columnSelection[selectedIndex].name);
+        setChoiceMetric(metricColumns[selectedIndex]);
+      }
       onConfirm();
       setDone(false);
     }
@@ -244,7 +246,6 @@ const StepModal: React.FC<StepModalProps> = ({
             <div className="flex flex-row space-x-4 justify-end mt-4">
               <Button
                 onClick={() => {
-                  columnSelection;
                   setDone(true);
                 }}
                 disabled={
