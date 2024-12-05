@@ -167,7 +167,7 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
         lockAspectRatio={true}
       >
         <div
-          className="flex items-center justify-center p-4 w-full h-full bg-white z-50"
+          className="flex items-center justify-center p-4 w-full h-full bg-white rounded-md z-50"
           onClick={() => setOpen(true)}
         >
           <Bubble options={options} data={bubbleChartData} />

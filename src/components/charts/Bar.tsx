@@ -113,7 +113,7 @@ export const BarChart: React.FC<BarProps> = ({
         lockAspectRatio={true}
       >
         <div
-          className="flex items-center justify-center p-4 w-full h-full bg-white z-50"
+          className="flex items-center justify-center p-4 w-full h-full bg-white rounded-md z-50"
           onClick={() => setOpen(true)}
         >
           <Bar options={options} data={barChartData} />
