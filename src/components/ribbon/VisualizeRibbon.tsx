@@ -5,6 +5,7 @@ import { CreateDonutChart } from "./chart_modals/DonutChartModals";
 import { CreateRadialChart } from "./chart_modals/RadialChartModals";
 import { CreateBubbleChart } from "./chart_modals/BubbleChartModals";
 import { useChartContext } from "../../lib/ChartContext";
+import { v4 as uuidv4 } from "uuid";
 
 // Material UI
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -17,6 +18,7 @@ import FormatShapesIcon from "@mui/icons-material/FormatShapes";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import PreviewIcon from "@mui/icons-material/Preview";
 import PrintIcon from "@mui/icons-material/Print";
+import { Remarks } from "../charts/Remarks";
 
 // Interfaces
 interface VisualizeRibbonProps {
@@ -161,12 +163,8 @@ Create your own chart and customize it"
         key={1}
         Icon={FormatShapesIcon}
         onClick={() => {
-          addFigure(
-            "",
-            <div className="flex flex-row bg-white justify-center items-center w-64 h-32">
-              <p className="text-sm">Text</p>
-            </div>,
-          );
+          const chartId = uuidv4();
+          addFigure(chartId, <Remarks id={chartId} />);
         }}
         enabled={true}
         tooltip="Add Remarks:
