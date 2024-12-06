@@ -6,7 +6,6 @@ import { CreateRadialChart } from "./chart_modals/RadialChartModals";
 import { CreateBubbleChart } from "./chart_modals/BubbleChartModals";
 import { useChartContext } from "../../lib/ChartContext";
 import { v4 as uuidv4 } from "uuid";
-import { useReactToPrint } from "react-to-print";
 
 // Material UI
 import BarChartIcon from "@mui/icons-material/BarChart";
