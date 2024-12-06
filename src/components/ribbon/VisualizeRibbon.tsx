@@ -6,6 +6,7 @@ import { CreateRadialChart } from "./chart_modals/RadialChartModals";
 import { CreateBubbleChart } from "./chart_modals/BubbleChartModals";
 import { useChartContext } from "../../lib/ChartContext";
 import { v4 as uuidv4 } from "uuid";
+import { useReactToPrint } from "react-to-print";
 
 // Material UI
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -60,13 +61,16 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
 }) => {
   // Initialization
   const addChartRef = useRef(null);
-  const { addFigure } = useChartContext();
+  const { chartsRef, addFigure } = useChartContext();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [isBarChartInvoked, setIsBarChartInvoked] = useState(false);
   const [isColumnChartInvoked, setIsColumnChartInvoked] = useState(false);
   const [isDonutChartInvoked, setIsDonutChartInvoked] = useState(false);
   const [isRadialChartInvoked, setIsRadialChartInvoked] = useState(false);
   const [isBubbleChartInvoked, setIsBubbleChartInvoked] = useState(false);
+  const reactToPrintFn = useReactToPrint({
+    contentRef: chartsRef,
+  });
 
   // Components
   const AddChartPopover: React.FC = () => {
@@ -193,7 +197,10 @@ See what report looks like."
       <RibbonButton
         key={1}
         Icon={PrintIcon}
-        onClick={() => {}}
+        onClick={() => {
+          console.log("Print");
+          reactToPrintFn();
+        }}
         enabled={true}
         tooltip="Print Report:
 Save your report as PDF or Image"
