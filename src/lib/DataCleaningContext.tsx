@@ -23,7 +23,7 @@ type DataCleaningContextType = {
     removeDuplicates: () => void;
     validateColumns: () => void;
 };
-type RowData = Record<string, any>;
+type RowData = Record<string, unknown>;
 
 export const DataCleaningContext = createContext<DataCleaningContextType>({
     handleMissingData: () => { },
@@ -44,7 +44,7 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({ childr
     const [removedDuplicates, setRemovedDuplicates] = useState<Record<string, unknown>[]>([]);
     const [openRemovedDuplicatesModal, setOpenRemovedDuplicatesModal] = useState(false);
 
-    const [validatedChanges, setValidatedChanges] = useState<any[]>([]);
+    const [validatedChanges, setValidatedChanges] = useState<RowData[]>([]);
     const [openValidationModal, setOpenValidationModal] = useState<boolean>(false);
 
 
@@ -412,7 +412,7 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({ childr
 
     // Function to validate columns and track changes
     const validateColumns = () => {
-        const changes: any[] = []; // Array to store changes for tracking
+        const changes: RowData[] = [];// Array to store changes for tracking
 
         // Step 1: Validate and normalize data
         const validatedData = csvData.map((row, index) => {
@@ -468,7 +468,7 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({ childr
             headerName: column,  // Display the actual column name in the header
             width: 200,
             renderCell: (params: GridCellParams) => {
-                const originalValue = params.row.originalValue; 
+                const originalValue = params.row.originalValue;
                 const convertedValue = params.row.convertedValue;
 
                 const isUpdated = originalValue !== convertedValue;
