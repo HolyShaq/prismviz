@@ -19,6 +19,7 @@ import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import PreviewIcon from "@mui/icons-material/Preview";
 import PrintIcon from "@mui/icons-material/Print";
 import { Remarks } from "../charts/Remarks";
+import { GenerateReportModal } from "./chart_modals/GenerateReportmodal";
 
 // Interfaces
 interface VisualizeRibbonProps {
@@ -67,6 +68,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
   const [isDonutChartInvoked, setIsDonutChartInvoked] = useState(false);
   const [isRadialChartInvoked, setIsRadialChartInvoked] = useState(false);
   const [isBubbleChartInvoked, setIsBubbleChartInvoked] = useState(false);
+  const [isReportModalInvoked, setIsReportModalInvoked] = useState(false);
 
   // Components
   const AddChartPopover: React.FC = () => {
@@ -193,7 +195,7 @@ See what report looks like."
       <RibbonButton
         key={1}
         Icon={PrintIcon}
-        onClick={() => {}}
+        onClick={() => setIsReportModalInvoked(true)}
         enabled={true}
         tooltip="Print Report:
 Save your report as PDF or Image"
@@ -237,6 +239,12 @@ Save your report as PDF or Image"
       <CreateBubbleChart
         invoked={isBubbleChartInvoked}
         setInvoked={setIsBubbleChartInvoked}
+      />
+
+      {/* Report Modal */}
+      <GenerateReportModal
+        invoked={isReportModalInvoked}
+        setInvoked={setIsReportModalInvoked}
       />
     </>
   );
