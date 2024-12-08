@@ -14,7 +14,6 @@ const UploadPage: React.FC = () => {
   const [uploadedData, setUploadedData] = useState<Record<string, unknown>[]>(
     [],
   );
-
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -22,12 +21,34 @@ const UploadPage: React.FC = () => {
         header: true,
         skipEmptyLines: true,
         complete: (results: { data: Record<string, unknown>[] }) => {
+          // Normalize the CSV data before setting it
+          const normalizedData = normalizeCsvData(results.data);
+
+          // Set the file and normalized data
           setFile(file);
-          setUploadedData(results.data);
+          setUploadedData(normalizedData);
           setIsModalOpen(true); // Open preview modal
         },
       });
     }
+  };
+
+  // Normalize CSV data: convert empty strings to null
+  const normalizeCsvData = (data: Record<string, unknown>[]) => {
+    return data.map((row) => {
+      const normalizedRow: Record<string, unknown> = {};
+
+      Object.keys(row).forEach((key) => {
+        // If the value is an empty string, replace it with null
+        if (row[key] === "") {
+          normalizedRow[key] = null;
+        } else {
+          normalizedRow[key] = row[key];
+        }
+      });
+
+      return normalizedRow;
+    });
   };
 
   const handleFileLoad = () => {
@@ -40,18 +61,18 @@ const UploadPage: React.FC = () => {
   // Dynamically generate columns for the table preview
   const columns: GridColDef[] = csvData.length
     ? Object.keys(csvData[0]).map((key) => ({
+      field: key,
+      headerName: key,
+      flex: 1,
+      minWidth: 150,
+    }))
+    : uploadedData.length
+      ? Object.keys(uploadedData[0]).map((key) => ({
         field: key,
         headerName: key,
         flex: 1,
-        minWidth: 150,
+        minWidth: 100,
       }))
-    : uploadedData.length
-      ? Object.keys(uploadedData[0]).map((key) => ({
-          field: key,
-          headerName: key,
-          flex: 1,
-          minWidth: 100,
-        }))
       : [];
 
   return (
