@@ -1,4 +1,12 @@
-import { Input, Button, Drawer, MenuItem, Select } from "@mui/material";
+import {
+  Input,
+  Button,
+  Drawer,
+  MenuItem,
+  Select,
+  Checkbox,
+  Slider,
+} from "@mui/material";
 import { MuiColorInput } from "mui-color-input";
 import { PropsWithChildren } from "react";
 import CloseIcon from "@mui/icons-material/Close";
@@ -16,15 +24,26 @@ export const PropertiesDrawer: React.FC<
   PropsWithChildren<PropertiesDrawerProps>
 > = ({ children, open, setOpen, id }) => {
   return (
-    <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
-      <div className="flex flex-col w-[250px] h-full p-4 bg-primary-pressed text-white">
+    <Drawer
+      PaperProps={{
+        sx: {
+          backgroundColor: "#545469",
+        },
+      }}
+      anchor="right"
+      open={open}
+      onClose={() => setOpen(false)}
+    >
+      <div className="flex flex-col w-[250px] h-full p-4 pb-0 text-white">
         <div className="flex flex-row justify-end mt-[-10px] mr-[-10px]">
           <CloseIcon fontSize="medium" onClick={() => setOpen(false)} />
         </div>
         <span className="text-2xl font-bold">Properties</span>
         <div className="flex flex-col justify-between flex-grow">
-          <div className="justify-start space-y-4 mt-2">{children}</div>
-          <ChartDeletion id={id} />
+          <div className="justify-start space-y-4 mt-2 h-full">{children}</div>
+          <div className="mt-16 mb-4">
+            <ChartDeletion id={id} />
+          </div>
         </div>
       </div>
     </Drawer>
@@ -41,6 +60,7 @@ interface ColumnSelectionProps {
   metric?: string;
   setMetric?: (metric: string) => void;
   items: string[];
+  aggregated?: boolean;
   optional?: boolean;
 }
 export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
@@ -50,6 +70,7 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
   metric = null,
   setMetric = () => {},
   items,
+  aggregated = true,
   optional = false,
 }) => {
   return axis ? (
@@ -78,7 +99,7 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
         ))}
       </Select>
 
-      {metric && (
+      {metric && aggregated && (
         <Select
           className="bg-white rounded-md"
           value={metric}
@@ -112,20 +133,84 @@ export const ColumnSelection: React.FC<ColumnSelectionProps> = ({
 interface TitleSelectionProps {
   title: string;
   setTitle: (title: string) => void;
+  titleShow: boolean;
+  setTitleShow: (show: boolean) => void;
 }
 export const TitleSelection: React.FC<TitleSelectionProps> = ({
   title,
   setTitle,
+  titleShow,
+  setTitleShow,
 }) => {
   return (
     <div className="flex flex-col space-y-1">
-      <span className="font-thin">Title</span>
+      <div className="flex flex-row space-x-1 items-center">
+        <span className="font-thin">Title</span>
+        <Checkbox
+          checked={titleShow}
+          onChange={() => setTitleShow(!titleShow)}
+        />
+      </div>
       <Input
         className="bg-white h-14 px-2 py-1 rounded-md"
         value={title}
         onChange={(event) => setTitle(event.target.value)}
         placeholder="Type something"
       />
+    </div>
+  );
+};
+
+// Axis Label Selection
+interface AxisLabelSelectionProps {
+  xLabel: string;
+  setXLabel: (axisLabel: string) => void;
+  xLabelShow: boolean;
+  setXLabelShow: (show: boolean) => void;
+  yLabel: string;
+  setYLabel: (axisLabel: string) => void;
+  yLabelShow: boolean;
+  setYLabelShow: (show: boolean) => void;
+}
+export const AxisLabelSelection: React.FC<AxisLabelSelectionProps> = ({
+  xLabel,
+  setXLabel,
+  xLabelShow,
+  setXLabelShow,
+  yLabel,
+  setYLabel,
+  yLabelShow,
+  setYLabelShow,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <span className="font-thin">Axis Label</span>
+      <div className="flex flex-row space-x-1">
+        <Input
+          className={`bg-white h-14 px-2 py-1 rounded-md ${!xLabelShow ? "opacity-50" : ""}`}
+          value={xLabel}
+          onChange={(event) => setXLabel(event.target.value)}
+          placeholder="X-Axis"
+          disabled={!xLabelShow}
+        />
+        <Checkbox
+          checked={xLabelShow}
+          onChange={() => setXLabelShow(!xLabelShow)}
+        />
+      </div>
+      <div className="flex flex-row space-x-1">
+        <Input
+          className={`bg-white h-14 px-2 py-1 rounded-md ${!yLabelShow ? "opacity-50" : ""}`}
+          value={yLabel}
+          onChange={(event) => setYLabel(event.target.value)}
+          placeholder="Y-Axis"
+          disabled={!yLabelShow}
+        />
+        <Checkbox
+          checked={yLabelShow}
+          onChange={() => setYLabelShow(!yLabelShow)}
+        />
+      </div>
     </div>
   );
 };
@@ -147,6 +232,205 @@ export const ColorSelection: React.FC<ColorSelectionProps> = ({
         value={color}
         onChange={setColor}
       />
+    </div>
+  );
+};
+
+// Legend Selection
+interface LegendOptionProps {
+  showLegend: boolean;
+  setShowLegend: (show: boolean) => void;
+  legendPosition: string;
+  setLegendPosition: (legend: string) => void;
+}
+export const LegendOption: React.FC<LegendOptionProps> = ({
+  showLegend,
+  setShowLegend,
+  legendPosition: legend,
+  setLegendPosition: setLegend,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <div className="flex flex-row space-x-1 items-center">
+        <span className={"font-thin " + (showLegend ? "" : "opacity-50")}>
+          Legend
+        </span>
+        <Checkbox
+          checked={showLegend}
+          onChange={() => setShowLegend(!showLegend)}
+        />
+      </div>
+      {showLegend && (
+        <Select
+          className="bg-white rounded-md"
+          value={legend}
+          onChange={(event) => setLegend(event.target.value as string)}
+        >
+          <MenuItem value="top">Top</MenuItem>
+          <MenuItem value="bottom">Bottom</MenuItem>
+          <MenuItem value="left">Left</MenuItem>
+          <MenuItem value="right">Right</MenuItem>
+        </Select>
+      )}
+    </div>
+  );
+};
+
+// Circumference Slider
+interface CircumferenceSliderProps {
+  circumference: number;
+  setCircumference: (circumference: number) => void;
+}
+
+export const CircumferenceSlider: React.FC<CircumferenceSliderProps> = ({
+  circumference,
+  setCircumference,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <span className="font-thin">Max Circumference</span>
+      <div className="px-6">
+        <Slider
+          sx={{
+            "& .MuiSlider-markLabel": {
+              color: "white",
+            },
+          }}
+          value={circumference}
+          onChange={(_event, value) => setCircumference(value as number)}
+          valueLabelDisplay="auto"
+          min={90}
+          max={360}
+          step={10}
+          marks={[
+            {
+              value: 90,
+              label: "90°",
+            },
+            {
+              value: 180,
+              label: "180°",
+            },
+            {
+              value: 270,
+              label: "270°",
+            },
+            {
+              value: 360,
+              label: "360°",
+            },
+          ]}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Sample Option for Bubble Chart
+interface SampleOptionProps {
+  enabled: boolean;
+  setEnabled: (enabled: boolean) => void;
+  sampleSize: number;
+  setSampleSize: (sampleSize: number) => void;
+}
+export const SampleOption: React.FC<SampleOptionProps> = ({
+  enabled,
+  setEnabled,
+  sampleSize,
+  setSampleSize,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <div className="flex flex-row space-x-1 items-center">
+        <span className={"font-thin " + (enabled ? "" : "opacity-50")}>
+          Sample Size
+        </span>
+        <Checkbox checked={enabled} onChange={() => setEnabled(!enabled)} />
+      </div>
+      <div className="flex flex-col space-y-1">
+        <div className="px-6">
+          <Slider
+            sx={{
+              "& .MuiSlider-markLabel": {
+                color: "white",
+              },
+            }}
+            value={sampleSize}
+            onChange={(_event, value) => setSampleSize(value as number)}
+            valueLabelDisplay="auto"
+            min={10}
+            max={100}
+            step={5}
+            disabled={!enabled}
+            marks={[
+              {
+                value: 10,
+                label: "10",
+              },
+              {
+                value: 100,
+                label: "100",
+              },
+            ]}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Scale Radius Checkbox
+interface scaleRadiusProps {
+  enabled: boolean;
+  setEnabled: (enabled: boolean) => void;
+  radiusRange: [number, number];
+  setRadiusRange: (range: [number, number]) => void;
+}
+export const ScaleRadius: React.FC<scaleRadiusProps> = ({
+  enabled,
+  setEnabled,
+  radiusRange,
+  setRadiusRange,
+}) => {
+  return (
+    <div className="flex flex-col space-y-1">
+      <div className="flex flex-row space-x-1 items-center">
+        <span className={"font-thin " + (enabled ? "" : "opacity-50")}>
+          Scale Radius
+        </span>
+        <Checkbox checked={enabled} onChange={() => setEnabled(!enabled)} />
+      </div>
+
+      <div className="flex flex-col space-y-1">
+        <div className="px-6">
+          <Slider
+            sx={{
+              "& .MuiSlider-markLabel": {
+                color: "white",
+              },
+            }}
+            value={radiusRange}
+            onChange={(_event, value) =>
+              setRadiusRange(value as [number, number])
+            }
+            valueLabelDisplay="auto"
+            min={1}
+            max={50}
+            step={1}
+            disabled={!enabled}
+            marks={[
+              {
+                value: 1,
+                label: "1",
+              },
+              {
+                value: 50,
+                label: "50",
+              },
+            ]}
+          />
+        </div>
+      </div>
     </div>
   );
 };

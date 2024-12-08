@@ -83,9 +83,9 @@ export const getAggregatedData = (
         filteredData.reduce((acc: number, val) => acc + Number(val), 0) /
         filteredData.length
       );
-    case "min":
+    case "minimum":
       return Math.min(...filteredData.map((val) => Number(val)));
-    case "max":
+    case "maximum":
       return Math.max(...filteredData.map((val) => Number(val)));
     case "median":
       const sortedData = filteredData

@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 type ChartContextType = {
+  chartsRef: React.RefObject<HTMLDivElement>;
   figures: { [key: string]: ReactNode };
   addFigure: (id: string, figure: ReactNode) => void;
   removeFigure: (index: string) => void;
@@ -15,6 +16,7 @@ export const ChartContext = createContext<ChartContextType | undefined>(
 export const ChartContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const chartsRef = React.useRef<HTMLDivElement>(null);
   const [figures, setFigures] = useState<{ [key: string]: ReactNode }>({});
 
   const addFigure = (id: string, figure: ReactNode) => {
@@ -33,7 +35,9 @@ export const ChartContextProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   return (
-    <ChartContext.Provider value={{ figures, addFigure, removeFigure }}>
+    <ChartContext.Provider
+      value={{ chartsRef, figures, addFigure, removeFigure }}
+    >
       {children}
     </ChartContext.Provider>
   );

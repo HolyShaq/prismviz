@@ -1,7 +1,11 @@
 import React, { useState, useRef } from "react";
 import RibbonButton from "./RibbonButton";
 import { CreateBarChart } from "./chart_modals/BarChartModals";
+import { CreateDonutChart } from "./chart_modals/DonutChartModals";
+import { CreateRadialChart } from "./chart_modals/RadialChartModals";
+import { CreateBubbleChart } from "./chart_modals/BubbleChartModals";
 import { useChartContext } from "../../lib/ChartContext";
+import { v4 as uuidv4 } from "uuid";
 
 // Material UI
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -14,6 +18,8 @@ import FormatShapesIcon from "@mui/icons-material/FormatShapes";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import PreviewIcon from "@mui/icons-material/Preview";
 import PrintIcon from "@mui/icons-material/Print";
+import { Remarks } from "../charts/Remarks";
+import { GenerateReportModal } from "./chart_modals/GenerateReportmodal";
 
 // Interfaces
 interface VisualizeRibbonProps {
@@ -59,6 +65,10 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [isBarChartInvoked, setIsBarChartInvoked] = useState(false);
   const [isColumnChartInvoked, setIsColumnChartInvoked] = useState(false);
+  const [isDonutChartInvoked, setIsDonutChartInvoked] = useState(false);
+  const [isRadialChartInvoked, setIsRadialChartInvoked] = useState(false);
+  const [isBubbleChartInvoked, setIsBubbleChartInvoked] = useState(false);
+  const [isReportModalInvoked, setIsReportModalInvoked] = useState(false);
 
   // Components
   const AddChartPopover: React.FC = () => {
@@ -97,11 +107,32 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
             />
           </div>
           <div className="flex flex-row space-x-6">
-            <PopoverButton Icon={DonutLargeIcon} label="Donut Chart" />
-            <PopoverButton Icon={TollIcon} label="Radial Chart" />
+            <PopoverButton
+              Icon={DonutLargeIcon}
+              label="Donut Chart"
+              onClick={() => {
+                setIsDonutChartInvoked(true);
+                setIsPopoverOpen(false);
+              }}
+            />
+            <PopoverButton
+              Icon={TollIcon}
+              label="Radial Chart"
+              onClick={() => {
+                setIsRadialChartInvoked(true);
+                setIsPopoverOpen(false);
+              }}
+            />
           </div>
           <div className="flex flex-row space-x-6">
-            <PopoverButton Icon={BubbleChartIcon} label="Bubble Chart" />
+            <PopoverButton
+              Icon={BubbleChartIcon}
+              label="Bubble Chart"
+              onClick={() => {
+                setIsBubbleChartInvoked(true);
+                setIsPopoverOpen(false);
+              }}
+            />
           </div>
         </div>
       </Popover>
@@ -134,12 +165,8 @@ Create your own chart and customize it"
         key={1}
         Icon={FormatShapesIcon}
         onClick={() => {
-          addFigure(
-            "",
-            <div className="flex flex-row bg-white justify-center items-center w-64 h-32">
-              <p className="text-sm">Text</p>
-            </div>,
-          );
+          const chartId = uuidv4();
+          addFigure(chartId, <Remarks id={chartId} />);
         }}
         enabled={true}
         tooltip="Add Remarks:
@@ -168,7 +195,7 @@ See what report looks like."
       <RibbonButton
         key={1}
         Icon={PrintIcon}
-        onClick={() => {}}
+        onClick={() => setIsReportModalInvoked(true)}
         enabled={true}
         tooltip="Print Report:
 Save your report as PDF or Image"
@@ -180,15 +207,44 @@ Save your report as PDF or Image"
     <>
       {left ? VisualizeButtonSet.left.map((button) => button) : null}
       {right ? VisualizeButtonSet.right.map((button) => button) : null}
+
       <AddChartPopover />
+
+      {/* Bar Chart Modals */}
       <CreateBarChart
         invoked={isBarChartInvoked}
         setInvoked={setIsBarChartInvoked}
       />
+
+      {/* Column Chart Modals */}
       <CreateBarChart
         invoked={isColumnChartInvoked}
         setInvoked={setIsColumnChartInvoked}
         columnChart={true}
+      />
+
+      {/* Donut Chart Modal */}
+      <CreateDonutChart
+        invoked={isDonutChartInvoked}
+        setInvoked={setIsDonutChartInvoked}
+      />
+
+      {/* Radial Chart Modal */}
+      <CreateRadialChart
+        invoked={isRadialChartInvoked}
+        setInvoked={setIsRadialChartInvoked}
+      />
+
+      {/* Bubble Chart Modal */}
+      <CreateBubbleChart
+        invoked={isBubbleChartInvoked}
+        setInvoked={setIsBubbleChartInvoked}
+      />
+
+      {/* Report Modal */}
+      <GenerateReportModal
+        invoked={isReportModalInvoked}
+        setInvoked={setIsReportModalInvoked}
       />
     </>
   );
