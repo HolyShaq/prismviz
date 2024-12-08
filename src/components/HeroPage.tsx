@@ -16,7 +16,19 @@ const HeroPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) => {
             fontSize: "var(--font-size-h4)",
           }}
         >
-          Turn your data into magic with
+          Turn your data into{" "}
+          <span
+            style={{
+              background:
+                "linear-gradient(90deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #5fc3e4, #84fab0, #f6d365)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              fontWeight: "bold",
+            }}
+          >
+            magic
+          </span>{" "}
+          with
         </h1>
 
         {/* Logo */}
