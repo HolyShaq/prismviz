@@ -12,7 +12,7 @@ const UploadPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [uploadedData, setUploadedData] = useState<Record<string, unknown>[]>(
-    [],
+    []
   );
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -61,19 +61,19 @@ const UploadPage: React.FC = () => {
   // Dynamically generate columns for the table preview
   const columns: GridColDef[] = csvData.length
     ? Object.keys(csvData[0]).map((key) => ({
-      field: key,
-      headerName: key,
-      flex: 1,
-      minWidth: 150,
-    }))
+        field: key,
+        headerName: key,
+        flex: 1,
+        minWidth: 150,
+      }))
     : uploadedData.length
-      ? Object.keys(uploadedData[0]).map((key) => ({
+    ? Object.keys(uploadedData[0]).map((key) => ({
         field: key,
         headerName: key,
         flex: 1,
         minWidth: 100,
       }))
-      : [];
+    : [];
 
   return (
     <div className="flex flex-col h-full w-full bg-primary-main text-neutral-white10">
@@ -85,22 +85,22 @@ const UploadPage: React.FC = () => {
             columns={columns}
             sx={{
               "& .MuiDataGrid-root": {
-                color: "var(--neutral-white-10)",
+                color: "var(--neutral-white-30)",
                 backgroundColor: "var(--primary-main)",
               },
               "& .MuiDataGrid-columnHeaders": {
                 backgroundColor: "var(--primary-hover)",
-                color: "var(--neutral-black-100)",
+                color: "var(--neutral-black-50)",
                 fontWeight: "bold",
               },
               "& .MuiDataGrid-cell": {
-                color: "var(--neutral-white-10)",
+                color: "var(--neutral-white-30)",
               },
               "& .MuiCheckbox-root": {
                 color: "var(--checkbox-primary)",
               },
               "& .MuiTablePagination-root": {
-                color: "var(--neutral-white-10)",
+                color: "var(--neutral-white-30)",
               },
             }}
           />
