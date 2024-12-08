@@ -85,22 +85,23 @@ const UploadPage: React.FC = () => {
             columns={columns}
             sx={{
               "& .MuiDataGrid-root": {
-                color: "var(--neutral-white-10)",
+                color: "var(--neutral-white-30)",
                 backgroundColor: "var(--primary-main)",
               },
               "& .MuiDataGrid-columnHeaders": {
                 backgroundColor: "var(--primary-hover)",
-                color: "var(--neutral-black-100)",
+                color: "var(--neutral-black-50)",
                 fontWeight: "bold",
               },
               "& .MuiDataGrid-cell": {
-                color: "var(--neutral-white-10)",
+                color: "var(--neutral-white-30)",
+                
               },
               "& .MuiCheckbox-root": {
                 color: "var(--checkbox-primary)",
               },
               "& .MuiTablePagination-root": {
-                color: "var(--neutral-white-10)",
+                color: "var(--neutral-white-30)",
               },
             }}
           />

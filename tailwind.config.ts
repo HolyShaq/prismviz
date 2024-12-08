@@ -28,6 +28,7 @@ const config: Config = {
           white20: 'var(--neutral-white-20)',
           white30: 'var(--neutral-white-30)',
           black100: 'var(--neutral-black-100)',
+          black50: 'var(--neutral-black-50)',
         },
         checkbox: {
           primary: 'var(--checkbox-primary)',

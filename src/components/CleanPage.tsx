@@ -65,16 +65,16 @@ const CleanPage: React.FC = () => {
           checkboxSelection
           sx={{
             "& .MuiDataGrid-root": {
-              color: "var(--neutral-black-100)",
-              backgroundColor: "var(--neutral-white-10)",
+              color: "var(--neutral-black-50)",
+              backgroundColor: "var(--neutral-white-30)",
             },
             "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "var(--neutral-white-20)",
+              backgroundColor: "var(--neutral-white-30)",
               color: "var(--neutral-black-100)",
               fontWeight: "bold",
             },
             "& .MuiDataGrid-cell": {
-              color: "var(--neutral-black-100)",
+              color: "var(--neutral-black-50)",
             },
             "& .MuiCheckbox-root": {
               color: "var(--checkbox-primary)",
