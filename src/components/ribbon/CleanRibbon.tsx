@@ -4,20 +4,27 @@ import { useStepContext } from "../../lib/StepContext";
 import { CsvContext } from "../../lib/CsvContext";
 
 // Material-UI icons
-import SearchOffIcon from '@mui/icons-material/SearchOff';
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import SearchOffIcon from "@mui/icons-material/SearchOff";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 // Material UI Icons for proceed and clearing uploaded data
-import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import DeleteIcon from "@mui/icons-material/Delete";
+import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
 
 const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
   left = false,
   right = false,
 }) => {
-  const { cleanStep, setCleanStep, completeCleanStep, completeCurrentStep, setCleanStepCompleted, cleanStepCompleted } = useStepContext(); // Access cleaning step context
-  const { handleMissingData, removeDuplicates, validateColumns } = useContext(CsvContext); // Access cleaning methods from CsvContext
+  const {
+    cleanStep,
+    setCleanStep,
+    completeCurrentStep,
+    setCleanStepCompleted,
+    cleanStepCompleted,
+  } = useStepContext(); // Access cleaning step context
+  const { handleMissingData, removeDuplicates, validateColumns } =
+    useContext(CsvContext); // Access cleaning methods from CsvContext
 
   type CleanButtonSetType = {
     left: Array<React.ReactElement<typeof RibbonButton>>;
@@ -44,12 +51,11 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
       }
       console.log(
         "Updated cleanStepCompleted after re-triggering step logic:",
-        updatedSteps
+        updatedSteps,
       );
       return updatedSteps;
     });
   };
-
 
   const CleanButtonSet: CleanButtonSetType = {
     left: [
@@ -90,7 +96,8 @@ Delete or Replace unsual entries"
     Delete specific rows"
       />,
       // Conditionally include the "Proceed" button if all steps are complete
-      ...(cleanStepCompleted.every((step) => step === true) && cleanStep === cleanStepCompleted.length - 1
+      ...(cleanStepCompleted.every((step) => step === true) &&
+      cleanStep === cleanStepCompleted.length - 1
         ? [
             <RibbonButton
               key={1}
@@ -109,17 +116,23 @@ Delete or Replace unsual entries"
 
   return (
     <>
-      {left ? CleanButtonSet.left.map((button, index) => (
-        <div
-          style={{
-            opacity: cleanStepCompleted[index] || cleanStep === index ? 1 : 0.5, // Fully visible if the step is complete or it's the current step
-            pointerEvents: cleanStepCompleted[index] || cleanStep === index ? "auto" : "none", // Disable interaction for incomplete steps
-          }}
-          key={index}
-        >
-          {button}
-        </div>
-      )) : null}
+      {left
+        ? CleanButtonSet.left.map((button, index) => (
+            <div
+              style={{
+                opacity:
+                  cleanStepCompleted[index] || cleanStep === index ? 1 : 0.5, // Fully visible if the step is complete or it's the current step
+                pointerEvents:
+                  cleanStepCompleted[index] || cleanStep === index
+                    ? "auto"
+                    : "none", // Disable interaction for incomplete steps
+              }}
+              key={index}
+            >
+              {button}
+            </div>
+          ))
+        : null}
       {right ? CleanButtonSet.right.map((button) => button) : null}
     </>
   );

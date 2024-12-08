@@ -3,13 +3,13 @@
 import React, { useContext } from "react";
 import { CsvContext } from "../lib/CsvContext";
 import { useStepContext } from "../lib/StepContext";
-import UploadIcon from '@mui/icons-material/Upload';
-import DatasetIcon from '@mui/icons-material/Dataset';
+import UploadIcon from "@mui/icons-material/Upload";
+import DatasetIcon from "@mui/icons-material/Dataset";
 import AddchartIcon from "@mui/icons-material/Addchart";
 
 type Step = {
   name: string;
-  component: React.FC<any>;
+  component: React.FC;
 };
 
 interface SidebarProps {
@@ -23,14 +23,14 @@ const Sidebar: React.FC<SidebarProps> = ({ steps }) => {
 
   // Define icons for each step
   const stepIcons = [
-    <UploadIcon fontSize="medium" />, // Medium size for smaller icons
-    <DatasetIcon fontSize="medium" />,
-    <AddchartIcon fontSize="medium" />,
+    <UploadIcon key={0} fontSize="medium" />, // Medium size for smaller icons
+    <DatasetIcon key={1} fontSize="medium" />,
+    <AddchartIcon key={2} fontSize="medium" />,
   ];
 
   return (
-    <div className="flex flex-col bg-primary-pressed p-2 w-16 h-screen text-neutral-white-10 space-y-2">
-      {steps.map((step, index) => {
+    <div className="flex flex-col bg-primary-pressed p-2 w-16 h-full text-neutral-white-10 space-y-2">
+      {steps.map((_step, index) => {
         const isDisabled =
           !completedSteps[index] &&
           ((index === 1 && !isCsvUploaded) || // Step 2 requires a CSV upload

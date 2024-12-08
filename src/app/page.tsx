@@ -1,36 +1,33 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Ribbon from "../components/ribbon/Ribbon";
 import UploadPage from "../components/UploadPage";
 import CleanPage from "../components/CleanPage";
 import VisualizePage from "../components/VisualizePage";
-import { CsvContextProvider, CsvContext } from "../lib/CsvContext";
+import HeroPage from "../components/HeroPage"; 
+import SplashScreen from "../components/SplashScreen"; 
+import { CsvContextProvider } from "../lib/CsvContext";
 import { StepContextProvider, useStepContext } from "../lib/StepContext";
 import { ChartContextProvider } from "../lib/ChartContext";
 
-type Step = {
-  name: string;
-  component: React.FC<any>;
-};
-
-// Define steps
-const steps: Step[] = [
-  { name: "Upload CSV File", component: UploadPage },
-  { name: "Data Cleaning", component: CleanPage },
-  { name: "Visualization and Reporting", component: VisualizePage },
-];
-
+// Main HomeContent Component (Dashboard)
 const HomeContent: React.FC = () => {
   const { currentStep } = useStepContext();
 
-  // Render the current step's component
+  // Steps for the dashboard
+  const steps = [
+    { name: "Upload CSV File", component: UploadPage },
+    { name: "Data Cleaning", component: CleanPage },
+    { name: "Visualization and Reporting", component: VisualizePage },
+  ];
+
   const StepComponent = steps[currentStep].component;
 
   return (
-    <div className="flex flex-col h-screen bg-primary-main text-neutral-white-10">
-      {/* Navigation Bar  */}
+    <div className="flex flex-col h-screen max-h-screen overflow-y-hidden bg-primary-main text-neutral-white-10">
+      {/* Navigation Bar */}
       <div className="flex items-center px-6 py-3 bg-primary-hover shadow-md">
         <img src="/prismicon.ico" alt="logo" className="w-12 h-12" />
         <div className="flex flex-col items-start space-y-1 my-1 w-full">
@@ -39,37 +36,62 @@ const HomeContent: React.FC = () => {
             <span className="cursor-pointer hover:opacity-75">Home</span>
             <span className="cursor-pointer hover:opacity-75">Help</span>
           </div>
-          {/* Background Section sa Nav Bar */}
           <div className="bg-primary-pressed rounded-lg py-1 px-4 w-full">
-            {/* Ribbon Section */}
             <Ribbon />
           </div>
         </div>
       </div>
-      {/* Main Content */}
-      <div className="flex h-full max-h-full bg-primary-main text-neutral-white-10">
+      <div className="flex flex-grow max-h-[calc(100vh-108px)]">
         {/* Sidebar */}
-        <div className="h-full">
-          <Sidebar steps={steps} />
-        </div>
-        {/* Step Component */}
-        <div className="flex flex-col flex-grow p-6 max-h-full overflow-hidden">
+        <Sidebar steps={steps} />
+        {/* Step Content */}
+        <div className="flex flex-col p-6 w-full max-h-full overflow-y-auto">
           <StepComponent />
         </div>
       </div>
-      {/* Navigation Buttons */}
     </div>
   );
 };
 
+const Page: React.FC = () => {
+  const [showSplash, setShowSplash] = useState(true);
+  const [showHero, setShowHero] = useState(false);
+
+  useEffect(() => {
+    // Show SplashScreen for 5 seconds total (Primary Logo + Name Logo)
+    const splashTimeout = setTimeout(() => {
+      setShowSplash(false);
+      setShowHero(true);
+    }, 5000); // Adjust based on your animation duration
+
+    return () => clearTimeout(splashTimeout);
+  }, []);
+
+  if (showSplash) {
+    return <SplashScreen />;
+  }
+
+  if (showHero) {
+    return (
+      <HeroPage
+        onGetStarted={() => {
+          setShowHero(false); // Transition to the dashboard
+        }}
+      />
+    );
+  }
+
+  return <HomeContent />;
+};
+
 export default function Home() {
   return (
-      <StepContextProvider>
-        <CsvContextProvider>
+    <StepContextProvider>
+      <CsvContextProvider>
         <ChartContextProvider>
-          <HomeContent />
+          <Page />
         </ChartContextProvider>
-        </CsvContextProvider>
-      </StepContextProvider>
+      </CsvContextProvider>
+    </StepContextProvider>
   );
 }

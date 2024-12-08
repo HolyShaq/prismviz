@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useState, ReactNode } from "react";
-import { StepContextProvider, useStepContext } from "./StepContext";
+import { useStepContext } from "./StepContext";
 import _ from "lodash";
 
 type CsvContextType = {
@@ -21,17 +21,19 @@ type CsvContextType = {
 export const CsvContext = createContext<CsvContextType>({
   csvFile: null,
   csvData: [],
-  setCsvFile: () => { },
-  setCsvData: () => { },
-  handleFileLoaded: () => { },
-  clearFile: () => { },
+  setCsvFile: () => {},
+  setCsvData: () => {},
+  handleFileLoaded: () => {},
+  clearFile: () => {},
 
-  handleMissingData: () => { },
-  removeDuplicates: () => { },
-  validateColumns: () => { },
+  handleMissingData: () => {},
+  removeDuplicates: () => {},
+  validateColumns: () => {},
 });
 
-export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState<Record<string, unknown>[]>([]);
 
@@ -41,7 +43,7 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({ children
   const handleFileLoaded = (file: File, data: Record<string, unknown>[]) => {
     setCsvFile(file);
     setCsvData(data);
-     // Reset the cleaning steps when a new file is uploaded
+    // Reset the cleaning steps when a new file is uploaded
     resetCleaningSteps();
   };
 
@@ -62,7 +64,9 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({ children
   // Handle missing data
   const handleMissingData = () => {
     const cleanedData = csvData.map((row) =>
-      _.mapValues(row, (value) => (value === null || value === "" ? "N/A" : value))
+      _.mapValues(row, (value) =>
+        value === null || value === "" ? "N/A" : value,
+      ),
     );
     setCsvData(cleanedData);
     alert(`Cleaned data preview: ${JSON.stringify(cleanedData.slice(0, 3))}`);
@@ -79,11 +83,15 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({ children
   const validateColumns = () => {
     const validatedData = csvData.map((row) =>
       _.mapValues(row, (value) =>
-        typeof value === "string" && !isNaN(parseFloat(value)) ? parseFloat(value) : value
-      )
+        typeof value === "string" && !isNaN(parseFloat(value))
+          ? parseFloat(value)
+          : value,
+      ),
     );
     setCsvData(validatedData);
-    alert(`Validated data preview: ${JSON.stringify(validatedData.slice(0, 3))}`);
+    alert(
+      `Validated data preview: ${JSON.stringify(validatedData.slice(0, 3))}`,
+    );
   };
 
   return (
