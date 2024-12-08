@@ -6,6 +6,7 @@ import { CreateRadialChart } from "./chart_modals/RadialChartModals";
 import { CreateBubbleChart } from "./chart_modals/BubbleChartModals";
 import { useChartContext } from "../../lib/ChartContext";
 import { v4 as uuidv4 } from "uuid";
+import AIInsights from "../ai-panel/ai-panel"; // Import AIInsights component
 
 // Material UI
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -71,6 +72,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
   const [isBubbleChartInvoked, setIsBubbleChartInvoked] = useState(false);
   const [isPreviewModalInvoked, setIsPreviewModalInvoked] = useState(false);
   const [isReportModalInvoked, setIsReportModalInvoked] = useState(false);
+  const [showAIInsights, setShowAIInsights] = useState(false);
 
   // Components
   const AddChartPopover: React.FC = () => {
@@ -177,7 +179,7 @@ Drag and drop text-box for description."
       <RibbonButton
         key={2}
         Icon={AutoGraphIcon}
-        onClick={() => {}}
+        onClick={() => setShowAIInsights((prev) => !prev)} // Toggle AIInsights on click
         enabled={true}
         tooltip="AI Insights:
 Elevate your data with AI generated insights."
@@ -254,8 +256,39 @@ Save your report as PDF or Image"
         invoked={isReportModalInvoked}
         setInvoked={setIsReportModalInvoked}
       />
+      {/* Conditionally render AIInsights */}
+      {showAIInsights && (
+        <div
+          style={{
+            position: "fixed",
+            top: "20%",
+            right: "10%",
+            zIndex: 1000,
+            backgroundColor: "rgba(0,0,0,0.6)",
+            padding: "20px",
+            borderRadius: "10px",
+          }}
+        >
+          <AIInsights />
+          <button
+            onClick={() => setShowAIInsights(false)}
+            style={{
+              marginTop: "10px",
+              padding: "10px",
+              backgroundColor: "#545469",
+              color: "#FFF",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Close
+          </button>
+        </div>
+      )}
     </>
   );
 };
 
 export default VisualizeRibbon;
+
