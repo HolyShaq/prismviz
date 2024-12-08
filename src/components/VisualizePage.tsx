@@ -7,7 +7,7 @@ import { useChartContext } from "../lib/ChartContext";
 
 const VisualizePage: React.FC = () => {
   const { csvData } = useContext(CsvContext);
-  const { figures } = useChartContext();
+  const { chartsRef, figures } = useChartContext();
   const { completeCurrentStep } = useStepContext();
   const [isCompleteNotified, setIsCompleteNotified] = useState(false);
 
@@ -26,7 +26,7 @@ const VisualizePage: React.FC = () => {
 
   return (
     <div className="h-full w-full max-h-full max-w-full">
-      <div className="flex flex-col space-y-2 justify-center pb-64">
+      <div ref={chartsRef} className="flex flex-col space-y-2 pb-64">
         {Object.keys(figures).map((id) => (
           <React.Fragment key={id}>{figures[id]}</React.Fragment>
         ))}

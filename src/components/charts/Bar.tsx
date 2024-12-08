@@ -10,6 +10,7 @@ import {
   useNumericalColumns,
 } from "@/lib/utils";
 import {
+  AxisLabelSelection,
   ColorSelection,
   ColumnSelection,
   PropertiesDrawer,
@@ -60,10 +61,29 @@ export const BarChart: React.FC<BarProps> = ({
 
   // General Properties
   const [title, setTitle] = useState("");
+  const [titleShow, setTitleShow] = useState(true);
+  const [xLabel, setXLabel] = useState("");
+  const [xLabelShow, setXLabelShow] = useState(true);
+  const [yLabel, setYLabel] = useState("");
+  const [yLabelShow, setYLabelShow] = useState(true);
 
   const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
   if (title) options.plugins.title.text = title; // Set title if it exists
-  if (!columnChart) options.indexAxis = "y" as "x" | "y"; // Set index axis to y (to make the chart vertical)
+  if (!titleShow) options.plugins.title.display = false; // Hide title if disabled
+  if (xLabel) options.scales!.x.title.text = xLabel; // Set x axis label if it exists
+  if (yLabel) options.scales!.y.title.text = yLabel; // Set y axis label if it exists
+  if (!xLabelShow) options.scales!.x.title.display = false; // Hide x axis label if disabled
+  if (!yLabelShow) options.scales!.y.title.display = false; // Hide y axis label if disabled
+
+  if (!columnChart) {
+    // Swap x and y axis for column charts
+    const _x = options.scales!.x;
+    const _y = options.scales!.y;
+    options.scales!.x = _y;
+    options.scales!.y = _x;
+    options.indexAxis = "y" as "x" | "y"; // Set index axis to y (to make the chart vertical)
+  }
+
   const labels = useCategories(xAxis!);
 
   // Color properties
@@ -95,7 +115,7 @@ export const BarChart: React.FC<BarProps> = ({
         lockAspectRatio={true}
       >
         <div
-          className="flex items-center justify-center p-4 w-full h-full bg-white z-50"
+          className="flex items-center justify-center p-4 w-full h-full bg-white rounded-md z-50"
           onClick={() => setOpen(true)}
         >
           <Bar options={options} data={barChartData} />
@@ -104,14 +124,14 @@ export const BarChart: React.FC<BarProps> = ({
 
       <PropertiesDrawer id={id} open={open} setOpen={setOpen}>
         <ColumnSelection
-          label="X Axis"
+          label={columnChart ? "X Axis" : "Y Axis"}
           axis={xAxis}
           setAxis={setXAxis}
           items={columns}
         />
 
         <ColumnSelection
-          label="Y Axis"
+          label={columnChart ? "Y Axis" : "X Axis"}
           axis={yAxis!}
           setAxis={setYAxis}
           metric={yMetricAxis}
@@ -120,7 +140,24 @@ export const BarChart: React.FC<BarProps> = ({
           optional
         />
 
-        <TitleSelection title={title} setTitle={setTitle} />
+        <TitleSelection
+          title={title}
+          setTitle={setTitle}
+          titleShow={titleShow}
+          setTitleShow={setTitleShow}
+        />
+
+        <AxisLabelSelection
+          xLabel={xLabel}
+          setXLabel={setXLabel}
+          xLabelShow={xLabelShow}
+          setXLabelShow={setXLabelShow}
+          yLabel={yLabel}
+          setYLabel={setYLabel}
+          yLabelShow={yLabelShow}
+          setYLabelShow={setYLabelShow}
+        />
+
         <ColorSelection color={color} setColor={setColor} />
       </PropertiesDrawer>
     </>
