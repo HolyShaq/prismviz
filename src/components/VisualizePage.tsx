@@ -28,7 +28,7 @@ const VisualizePage: React.FC = () => {
 
   return (
     <div className="h-full w-full max-h-full max-w-full">
-      <div ref={chartsRef} className="flex flex-col space-y-2 pb-64">
+      <div ref={chartsRef} className="flex flex-col space-y-2 w-fit pb-64">
         {figureKeys.map((_key, index) => (
           <div key={index} className="flex flex-row space-x-2">
             {figureKeys.slice(index * 2, (index + 1) * 2).map((key) => (
