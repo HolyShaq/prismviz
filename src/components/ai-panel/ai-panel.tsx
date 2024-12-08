@@ -1,39 +1,83 @@
-
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { CSSProperties } from "react";
-// Import Gemini API SDK
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// Initialize Gemini API
-const genAI = new GoogleGenerativeAI(process.env.API_KEY!);
-console.log("API KEY") // Make sure API_KEY is defined in your environment
-console.log(process.env.API_KEY) // Make sure API_KEY is defined in your environment
-console.log(process.env);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+import { CsvContext } from "@/lib/CsvContext"; // Make sure the context is properly provided
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
 
 const AIInsights = () => {
+  const { csvData } = useContext(CsvContext); // Access CSV data
   const [userInput, setUserInput] = useState(""); // State to manage user input
   const [response, setResponse] = useState<string | null>(null); // State for API response
   const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [alertMessage, setAlertMessage] = useState("");  // State for Alert message
+  const [isAlertVisible, setIsAlertVisible] = useState(false);  // State for Alert visibility
+
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value); // Update state with user's input
   };
 
+  // Function to convert CSV data (array of objects) to a CSV string
+  const convertCsvDataToString = (csvData: Record<string, unknown>[]): string => {
+    if (csvData.length === 0) return "";
+
+    const headers = Object.keys(csvData[0]); // Extract column names from the first object
+    const rows = csvData.map(row =>
+      headers.map(header => row[header] ?? "").join(",") // Join the values in each row by commas
+    );
+
+    return [headers.join(","), ...rows].join("\n");
+  };
+
+  // Function to truncate CSV string by rows, excluding the header
+  const truncateCsvByRows = (csvString: string, numRows: number = 500): string => {
+    const rows = csvString.split("\n"); // Split by newline to get rows
+    const header = rows[0];
+    const dataRows = rows.slice(1); // The rest are data rows
+
+    const truncatedDataRows = dataRows.slice(0, numRows); // Truncate the data rows to 'numRows'
+
+    return [header, ...truncatedDataRows].join("\n");
+  };
+
   const handleSubmit = async () => {
+    if (!userInput.trim() && !csvData) {
+      alert("Please enter a prompt or make sure CSV data is available.");
+      return;
+    }
+
+    // If userInput is not provided, we want to explicitly show an error
     if (!userInput.trim()) {
-      alert("Please enter a prompt.");
+      setAlertMessage("Please enter a prompt.");
+      setIsAlertVisible(true); // Show alert when prompt is empty
       return;
     }
 
     setIsLoading(true); // Set loading state
     setResponse(null); // Clear previous response
+    setIsAlertVisible(false); // Hide alert when the user submits a prompt
 
     try {
-      // Send prompt to Gemini API
-      const result = await model.generateContent(userInput);
-      const generatedText = result.response.text();
-      setResponse(generatedText); // Set the response
+      const csvString = convertCsvDataToString(csvData);
+      const truncatedCsv = csvString ? truncateCsvByRows(csvString, 500) : "";
+
+      // Combine truncated CSV data with context and user input
+      const prompt = truncatedCsv
+        ? `This is just a sample of the data. Pretend you're giving an overview or insights for the entire dataset based on this sample. Here's the data:\n\n${truncatedCsv}\n\n`
+        : `User asks: ${userInput}`;
+
+      // API route to generate content
+      const response = await fetch("/api/generate-insights", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt }),
+      });
+
+      const data = await response.json();
+      setResponse(data.text); // Set the response text from the API
     } catch (error) {
       console.error("Error generating response:", error);
       setResponse("An error occurred while generating the response. Please try again.");
@@ -46,10 +90,9 @@ const AIInsights = () => {
     <div style={styles.insightsContainer}>
       <h4 style={styles.title}>AI Insights</h4>
       <div style={styles.insightContent}>
-      
         <ul style={styles.insightList}>
           <li>
-           Enter a prompt below to generate AI insights or suggestions.
+            Enter a prompt below to generate AI insights or suggestions.
           </li>
         </ul>
         <div style={styles.inputContainer}>
@@ -64,6 +107,15 @@ const AIInsights = () => {
             {isLoading ? "Generating..." : "Submit"}
           </button>
         </div>
+        {/* Display the Alert when no prompt is entered */}
+        {isAlertVisible && (
+          <Stack sx={{ width: '100%' }} spacing={2}>
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              {alertMessage}
+            </Alert>
+          </Stack>
+        )}
         {response && (
           <div style={styles.responseContainer}>
             <h5 style={styles.responseTitle}>Generated Insight:</h5>
@@ -113,7 +165,7 @@ const styles: { [key: string]: CSSProperties } = {
     border: "1px solid #CCC",
     outline: "none",
     width: "100%",
-    color:"black"
+    color: "black"
   },
   submitButton: {
     padding: "10px",
@@ -124,7 +176,7 @@ const styles: { [key: string]: CSSProperties } = {
     borderRadius: "5px",
     cursor: "pointer",
     textAlign: "center",
-  
+
   },
   responseContainer: {
     marginTop: "20px",
