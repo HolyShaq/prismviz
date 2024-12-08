@@ -16,15 +16,9 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
   const [previewImage, setPreviewImage] = useState<string | undefined>();
 
   useEffect(() => {
-    chartsRef.current &&
-      htmlToImage
-        .toPng(chartsRef.current!)
-        .then(async function (dataUrl) {
-          setPreviewImage(dataUrl);
-        })
-        .catch(function (error) {
-          console.error("Oops, something went wrong!", error);
-        });
+    htmlToImage.toPng(chartsRef.current!).then(async function (dataUrl) {
+      setPreviewImage(dataUrl);
+    });
   }, [invoked]);
 
   return (
