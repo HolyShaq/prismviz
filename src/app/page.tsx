@@ -1,21 +1,23 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "../components/Sidebar";
 import Ribbon from "../components/ribbon/Ribbon";
 import UploadPage from "../components/UploadPage";
 import CleanPage from "../components/CleanPage";
 import VisualizePage from "../components/VisualizePage";
-import HeroPage from "../components/HeroPage"; 
-import SplashScreen from "../components/SplashScreen"; 
-import { CsvContextProvider } from "../lib/CsvContext";
+import HeroPage from "../components/HeroPage";
+import SplashScreen from "../components/SplashScreen";
+import { CsvContext, CsvContextProvider } from "../lib/CsvContext";
 import { StepContextProvider, useStepContext } from "../lib/StepContext";
 import { ChartContextProvider } from "../lib/ChartContext";
 import { DataCleaningProvider } from "../lib/DataCleaningContext";
 
 // Main HomeContent Component (Dashboard)
 const HomeContent: React.FC = () => {
+  const { setCurrentStep } = useStepContext();
   const { currentStep } = useStepContext();
+  const { csvFile, handleFileUpload } = useContext(CsvContext);
 
   // Steps for the dashboard
   const steps = [
@@ -33,11 +35,30 @@ const HomeContent: React.FC = () => {
         <img src="/prismicon.ico" alt="logo" className="w-12 h-12" />
         <div className="flex flex-col items-start space-y-1 my-1 w-full">
           <div className="flex space-x-6 font-semibold text-white ml-2">
-            <span className="cursor-pointer hover:opacity-75">File</span>
-            <span className="cursor-pointer hover:opacity-75">Home</span>
+            <label
+              htmlFor="file-input-top-bar"
+              className="cursor-pointer hover:opacity-75"
+            >
+              File
+            </label>
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="hidden"
+              id="file-input-top-bar"
+            />
+            <span
+              className="cursor-pointer hover:opacity-75"
+              onClick={() => setCurrentStep(0)}
+            >
+              Home
+            </span>
             <span className="cursor-pointer hover:opacity-75">Help</span>
           </div>
-          <div className="bg-primary-pressed rounded-lg py-1 px-4 w-full">
+          <div
+            className={`rounded-lg py-1 px-4 w-full ${csvFile && "bg-primary-pressed"}`}
+          >
             <Ribbon />
           </div>
         </div>
@@ -88,13 +109,13 @@ const Page: React.FC = () => {
 export default function Home() {
   return (
     <StepContextProvider>
-      <CsvContextProvider>
-        <ChartContextProvider>
+      <ChartContextProvider>
+        <CsvContextProvider>
           <DataCleaningProvider>
-          <Page />
+            <Page />
           </DataCleaningProvider>
-        </ChartContextProvider>
-      </CsvContextProvider>
+        </CsvContextProvider>
+      </ChartContextProvider>
     </StepContextProvider>
   );
 }

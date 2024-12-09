@@ -1,11 +1,15 @@
 import React, { useState, useContext } from "react";
 import { CSSProperties } from "react";
-import { CsvContext } from "@/lib/CsvContext"; // Make sure the context is properly provided
+import { CsvContext } from "@/lib/CsvContext"; // Ensure the context is properly provided
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import CloseIcon from "@mui/icons-material/Close";
 import Stack from "@mui/material/Stack";
 
-const AIInsights = () => {
+interface AIInsightsProps {
+  setShowAIInsights: (show: boolean) => void;
+}
+const AIInsights: React.FC<AIInsightsProps> = ({ setShowAIInsights }) => {
   const { csvData } = useContext(CsvContext); // Access CSV data
   const [userInput, setUserInput] = useState(""); // State to manage user input
   const [response, setResponse] = useState<string | null>(null); // State for API response
@@ -100,7 +104,7 @@ const AIInsights = () => {
 
   return (
     <div style={styles.insightsContainer}>
-      <h4 style={styles.title}>AI Insights</h4>
+      <h4 style={styles.title}>PrismViz AI Insights</h4>
       <div style={styles.insightContent}>
         <ul style={styles.insightList}>
           <li>Enter a prompt below to generate AI insights or suggestions.</li>
@@ -136,27 +140,57 @@ const AIInsights = () => {
             <p style={styles.responseText}>{response}</p>
           </div>
         )}
+        <div className="flex w-full justify-end"></div>
       </div>
+      <button
+        onClick={() => setShowAIInsights(false)}
+        style={{
+          position: "absolute",
+          top: "27px",
+          right: "25px",
+          color: "#FFF",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        <CloseIcon />
+      </button>
     </div>
   );
 };
 
-// CSS Styles as JS Objects
+// Updated CSS Styles as JS Objects
 const styles: { [key: string]: CSSProperties } = {
   insightsContainer: {
-    width: "300px",
+    width: "80%",
+    maxWidth: "600px", // Limiting max width to 600px
+    height: "auto",
     backgroundColor: "#2D2F41",
     color: "#FFF",
-    padding: "20px",
+    padding: "30px",
     borderRadius: "10px",
     boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-    overflowY: "auto",
     fontFamily: "Arial, sans-serif",
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    zIndex: 1000,
+    overflowY: "auto",
+    display: "flex",
+    flexDirection: "column", // Ensure content flows vertically
   },
   title: {
-    fontSize: "18px",
+    fontSize: "20px",
     fontWeight: "bold",
-    marginBottom: "10px",
+    marginBottom: "15px",
+    textAlign: "center",
+    position: "relative", // Make space for close button
+    background:
+      "linear-gradient(90deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #5fc3e4, #84fab0, #f6d365)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
   },
   insightContent: {
     fontSize: "14px",
@@ -170,10 +204,11 @@ const styles: { [key: string]: CSSProperties } = {
     marginTop: "20px",
     display: "flex",
     flexDirection: "column",
-    gap: "10px",
+    gap: "15px",
+    alignItems: "stretch", // Ensure inputs and button take full width
   },
   inputField: {
-    padding: "10px",
+    padding: "12px",
     fontSize: "14px",
     borderRadius: "5px",
     border: "1px solid #CCC",
@@ -182,7 +217,7 @@ const styles: { [key: string]: CSSProperties } = {
     color: "black",
   },
   submitButton: {
-    padding: "10px",
+    padding: "12px",
     fontSize: "14px",
     backgroundColor: "#545469",
     color: "#FFF",
@@ -190,11 +225,12 @@ const styles: { [key: string]: CSSProperties } = {
     borderRadius: "5px",
     cursor: "pointer",
     textAlign: "center",
+    width: "100%", // Make button full-width
   },
   responseContainer: {
     marginTop: "20px",
     backgroundColor: "#1F1F33",
-    padding: "10px",
+    padding: "15px",
     borderRadius: "5px",
     color: "#FFF",
   },

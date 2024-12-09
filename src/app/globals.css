@@ -23,6 +23,7 @@
   --neutral-white-20: #F0F0F0;
   --neutral-white-30: #D6D7D8;
   --neutral-black-100: #000000;
+  --neutral-black-50: #0e0202be;
 
   /* Background & Foreground */
   --background: var(--primary-surface);
