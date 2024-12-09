@@ -103,13 +103,13 @@ const Page: React.FC = () => {
 export default function Home() {
   return (
     <StepContextProvider>
-      <CsvContextProvider>
-        <ChartContextProvider>
+      <ChartContextProvider>
+        <CsvContextProvider>
           <DataCleaningProvider>
             <Page />
           </DataCleaningProvider>
-        </ChartContextProvider>
-      </CsvContextProvider>
+        </CsvContextProvider>
+      </ChartContextProvider>
     </StepContextProvider>
   );
 }

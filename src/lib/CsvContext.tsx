@@ -5,6 +5,7 @@ import { useStepContext } from "./StepContext";
 import Papa from "papaparse";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useChartContext } from "./ChartContext";
 
 type CsvContextType = {
   csvFile: File | null;
@@ -48,12 +49,14 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
     setCleanStep,
     setCleanStepCompleted,
   } = useStepContext();
+  const { clearFigures } = useChartContext();
 
   const handleFileLoad = () => {
     if (file && uploadedData.length > 0) {
       clearFile(); // Clears file data from CsvContext
       setCompletedSteps([false, false, false]); // Resets all step completions
       setCurrentStep(0);
+      clearFigures();
       handleFileLoaded(file, uploadedData);
       setIsModalOpen(false); // Close the modal
     }
