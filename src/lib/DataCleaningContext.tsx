@@ -16,6 +16,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import { determineValueType } from "./utils";
 
 // Type for the methods in our DataCleaningContext
 type DataCleaningContextType = {
@@ -197,7 +198,7 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
         <Dialog
           open={openPreviewModal}
           onClose={() => setOpenPreviewModal(false)}
-          maxWidth="lg"
+          maxWidth="sm"
           fullWidth
         >
           <DialogTitle>Preview Changes</DialogTitle>
@@ -381,7 +382,7 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
         <Dialog
           open={openRemovedDuplicatesModal}
           onClose={() => setOpenRemovedDuplicatesModal(false)}
-          maxWidth="lg"
+          maxWidth="sm"
           fullWidth
         >
           <DialogTitle>Removed Duplicates</DialogTitle>
@@ -465,35 +466,45 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
 
   // Function to validate columns and track changes
   const validateColumns = () => {
+    const dataCopy = JSON.parse(JSON.stringify(csvData));
     const changes: RowData[] = []; // Array to store changes for tracking
 
-    // Step 1: Validate and normalize data
-    const validatedData = csvData.map((row, index) => {
-      const validatedRow = _.mapValues(row, (value) => {
-        // Check if the value is a string number and needs to be converted
-        if (typeof value === "string" && !isNaN(parseFloat(value))) {
-          // If it's a string that represents a number, convert it
-          const originalValue = value;
-          const convertedValue = parseFloat(value);
-          changes.push({
-            id: `change-${index}-${Object.keys(row).find((key) => row[key] === originalValue)}`, // Unique ID for each change
-            rowIndex: index,
-            column: Object.keys(row).find((key) => row[key] === originalValue),
-            originalValue,
-            convertedValue,
-          });
-          return convertedValue;
-        }
-        return value;
-      });
+    // Titlecase all string columns
+    function toTitleCase(str: string) {
+      return str.replace(
+        /\w\S*/g,
+        (text) =>
+          text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
+      );
+    }
+    const stringColumns = Object.keys(csvData[0]).filter(
+      (key) => determineValueType(String(csvData[0][key])) === "string",
+    );
 
-      // Add a unique 'id' for each row
-      return { ...validatedRow, id: index };
-    });
+    const titlecaseData = dataCopy.map(
+      (row: Record<string, unknown>, index) => {
+        stringColumns.forEach((col) => {
+          // Titlecase all non lowercase strings
+          if (String(row[col]) !== toTitleCase(String(row[col]))) {
+            const originalValue = String(row[col]);
+            row[col] = toTitleCase(String(row[col]));
+            changes.push({
+              "Row Index": index,
+              "Column Name": col,
+              "Original Value": originalValue,
+              "Converted Value": row[col],
+            });
+          }
+        });
+        return row;
+      },
+    );
 
     // Step 2: Update state with validated data and changes
-    setCsvData(validatedData);
-    setValidatedChanges(changes); // Store the changes
+    setCsvData(titlecaseData);
+    setValidatedChanges(
+      changes.map((change, index) => ({ id: index, ...change })),
+    ); // Store the changes
     setOpenValidationModal(true); // Open the modal to show the changes
   };
 
@@ -504,7 +515,7 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
         <Dialog
           open={openValidationModal}
           onClose={() => setOpenValidationModal(false)}
-          maxWidth="lg"
+          maxWidth="sm"
           fullWidth
         >
           <DialogTitle>Validation Changes</DialogTitle>
@@ -532,42 +543,39 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
         headerName: column, // Display the actual column name in the header
         width: 200,
         renderCell: (params: GridCellParams) => {
-          const originalValue = params.row.originalValue;
-          const convertedValue = params.row.convertedValue;
-
-          const isUpdated = originalValue !== convertedValue;
-
+          if (params.colDef.field !== "Converted Value") {
+            return (
+              <Typography variant="body2">{String(params.value)}</Typography>
+            );
+          }
           return (
             <Box>
-              {isUpdated ? (
-                <>
-                  {/* Show original value with red strikethrough */}
-                  <Typography
-                    variant="body2"
-                    style={{ color: "red", textDecoration: "line-through" }}
-                  >
-                    {String(originalValue)}
-                  </Typography>
-                  {/* Show updated value in green */}
-                  <Typography variant="body2" style={{ color: "green" }}>
-                    {String(convertedValue)}
-                  </Typography>
-                </>
-              ) : (
-                // If no change, just display the original value in black text
-                <Typography variant="body2">{String(originalValue)}</Typography>
-              )}
+              <>
+                {/* Show original value with red strikethrough */}
+                <Typography
+                  variant="body2"
+                  style={{ color: "red", textDecoration: "line-through" }}
+                >
+                  {String(params.row["Original Value"])}
+                </Typography>
+                {/* Show updated value in green */}
+                <Typography variant="body2" style={{ color: "green" }}>
+                  {String(params.row["Converted Value"])}
+                </Typography>
+              </>
             </Box>
           );
         },
       }),
     );
 
+    console.log(validatedChanges);
+
     return (
       <Dialog
         open={openValidationModal}
         onClose={() => setOpenValidationModal(false)}
-        maxWidth="lg"
+        maxWidth="md"
         fullWidth
       >
         <DialogTitle>Validation Changes</DialogTitle>
@@ -578,7 +586,9 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
           <Box sx={{ marginTop: 2, height: 400 }}>
             <DataGrid
               rows={validatedChanges} // Display changes in the modal
-              columns={columns} // Dynamically generated columns based on actual data columns
+              columns={columns.filter(
+                (col) => col.field !== "Original Value" && col.field !== "id",
+              )} // Dynamically generated columns based on actual data columns
               getRowId={(row) => row.id} // Specify the unique 'id' field
               initialState={{
                 pagination: { paginationModel: { pageSize: 10 } },
