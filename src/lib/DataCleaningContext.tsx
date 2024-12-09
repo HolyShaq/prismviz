@@ -1,6 +1,5 @@
 import React, { createContext, useContext, ReactNode, useState } from "react";
 import { DataGrid, GridColDef, GridCellParams } from "@mui/x-data-grid";
-import _ from "lodash";
 import { CsvContext } from "./CsvContext";
 import {
   Dialog,
@@ -482,7 +481,7 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
     );
 
     const titlecaseData = dataCopy.map(
-      (row: Record<string, unknown>, index) => {
+      (row: Record<string, unknown>, index: number) => {
         stringColumns.forEach((col) => {
           // Titlecase all non lowercase strings
           if (String(row[col]) !== toTitleCase(String(row[col]))) {
@@ -568,8 +567,6 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
         },
       }),
     );
-
-    console.log(validatedChanges);
 
     return (
       <Dialog
