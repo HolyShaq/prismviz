@@ -2,6 +2,7 @@
 
 import React, { createContext, useState, ReactNode } from "react";
 import { useStepContext } from "./StepContext";
+import { GridRowId } from "@mui/x-data-grid";
 import Papa from "papaparse";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
@@ -12,9 +13,12 @@ type CsvContextType = {
   uploadedData: Record<string, unknown>[];
   columns: GridColDef[];
   csvData: Record<string, unknown>[]; // Data loaded from CSV
+  selectedRowIds: Set<GridRowId>;
   setCsvFile: (file: File | null) => void;
   setCsvData: (data: Record<string, unknown>[]) => void;
+  setSelectedRowIds: (selectedRowIds: Set<GridRowId>) => void;
   handleFileLoaded: (file: File, data: Record<string, unknown>[]) => void;
+  deleteSelectedRows: () => void;
   handleFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
   clearFile: () => void;
 };
@@ -24,10 +28,13 @@ export const CsvContext = createContext<CsvContextType>({
   uploadedData: [],
   columns: [],
   csvData: [],
+  selectedRowIds: new Set(),
   setCsvFile: () => {},
   setCsvData: () => {},
+  setSelectedRowIds: () => {},
   handleFileLoaded: () => {},
   handleFileUpload: () => {},
+  deleteSelectedRows: () => {},
   clearFile: () => {},
 });
 
@@ -37,6 +44,9 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvData, setCsvData] = useState<Record<string, unknown>[]>([]);
+  const [selectedRowIds, setSelectedRowIds] = useState<Set<GridRowId>>(
+    new Set(),
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [uploadedData, setUploadedData] = useState<Record<string, unknown>[]>(
@@ -139,6 +149,14 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
     resetCleaningSteps();
   };
 
+  const deleteSelectedRows = () => {
+    const updatedData = csvData.filter(
+      (_row, index) => !selectedRowIds.has(index),
+    );
+    setSelectedRowIds(new Set());
+    setCsvData(updatedData);
+  };
+
   // Reset cleaning steps
   const resetCleaningSteps = () => {
     setCleanStep(0);
@@ -152,10 +170,13 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
         uploadedData,
         columns,
         csvData,
+        selectedRowIds,
         setCsvFile,
         setCsvData,
+        setSelectedRowIds,
         handleFileLoaded,
         handleFileUpload,
+        deleteSelectedRows,
         clearFile,
       }}
     >

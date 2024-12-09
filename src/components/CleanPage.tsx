@@ -1,34 +1,31 @@
-import React, { useContext } from "react";
-import { Box, Typography } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import React, { useContext, useEffect } from "react";
+import { Box } from "@mui/material";
+import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
 import { CsvContext } from "../lib/CsvContext";
 
 const CleanPage: React.FC = () => {
-  const { csvData } = useContext(CsvContext); // Access CSV data
+  const { csvData, setSelectedRowIds } = useContext(CsvContext); // Access CSV data
+  const [dataGridSelected, setDataGridSelected] = React.useState<GridRowId[]>(
+    [],
+  );
 
-  if (csvData.length === 0) {
-    return (
-      <Typography
-        sx={{
-          textAlign: "center",
-          mt: 4,
-          color: "var(--neutral-black-100)",
-        }}
-      >
-        No data available
-      </Typography>
-    );
-  }
-
-  const columns: GridColDef[] = Object.keys(csvData[0]).map((key) => ({
-    field: key,
-    headerName: key,
-    flex: 1,
-    minWidth: 150,
-    // editable: true,
-  }));
+  const columns: GridColDef[] =
+    csvData.length > 0
+      ? Object.keys(csvData[0]).map((key) => ({
+          field: key,
+          headerName: key,
+          flex: 1,
+          minWidth: 150,
+          // editable: true,
+        }))
+      : [];
 
   const rows = csvData.map((row, index) => ({ id: index, ...row }));
+
+  // Clear selection when data changes
+  useEffect(() => {
+    setDataGridSelected([]);
+  }, [csvData]);
 
   return (
     <Box
@@ -63,6 +60,12 @@ const CleanPage: React.FC = () => {
           rows={rows}
           columns={columns}
           checkboxSelection
+          rowSelectionModel={dataGridSelected}
+          onRowSelectionModelChange={(ids) => {
+            const selectedIds = new Set(ids);
+            setDataGridSelected(Array.from(selectedIds));
+            setSelectedRowIds(selectedIds);
+          }}
           sx={{
             "& .MuiDataGrid-root": {
               color: "var(--neutral-black-50)",
