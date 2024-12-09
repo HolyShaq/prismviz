@@ -84,7 +84,7 @@ const Page: React.FC = () => {
     const splashTimeout = setTimeout(() => {
       setShowSplash(false);
       setShowHero(true);
-    }, 1000); // Adjust based on your animation duration
+    }, 5000); // Adjust based on your animation duration
 
     return () => clearTimeout(splashTimeout);
   }, []);
