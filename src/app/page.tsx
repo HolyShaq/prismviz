@@ -32,7 +32,7 @@ const HomeContent: React.FC = () => {
     <div className="flex flex-col h-screen max-h-screen overflow-y-hidden bg-primary-main text-neutral-white-10">
       {/* Navigation Bar */}
       <div className="flex items-center px-6 py-3 bg-primary-hover shadow-md">
-        <img src="/prismicon.ico" alt="logo" className="w-12 h-12" />
+        <img src="/prismicon.ico" alt="logo" className="w-12 h-12 mr-4" />
         <div className="flex flex-col items-start space-y-1 my-1 w-full">
           <div className="flex space-x-6 font-semibold text-white ml-2">
             <label
