@@ -11,6 +11,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 // Material UI Icons for proceed and clearing uploaded data
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowCircleRightIcon from "@mui/icons-material/ArrowCircleRight";
+import { CsvContext } from "@/lib/CsvContext";
 
 const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
   left = false,
@@ -23,7 +24,9 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
     setCleanStepCompleted,
     cleanStepCompleted,
   } = useStepContext(); // Access cleaning step context
-  const { handleMissingData, removeDuplicates, validateColumns, } = useContext(DataCleaningContext); // Access data cleaning methods from DataCleaningContext
+  const { handleMissingData, removeDuplicates, validateColumns } =
+    useContext(DataCleaningContext); // Access data cleaning methods from DataCleaningContext
+  const { deleteSelectedRows } = useContext(CsvContext);
   type CleanButtonSetType = {
     left: Array<React.ReactElement<typeof RibbonButton>>;
     right: Array<React.ReactElement<typeof RibbonButton>>;
@@ -87,7 +90,7 @@ Delete or Replace unsual entries"
         key={0}
         Icon={DeleteIcon}
         onClick={() => {
-          console.log("Delete Rows action executed.");
+          deleteSelectedRows();
         }}
         enabled={true}
         tooltip="Delete Selected Row/s:

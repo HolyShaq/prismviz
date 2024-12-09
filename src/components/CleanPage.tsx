@@ -1,10 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
 import { CsvContext } from "../lib/CsvContext";
 
 const CleanPage: React.FC = () => {
-  const { csvData } = useContext(CsvContext); // Access CSV data
+  const { csvData, setSelectedRowIds } = useContext(CsvContext); // Access CSV data
+  const [dataGridSelected, setDataGridSelected] = React.useState<GridRowId[]>(
+    [],
+  );
 
   if (csvData.length === 0) {
     return (
@@ -29,6 +32,11 @@ const CleanPage: React.FC = () => {
   }));
 
   const rows = csvData.map((row, index) => ({ id: index, ...row }));
+
+  // Clear selection when data changes
+  useEffect(() => {
+    setDataGridSelected([]);
+  }, [csvData]);
 
   return (
     <Box
@@ -63,6 +71,12 @@ const CleanPage: React.FC = () => {
           rows={rows}
           columns={columns}
           checkboxSelection
+          rowSelectionModel={dataGridSelected}
+          onRowSelectionModelChange={(ids) => {
+            const selectedIds = new Set(ids);
+            setDataGridSelected(Array.from(selectedIds));
+            setSelectedRowIds(selectedIds);
+          }}
           sx={{
             "& .MuiDataGrid-root": {
               color: "var(--neutral-black-100)",
