@@ -16,7 +16,7 @@ import { DataCleaningProvider } from "../lib/DataCleaningContext";
 // Main HomeContent Component (Dashboard)
 const HomeContent: React.FC = () => {
   const { currentStep } = useStepContext();
-  const { csvFile } = useContext(CsvContext);
+  const { csvFile, handleFileUpload } = useContext(CsvContext);
 
   // Steps for the dashboard
   const steps = [
@@ -34,7 +34,19 @@ const HomeContent: React.FC = () => {
         <img src="/prismicon.ico" alt="logo" className="w-12 h-12" />
         <div className="flex flex-col items-start space-y-1 my-1 w-full">
           <div className="flex space-x-6 font-semibold text-white ml-2">
-            <span className="cursor-pointer hover:opacity-75">File</span>
+            <label
+              htmlFor="file-input-top-bar"
+              className="cursor-pointer hover:opacity-75"
+            >
+              File
+            </label>
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="hidden"
+              id="file-input-top-bar"
+            />
             <span className="cursor-pointer hover:opacity-75">Home</span>
             <span className="cursor-pointer hover:opacity-75">Help</span>
           </div>

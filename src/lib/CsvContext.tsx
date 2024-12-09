@@ -42,16 +42,23 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
     [],
   );
 
+  const {
+    setCurrentStep,
+    setCompletedSteps,
+    setCleanStep,
+    setCleanStepCompleted,
+  } = useStepContext();
+
   const handleFileLoad = () => {
     if (file && uploadedData.length > 0) {
+      clearFile(); // Clears file data from CsvContext
+      setCompletedSteps([false, false, false]); // Resets all step completions
+      setCurrentStep(0);
       handleFileLoaded(file, uploadedData);
       setIsModalOpen(false); // Close the modal
     }
   };
 
-  const { setCleanStep, setCleanStepCompleted } = useStepContext();
-
-  // Handle file load
   const handleFileLoaded = (file: File, data: Record<string, unknown>[]) => {
     setCsvFile(file);
     setCsvData(data);
@@ -103,21 +110,24 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   // Dynamically generate columns for the table preview
-  const columns: GridColDef[] = csvData.length
-    ? Object.keys(csvData[0]).map((key) => ({
-        field: key,
-        headerName: key,
-        flex: 1,
-        minWidth: 150,
-      }))
-    : uploadedData.length
-      ? Object.keys(uploadedData[0]).map((key) => ({
+  const columns: GridColDef[] =
+    csvData.length > 0
+      ? Object.keys(csvData[0]).map((key) => ({
           field: key,
           headerName: key,
           flex: 1,
-          minWidth: 100,
+          minWidth: 150,
         }))
       : [];
+
+  const columnsUpload: GridColDef[] = uploadedData.length
+    ? Object.keys(uploadedData[0]).map((key) => ({
+        field: key,
+        headerName: key,
+        flex: 1,
+        minWidth: 100,
+      }))
+    : [];
 
   // Clear file data
   const clearFile = () => {
@@ -169,7 +179,7 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
                 id: index,
                 ...row,
               }))}
-              columns={columns}
+              columns={columnsUpload}
             />
           </Box>
           <Button
