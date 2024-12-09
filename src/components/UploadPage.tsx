@@ -12,11 +12,17 @@ const UploadPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [uploadedData, setUploadedData] = useState<Record<string, unknown>[]>(
-    []
+    [],
   );
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Limit file size under 10mb
+      if (file.size > 10 * 1024 * 1024) {
+        alert("File size limit exceeded. Please choose a smaller file.");
+        return;
+      }
+
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
@@ -67,13 +73,13 @@ const UploadPage: React.FC = () => {
         minWidth: 150,
       }))
     : uploadedData.length
-    ? Object.keys(uploadedData[0]).map((key) => ({
-        field: key,
-        headerName: key,
-        flex: 1,
-        minWidth: 100,
-      }))
-    : [];
+      ? Object.keys(uploadedData[0]).map((key) => ({
+          field: key,
+          headerName: key,
+          flex: 1,
+          minWidth: 100,
+        }))
+      : [];
 
   return (
     <div className="flex flex-col h-full w-full bg-primary-main text-neutral-white10">
@@ -151,7 +157,7 @@ const UploadPage: React.FC = () => {
                 fontSize: "var(--font-size-p2)",
               }}
             >
-              25 MB Max. file size, [Column Name] is required.
+              10 MB max file size
             </div>
           </div>
         </div>
