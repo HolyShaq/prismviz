@@ -9,27 +9,16 @@ const CleanPage: React.FC = () => {
     [],
   );
 
-  if (csvData.length === 0) {
-    return (
-      <Typography
-        sx={{
-          textAlign: "center",
-          mt: 4,
-          color: "var(--neutral-black-100)",
-        }}
-      >
-        No data available
-      </Typography>
-    );
-  }
-
-  const columns: GridColDef[] = Object.keys(csvData[0]).map((key) => ({
-    field: key,
-    headerName: key,
-    flex: 1,
-    minWidth: 150,
-    // editable: true,
-  }));
+  const columns: GridColDef[] =
+    csvData.length > 0
+      ? Object.keys(csvData[0]).map((key) => ({
+          field: key,
+          headerName: key,
+          flex: 1,
+          minWidth: 150,
+          // editable: true,
+        }))
+      : [];
 
   const rows = csvData.map((row, index) => ({ id: index, ...row }));
 
