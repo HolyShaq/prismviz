@@ -15,6 +15,7 @@ import { DataCleaningProvider } from "../lib/DataCleaningContext";
 
 // Main HomeContent Component (Dashboard)
 const HomeContent: React.FC = () => {
+  const { setCurrentStep } = useStepContext();
   const { currentStep } = useStepContext();
   const { csvFile, handleFileUpload } = useContext(CsvContext);
 
@@ -47,7 +48,12 @@ const HomeContent: React.FC = () => {
               className="hidden"
               id="file-input-top-bar"
             />
-            <span className="cursor-pointer hover:opacity-75">Home</span>
+            <span
+              className="cursor-pointer hover:opacity-75"
+              onClick={() => setCurrentStep(0)}
+            >
+              Home
+            </span>
             <span className="cursor-pointer hover:opacity-75">Help</span>
           </div>
           <div
