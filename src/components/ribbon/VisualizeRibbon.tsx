@@ -21,6 +21,7 @@ import PreviewIcon from "@mui/icons-material/Preview";
 import PrintIcon from "@mui/icons-material/Print";
 import { Remarks } from "../charts/Remarks";
 import { GenerateReportModal } from "./chart_modals/GenerateReportmodal";
+import { ReportPreviewModal } from "./chart_modals/ReportPreviewModal";
 
 // Interfaces
 interface VisualizeRibbonProps {
@@ -69,6 +70,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
   const [isDonutChartInvoked, setIsDonutChartInvoked] = useState(false);
   const [isRadialChartInvoked, setIsRadialChartInvoked] = useState(false);
   const [isBubbleChartInvoked, setIsBubbleChartInvoked] = useState(false);
+  const [isPreviewModalInvoked, setIsPreviewModalInvoked] = useState(false);
   const [isReportModalInvoked, setIsReportModalInvoked] = useState(false);
   const [showAIInsights, setShowAIInsights] = useState(false);
 
@@ -189,7 +191,7 @@ Elevate your data with AI generated insights."
       <RibbonButton
         key={0}
         Icon={PreviewIcon}
-        onClick={() => {}}
+        onClick={() => setIsPreviewModalInvoked(true)}
         enabled={true}
         tooltip="Preview Report:
 See what report looks like."
@@ -243,7 +245,13 @@ Save your report as PDF or Image"
         setInvoked={setIsBubbleChartInvoked}
       />
 
-      {/* Report Modal */}
+      {/* Preview Report Modal */}
+      <ReportPreviewModal
+        invoked={isPreviewModalInvoked}
+        setInvoked={setIsPreviewModalInvoked}
+      />
+
+      {/* Generate Report Modal */}
       <GenerateReportModal
         invoked={isReportModalInvoked}
         setInvoked={setIsReportModalInvoked}
