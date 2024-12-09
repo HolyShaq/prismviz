@@ -82,7 +82,7 @@ Delete duplicate entries"
         onClick={() => triggerCleaningStep(2)}
         enabled={true}
         tooltip="Validate Column Entry:
-Delete or Replace unsual entries"
+Automatically Standardize Columns"
       />,
     ],
     right: [
