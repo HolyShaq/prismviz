@@ -216,6 +216,8 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
     // Filter rows where the data has changed
     const changedRows = previewData
       .map((row, rowIndex) => {
+        if (!csvData[rowIndex]) return null; // Skip rows that don't exist in the original data
+
         const originalRow = csvData[rowIndex];
         const updatedRow: Record<string, unknown> = { id: rowIndex }; // Initialize row with id for the DataGrid
         let isRowChanged = false; // Flag to track if any value has changed
