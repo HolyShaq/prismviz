@@ -7,6 +7,7 @@ type ChartContextType = {
   figures: { [key: string]: ReactNode };
   addFigure: (id: string, figure: ReactNode) => void;
   removeFigure: (index: string) => void;
+  clearFigures: () => void;
 };
 
 export const ChartContext = createContext<ChartContextType | undefined>(
@@ -34,9 +35,11 @@ export const ChartContextProvider: React.FC<{ children: ReactNode }> = ({
     });
   };
 
+  const clearFigures = () => setFigures({});
+
   return (
     <ChartContext.Provider
-      value={{ chartsRef, figures, addFigure, removeFigure }}
+      value={{ chartsRef, figures, addFigure, removeFigure, clearFigures }}
     >
       {children}
     </ChartContext.Provider>
