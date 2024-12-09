@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "../components/Sidebar";
 import Ribbon from "../components/ribbon/Ribbon";
 import UploadPage from "../components/UploadPage";
 import CleanPage from "../components/CleanPage";
 import VisualizePage from "../components/VisualizePage";
-import HeroPage from "../components/HeroPage"; 
-import SplashScreen from "../components/SplashScreen"; 
-import { CsvContextProvider } from "../lib/CsvContext";
+import HeroPage from "../components/HeroPage";
+import SplashScreen from "../components/SplashScreen";
+import { CsvContext, CsvContextProvider } from "../lib/CsvContext";
 import { StepContextProvider, useStepContext } from "../lib/StepContext";
 import { ChartContextProvider } from "../lib/ChartContext";
 import { DataCleaningProvider } from "../lib/DataCleaningContext";
@@ -16,6 +16,7 @@ import { DataCleaningProvider } from "../lib/DataCleaningContext";
 // Main HomeContent Component (Dashboard)
 const HomeContent: React.FC = () => {
   const { currentStep } = useStepContext();
+  const { csvFile } = useContext(CsvContext);
 
   // Steps for the dashboard
   const steps = [
@@ -37,7 +38,9 @@ const HomeContent: React.FC = () => {
             <span className="cursor-pointer hover:opacity-75">Home</span>
             <span className="cursor-pointer hover:opacity-75">Help</span>
           </div>
-          <div className="bg-primary-pressed rounded-lg py-1 px-4 w-full">
+          <div
+            className={`rounded-lg py-1 px-4 w-full ${csvFile && "bg-primary-pressed"}`}
+          >
             <Ribbon />
           </div>
         </div>
@@ -91,7 +94,7 @@ export default function Home() {
       <CsvContextProvider>
         <ChartContextProvider>
           <DataCleaningProvider>
-          <Page />
+            <Page />
           </DataCleaningProvider>
         </ChartContextProvider>
       </CsvContextProvider>
