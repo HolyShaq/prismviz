@@ -60,10 +60,7 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
   const findRowsWithMissingData = () => {
     const rowsToRemove = csvData.filter((row) => {
       // Count the number of missing (null) values in the row
-      const missingCount = Object.values(row).filter(
-        (value) => value === null,
-      ).length;
-      return missingCount > 2; // Flag rows with more than 2 missing values
+      return Object.values(row).some((value) => value === null);
     });
 
     setRowsWithMissingData(rowsToRemove);
@@ -82,11 +79,7 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
 
   const removeRowsWithMissingData = () => {
     const filteredData = csvData.filter((row) => {
-      // Count the number of missing (null) values in the row
-      const missingCount = Object.values(row).filter(
-        (value) => value === null,
-      ).length;
-      return missingCount <= 2; // Keep rows with 2 or fewer missing values
+      return !Object.values(row).some((value) => value === null);
     });
 
     setCsvData(filteredData);
