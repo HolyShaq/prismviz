@@ -26,7 +26,7 @@ const CleanRibbon: React.FC<{ left?: boolean; right?: boolean }> = ({
   } = useStepContext(); // Access cleaning step context
   const { handleMissingData, removeDuplicates, validateColumns } =
     useContext(DataCleaningContext); // Access data cleaning methods from DataCleaningContext
-  const { deleteSelectedRows } = useContext(CsvContext);
+  const { selectedRowIds, deleteSelectedRows } = useContext(CsvContext);
   type CleanButtonSetType = {
     left: Array<React.ReactElement<typeof RibbonButton>>;
     right: Array<React.ReactElement<typeof RibbonButton>>;
@@ -92,7 +92,7 @@ Delete or Replace unsual entries"
         onClick={() => {
           deleteSelectedRows();
         }}
-        enabled={true}
+        enabled={selectedRowIds.size > 0}
         tooltip="Delete Selected Row/s:
     Delete specific rows"
       />,

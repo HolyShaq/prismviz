@@ -58,6 +58,7 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
     const updatedData = csvData.filter(
       (_row, index) => !selectedRowIds.has(index),
     );
+    setSelectedRowIds(new Set());
     setCsvData(updatedData);
   };
 
