@@ -189,7 +189,7 @@ Elevate your data with AI generated insights."
       <RibbonButton
         key={0}
         Icon={PreviewIcon}
-        onClick={() => { }}
+        onClick={() => {}}
         enabled={true}
         tooltip="Preview Report:
 See what report looks like."
@@ -249,37 +249,10 @@ Save your report as PDF or Image"
         setInvoked={setIsReportModalInvoked}
       />
       {/* Conditionally render AIInsights */}
-      {showAIInsights && (
-        <div
-          style={{
-            position: "fixed",
-            top: "20%",
-            right: "10%",
-            zIndex: 1000,
-            backgroundColor: "rgba(0,0,0,0.6)",
-            padding: "20px",
-            borderRadius: "10px",
-          }}
-        >
-          <AIInsights />
-          <button
-            onClick={() => setShowAIInsights(false)}
-            style={{
-              marginTop: "10px",
-              padding: "10px",
-              backgroundColor: "#545469",
-              color: "#FFF",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            Close
-          </button>
-        </div>
-      )}
+      {showAIInsights && <AIInsights setShowAIInsights={setShowAIInsights} />}
     </>
   );
 };
 
 export default VisualizeRibbon;
+

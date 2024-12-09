@@ -3,9 +3,13 @@ import { CSSProperties } from "react";
 import { CsvContext } from "@/lib/CsvContext"; // Ensure the context is properly provided
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import CloseIcon from "@mui/icons-material/Close";
 import Stack from "@mui/material/Stack";
 
-const AIInsights = () => {
+interface AIInsightsProps {
+  setShowAIInsights: (show: boolean) => void;
+}
+const AIInsights: React.FC<AIInsightsProps> = ({ setShowAIInsights }) => {
   const { csvData } = useContext(CsvContext); // Access CSV data
   const [userInput, setUserInput] = useState(""); // State to manage user input
   const [response, setResponse] = useState<string | null>(null); // State for API response
@@ -136,7 +140,22 @@ const AIInsights = () => {
             <p style={styles.responseText}>{response}</p>
           </div>
         )}
+        <div className="flex w-full justify-end"></div>
       </div>
+      <button
+        onClick={() => setShowAIInsights(false)}
+        style={{
+          position: "absolute",
+          top: "27px",
+          right: "25px",
+          color: "#FFF",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        <CloseIcon />
+      </button>
     </div>
   );
 };
@@ -168,7 +187,8 @@ const styles: { [key: string]: CSSProperties } = {
     marginBottom: "15px",
     textAlign: "center",
     position: "relative", // Make space for close button
-    background: "linear-gradient(90deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #5fc3e4, #84fab0, #f6d365)",
+    background:
+      "linear-gradient(90deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #5fc3e4, #84fab0, #f6d365)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
