@@ -481,23 +481,27 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
     );
 
     const titlecaseData = dataCopy.map(
-      (row: Record<string, unknown>, index: number) => {
-        stringColumns.forEach((col) => {
-          // Titlecase all non lowercase strings
-          if (String(row[col]) !== toTitleCase(String(row[col]))) {
-            const originalValue = String(row[col]);
-            row[col] = toTitleCase(String(row[col]));
-            changes.push({
-              "Row Index": index,
-              "Column Name": col,
-              "Original Value": originalValue,
-              "Converted Value": row[col],
-            });
-          }
-        });
-        return row;
-      },
-    );
+        (row: Record<string, unknown>, index: number) => {
+          stringColumns.forEach((col) => {
+            const value = String(row[col]);
+      
+            // Check if the value is an email by looking for '@'
+            const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      
+            if (!isEmail && value !== toTitleCase(value)) {
+              const originalValue = value;
+              row[col] = toTitleCase(value);
+              changes.push({
+                "Row Index": index,
+                "Column Name": col,
+                "Original Value": originalValue,
+                "Converted Value": row[col],
+              });
+            }
+          });
+          return row;
+        }
+      );
 
     // Step 2: Update state with validated data and changes
     setCsvData(titlecaseData);
