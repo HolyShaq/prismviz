@@ -23,8 +23,8 @@ export const GenerateReportModal: React.FC<GenerateReportModalProps> = ({
       <Slide direction="up" in={invoked}>
         <div className="flex h-screen justify-center items-center">
           <Box
+            className="w-fit p-4 py-4"
             sx={{
-              width: "30%",
               bgcolor: "background.paper",
               border: "2px solid #000",
               boxShadow: 24,
