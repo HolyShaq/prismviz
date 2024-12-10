@@ -54,10 +54,22 @@ const HomeContent: React.FC = () => {
             >
               Home
             </span>
-            <span className="cursor-pointer hover:opacity-75">Help</span>
+            <span
+              className="cursor-pointer hover:opacity-75"
+              onClick={() => {
+                const link = document.createElement("a");
+                link.href = "/PrismViz User Manual.pdf"; // Correct path to the PDF in the public directory
+                link.target = "_blank";
+                link.click();
+              }}
+            >
+              Help
+            </span>
           </div>
           <div
-            className={`rounded-lg py-1 px-4 w-full ${csvFile && "bg-primary-pressed"}`}
+            className={`rounded-lg py-1 px-4 w-full ${
+              csvFile && "bg-primary-pressed"
+            }`}
           >
             <Ribbon />
           </div>
