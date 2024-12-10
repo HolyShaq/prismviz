@@ -26,19 +26,19 @@ export const ReportPreviewModal: React.FC<ReportPreviewModalProps> = ({
       <Slide direction="up" in={invoked}>
         <div className="flex h-screen justify-center items-center">
           <Box
+            className="w-full h-fit max-h-full m-1 md:w-1/2 md:h-fit"
             sx={{
-              width: "50%",
               bgcolor: "background.paper",
               border: "2px solid #000",
               boxShadow: 24,
               p: 4,
             }}
           >
-            <div className="flex flex-col items-center space-y-4 max-h-[60vh]">
+            <div className="flex flex-col items-center space-y-4 max-h-[45vh]">
               <div className="flex w-full h-full">
                 <span className="text-2xl font-bold">Preview of Report</span>
               </div>
-              <div className="max-h-full overflow-y-scroll w-full px-28">
+              <div className="max-h-full overflow-y-scroll w-full">
                 {chartsRef.current &&
                 chartsRef.current.childElementCount > 0 ? (
                   <img src={previewImage} className="w-full h-full" />
