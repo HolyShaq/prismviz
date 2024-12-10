@@ -30,7 +30,7 @@ export const CreateDonutChart: React.FC<CreateDonutChartProps> = ({
   return (
     <>
       <StepModal
-        header="Please select a column for the pie chart"
+        header="Please select a column for the donut chart"
         open={invoked}
         onClose={() => {
           setInvoked(false);
