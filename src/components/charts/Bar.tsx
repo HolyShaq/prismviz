@@ -67,6 +67,7 @@ export const BarChart: React.FC<BarProps> = ({
   const [yLabel, setYLabel] = useState("");
   const [yLabelShow, setYLabelShow] = useState(true);
 
+
   const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
   if (title) options.plugins.title.text = title; // Set title if it exists
   if (!titleShow) options.plugins.title.display = false; // Hide title if disabled
@@ -140,13 +141,18 @@ export const BarChart: React.FC<BarProps> = ({
           </button>
         </div>
       </ResizableBox>
-      
+
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg w-1/3">
             <h2 className="text-xl font-semibold mb-4">Modal Title</h2>
-            <p>This is the content of the modal. You can put any text here!</p>
+            <div>
+              <h2>Selected Chart Parameters</h2>
+              <p>X-Axis: {xAxis}</p>
+              <p>Y-Axis: {yAxis}</p>
+              <p>Y-Metric: {yMetric}</p>
+            </div>
             <div className="flex justify-end mt-4">
               <button
                 onClick={handleCloseModal}
