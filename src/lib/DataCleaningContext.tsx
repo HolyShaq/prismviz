@@ -16,6 +16,7 @@ import {
   Box,
 } from "@mui/material";
 import { determineValueType } from "./utils";
+import SnackNotif from "@/components/SnackbarNotif";
 
 // Type for the methods in our DataCleaningContext
 type DataCleaningContextType = {
@@ -24,6 +25,9 @@ type DataCleaningContextType = {
   validateColumns: () => void;
 };
 type RowData = Record<string, unknown>;
+
+// Type for the severity strings
+type Severity = "success" | "info" | "warning" | "error";
 
 export const DataCleaningContext = createContext<DataCleaningContextType>({
   handleMissingData: () => {},
@@ -54,6 +58,20 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
   const [validatedChanges, setValidatedChanges] = useState<RowData[]>([]);
   const [openValidationModal, setOpenValidationModal] =
     useState<boolean>(false);
+
+  // Snackbar stuff
+  const [snackOpen, setSnackOpen] = useState<boolean>(false);
+  const [snackMessage, setSnackMessage] = useState<string>("");
+  const [snackSeverity, setSnackSeverity] = useState<Severity>("success");
+
+  const showSnackNotif: (message: string, severity: Severity) => void = (
+    message,
+    severity,
+  ) => {
+    setSnackMessage(message);
+    setSnackSeverity(severity);
+    setSnackOpen(true);
+  };
 
   /* Step 1 functions for handling missing data */
 
@@ -145,7 +163,16 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
           </Button>
           {/* Show the "Confirm Removal" button only if there are rows to remove */}
           {rowsWithMissingData.length > 0 && (
-            <Button onClick={removeRowsWithMissingData} color="primary">
+            <Button
+              onClick={() => {
+                showSnackNotif(
+                  `${rowsWithMissingData.length} rows removed.`,
+                  "success",
+                );
+                removeRowsWithMissingData();
+              }}
+              color="primary"
+            >
               Confirm Removal
             </Button>
           )}
@@ -311,7 +338,17 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
           </Button>
           {/* Only show the "Apply Changes" button if there are rows with changes */}
           {changedRows.length > 0 && (
-            <Button onClick={() => applyChanges()} color="primary">
+            <Button
+              onClick={() => {
+                // Show snack notif of rows affected
+                showSnackNotif(
+                  `${changedRows.length} row(s) updated.`,
+                  "success",
+                );
+                applyChanges();
+              }}
+              color="primary"
+            >
               Apply Changes
             </Button>
           )}
@@ -443,7 +480,16 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
           >
             Close
           </Button>
-          <Button onClick={applyRemovedDuplicates} color="primary">
+          <Button
+            onClick={() => {
+              showSnackNotif(
+                `${removedDuplicates.length} duplicate(s) removed.`,
+                "success",
+              );
+              applyRemovedDuplicates();
+            }}
+            color="primary"
+          >
             Apply Changes
           </Button>
         </DialogActions>
@@ -481,27 +527,27 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
     );
 
     const titlecaseData = dataCopy.map(
-        (row: Record<string, unknown>, index: number) => {
-          stringColumns.forEach((col) => {
-            const value = String(row[col]);
-      
-            // Check if the value is an email by looking for '@'
-            const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-      
-            if (!isEmail && value !== toTitleCase(value)) {
-              const originalValue = value;
-              row[col] = toTitleCase(value);
-              changes.push({
-                "Row Index": index,
-                "Column Name": col,
-                "Original Value": originalValue,
-                "Converted Value": row[col],
-              });
-            }
-          });
-          return row;
-        }
-      );
+      (row: Record<string, unknown>, index: number) => {
+        stringColumns.forEach((col) => {
+          const value = String(row[col]);
+
+          // Check if the value is an email by looking for '@'
+          const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+          if (!isEmail && value !== toTitleCase(value)) {
+            const originalValue = value;
+            row[col] = toTitleCase(value);
+            changes.push({
+              "Row Index": index,
+              "Column Name": col,
+              "Original Value": originalValue,
+              "Converted Value": row[col],
+            });
+          }
+        });
+        return row;
+      },
+    );
 
     // Step 2: Update state with validated data and changes
     setCsvData(titlecaseData);
@@ -600,7 +646,16 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenValidationModal(false)} color="primary">
+          <Button
+            onClick={() => {
+              showSnackNotif(
+                `${validatedChanges.length} cells standardized.`,
+                "success",
+              );
+              setOpenValidationModal(false);
+            }}
+            color="primary"
+          >
             Close
           </Button>
         </DialogActions>
@@ -666,6 +721,13 @@ export const DataCleaningProvider: React.FC<{ children: ReactNode }> = ({
       <RemovedDuplicatesModal />
       {/* Validation Changes Modal */}
       <ValidationChangesModal />
+
+      <SnackNotif
+        message={snackMessage}
+        severity={snackSeverity}
+        open={snackOpen}
+        setOpen={setSnackOpen}
+      />
     </DataCleaningContext.Provider>
   );
 };
