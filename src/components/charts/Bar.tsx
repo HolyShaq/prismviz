@@ -104,11 +104,9 @@ export const BarChart: React.FC<BarProps> = ({
       },
     ],
   };
-
   // Modal visibility state
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // New state for button click action
   const handleButtonClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent the event from propagating to the parent container
     setIsModalOpen(true); // Open the modal when button is clicked
@@ -118,6 +116,7 @@ export const BarChart: React.FC<BarProps> = ({
   const handleCloseModal = () => {
     setIsModalOpen(false); // Close the modal when close button is clicked
   };
+
 
   return (
     <>
@@ -129,21 +128,19 @@ export const BarChart: React.FC<BarProps> = ({
         lockAspectRatio={true}
       >
         <div
-          className="flex items-center justify-center p-4 w-full h-full bg-white rounded-md z-50 relative"
+          className="flex items-center justify-center p-4 w-full h-full bg-white rounded-md z-50"
           onClick={() => setOpen(true)}
         >
           <Bar options={options} data={barChartData} />
-          
-          {/* Button at the upper-right corner */}
           <button
             onClick={handleButtonClick}
             className="absolute top-4 right-4 p-2 bg-blue-500 text-white rounded-lg"
           >
-            Open Modal
+            AI Insights
           </button>
         </div>
       </ResizableBox>
-
+      
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
