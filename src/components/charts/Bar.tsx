@@ -113,13 +113,53 @@ export const BarChart: React.FC<BarProps> = ({
     e.stopPropagation(); // Prevent the event from propagating to the parent container
     setIsModalOpen(true); // Open the modal when button is clicked
   };
+  // Function to convert CSV data (array of objects) to a CSV string
+  const convertCsvDataToString = (
+    csvData: Record<string, unknown>[],
+  ): string => {
+    if (csvData.length === 0) return "";
+
+    const headers = Object.keys(csvData[0]); // Extract column names from the first object
+    const rows = csvData.map(
+      (row) => headers.map((header) => row[header] ?? "").join(","), // Join the values in each row by commas
+    );
+
+    return [headers.join(","), ...rows].join("\n");
+  };
+
+  // Function to truncate CSV string by rows, excluding the header
+  const truncateCsvByRows = (
+    csvString: string,
+    numRows: number = 500,
+  ): string => {
+    const rows = csvString.split("\n"); // Split by newline to get rows
+    const header = rows[0];
+    const dataRows = rows.slice(1); // The rest are data rows
+
+    const truncatedDataRows = dataRows.slice(0, numRows); // Truncate the data rows to 'numRows'
+
+    return [header, ...truncatedDataRows].join("\n");
+  };
 
 
   const generatePrompt = () => {
-    return `
-      Analyze the relationship between "${xAxis}" and "${yAxis}" in the provided dataset.
+    const csvString = convertCsvDataToString(csvData);
+    const truncatedCsv = csvString ? truncateCsvByRows(csvString, 500) : "";
+    // Combine truncated CSV data with context and user input
+    const instructions =
+      "You are an expert data analyst. Answer briefly and straight to the point. Do NOT say the size of the dataset. If no question or command was given, do not give an analysis. Answer with confidence.";
+    const context = `The CSV data provided is truncated to 500 rows. The original dataset has ${csvData.length} rows. Take into account this limitation and adjust your answers accordingly. Do not mention this feature of the dataset in your response.`;
+    const prompt =
+      `Instructions: ${instructions} \n` +
+      `Context: ${context} \n` +
+      `- Given the following CSV data: ${truncatedCsv}\n` +
+      `- 
+      Analyze the relationship between "${xAxis}" and "${yAxis}" in the provided dataset ${truncatedCsv}.
       Use "${yMetricAxis}" to provide meaningful insights. Be brief, direct, and insightful.
-    `;
+    \n` +
+      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics. Please just use the highest and lowest values for your response.`;
+
+    return prompt;
   };
   // Open modal and fetch insights
   const handleOpenModal = () => {
