@@ -110,7 +110,6 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
   );
 
   const [loading, setLoading] = useState(false); // Track loading state
-  const [progress, setProgress] = useState(0); // Track loading progress
   
   const {
     setCurrentStep,
@@ -177,12 +176,10 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
           setLoading(true); // Start loading state
   
           // Simulate row loading progress
-          let progress = 0;
+          let localProgress = 0; // Use only a local variable
           const interval = setInterval(() => {
-            progress += 10;
-            setProgress(progress); // Update progress for UI
-  
-            if (progress >= 100) {
+            localProgress += 10;
+            if (localProgress >= 100) {
               clearInterval(interval);
               setLoading(false); // Stop loading
               setCsvData(normalizedData); // Transfer uploaded data to CSV data
