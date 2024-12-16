@@ -85,7 +85,7 @@ const UploadPage: React.FC = () => {
                 fontSize: "var(--font-size-p2)",
               }}
             >
-              10 MB max file size
+              100 MB max file size
             </div>
           </div>
         </div>
