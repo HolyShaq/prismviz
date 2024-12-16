@@ -66,7 +66,8 @@ export const BarChart: React.FC<BarProps> = ({
   const [xLabelShow, setXLabelShow] = useState(true);
   const [yLabel, setYLabel] = useState("");
   const [yLabelShow, setYLabelShow] = useState(true);
-
+  const [modalContent, setModalContent] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const options = defaultChartOptions(xAxis, yAxis!, yMetricAxis!);
   if (title) options.plugins.title.text = title; // Set title if it exists
@@ -113,9 +114,51 @@ export const BarChart: React.FC<BarProps> = ({
     setIsModalOpen(true); // Open the modal when button is clicked
   };
 
+
+  const generatePrompt = () => {
+    return `
+      Analyze the relationship between "${xAxis}" and "${yAxis}" in the provided dataset.
+      Use "${yMetricAxis}" to provide meaningful insights. Be brief, direct, and insightful.
+    `;
+  };
+  // Open modal and fetch insights
+  const handleOpenModal = () => {
+    setIsModalOpen(true); // Open modal
+    fetchInsights(); // Fetch insights
+  };
+
   // Close modal
   const handleCloseModal = () => {
-    setIsModalOpen(false); // Close the modal when close button is clicked
+    setIsModalOpen(false);
+    setModalContent(null); // Clear content when modal closes
+  };
+
+  // Fetch insights from the API
+  const fetchInsights = async () => {
+    setIsLoading(true); // Start loading
+    setModalContent(null); // Clear previous content
+
+    try {
+      console.log("IM HERE SA TRY")
+      const prompt = generatePrompt();
+      const truncatedCsv = csvData.slice(0, 500); // Optional truncation for large datasets
+
+      const response = await fetch("/api/generate-insights", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt, csvData: truncatedCsv }),
+      });
+
+      const data = await response.json();
+      setModalContent(data.text); // Set the response content
+    } catch (error) {
+      console.error("Error fetching insights:", error);
+      setModalContent("An error occurred while generating insights. Please try again.");
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
   };
 
 
@@ -134,10 +177,13 @@ export const BarChart: React.FC<BarProps> = ({
         >
           <Bar options={options} data={barChartData} />
           <button
-            onClick={handleButtonClick}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent triggering parent clicks
+              handleOpenModal();
+            }}
             className="absolute top-4 right-4 p-2 bg-blue-500 text-white rounded-lg"
           >
-            AI Insights
+            Generate Insights
           </button>
         </div>
       </ResizableBox>
@@ -146,13 +192,12 @@ export const BarChart: React.FC<BarProps> = ({
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg w-1/3">
-            <h2 className="text-xl font-semibold mb-4">Modal Title</h2>
-            <div>
-              <h2>Selected Chart Parameters</h2>
-              <p>X-Axis: {xAxis}</p>
-              <p>Y-Axis: {yAxis}</p>
-              <p>Y-Metric: {yMetric}</p>
-            </div>
+            <h2 className="text-xl font-semibold mb-4">AI Insights</h2>
+            {isLoading ? (
+              <p>Loading insights...</p>
+            ) : (
+              <p>{modalContent || "No insights available."}</p>
+            )}
             <div className="flex justify-end mt-4">
               <button
                 onClick={handleCloseModal}
