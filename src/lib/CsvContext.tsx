@@ -1,10 +1,10 @@
 "use client";
 
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, useState, ReactNode, useEffect } from "react";
 import { useStepContext } from "./StepContext";
 import { GridRowId } from "@mui/x-data-grid";
 import Papa from "papaparse";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Button, Modal, Typography, styled, CircularProgress } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useChartContext } from "./ChartContext";
 
@@ -38,6 +38,62 @@ export const CsvContext = createContext<CsvContextType>({
   clearFile: () => {},
 });
 
+const StyledGridOverlay = styled("div")(() => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  height: "100%",
+}));
+
+function CircularProgressWithLabel({
+  value,
+}: {
+  value: number;
+}) {
+  return (
+    <Box sx={{ position: "relative", display: "inline-flex" }}>
+      <CircularProgress variant="determinate" value={value} />
+      <Box
+        sx={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography
+          variant="caption"
+          component="div"
+          color="text.primary"
+        >
+          {`${Math.round(value)}%`}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
+const CustomLoadingOverlay = () => {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prev) => (prev >= 100 ? 100 : prev + 10));
+    }, 500);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <StyledGridOverlay>
+      <CircularProgressWithLabel value={progress} />
+      <Box sx={{ mt: 2 }}>Loading rows…</Box>
+    </StyledGridOverlay>
+  );
+};
+
 // Provider
 export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -53,6 +109,9 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
     [],
   );
 
+  const [loading, setLoading] = useState(false); // Track loading state
+  const [progress, setProgress] = useState(0); // Track loading progress
+  
   const {
     setCurrentStep,
     setCompletedSteps,
@@ -100,23 +159,35 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Limit file size under 10mb
-      if (file.size > 10 * 1024 * 1024) {
+      if (file.size > 100 * 1024 * 1024) {
         alert("File size limit exceeded. Please choose a smaller file.");
         return;
       }
-
+  
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
         complete: (results: { data: Record<string, unknown>[] }) => {
-          // Normalize the CSV data before setting it
           const normalizedData = normalizeCsvData(results.data);
-
-          // Set the file and normalized data
+  
+          // Automatically open modal and start loading rows
           setFile(file);
-          setUploadedData(normalizedData);
-          setIsModalOpen(true); // Open preview modal
+          setUploadedData(normalizedData); // Parsed data
+          setIsModalOpen(true); // Open the modal
+          setLoading(true); // Start loading state
+  
+          // Simulate row loading progress
+          let progress = 0;
+          const interval = setInterval(() => {
+            progress += 10;
+            setProgress(progress); // Update progress for UI
+  
+            if (progress >= 100) {
+              clearInterval(interval);
+              setLoading(false); // Stop loading
+              setCsvData(normalizedData); // Transfer uploaded data to CSV data
+            }
+          }, 200); // Adjust interval for loading simulation
         },
       });
     }
@@ -198,21 +269,26 @@ export const CsvContextProvider: React.FC<{ children: ReactNode }> = ({
             CSV File Preview
           </Typography>
           <Box sx={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={uploadedData.map((row, index) => ({
-                id: index,
-                ...row,
-              }))}
-              columns={columnsUpload}
-            />
+          <DataGrid
+            rows={uploadedData.map((row, index) => ({
+              id: index,
+              ...row,
+            }))}
+            columns={columnsUpload}
+            loading={loading} // Display loading overlay if rows are still loading
+            slots={{
+              loadingOverlay: CustomLoadingOverlay, // Custom overlay during loading
+            }}
+          />
           </Box>
           <Button
             onClick={handleFileLoad}
             variant="contained"
             color="secondary"
             sx={{ mt: 2 }}
+            disabled={loading} // Disable button while loading
           >
-            Load
+            {loading ? "Loading..." : "Load"}
           </Button>
         </Box>
       </Modal>
