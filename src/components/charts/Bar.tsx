@@ -105,6 +105,20 @@ export const BarChart: React.FC<BarProps> = ({
     ],
   };
 
+  // Modal visibility state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // New state for button click action
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the event from propagating to the parent container
+    setIsModalOpen(true); // Open the modal when button is clicked
+  };
+
+  // Close modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Close the modal when close button is clicked
+  };
+
   return (
     <>
       <ResizableBox
@@ -115,12 +129,38 @@ export const BarChart: React.FC<BarProps> = ({
         lockAspectRatio={true}
       >
         <div
-          className="flex items-center justify-center p-4 w-full h-full bg-white rounded-md z-50"
+          className="flex items-center justify-center p-4 w-full h-full bg-white rounded-md z-50 relative"
           onClick={() => setOpen(true)}
         >
           <Bar options={options} data={barChartData} />
+          
+          {/* Button at the upper-right corner */}
+          <button
+            onClick={handleButtonClick}
+            className="absolute top-4 right-4 p-2 bg-blue-500 text-white rounded-lg"
+          >
+            Open Modal
+          </button>
         </div>
       </ResizableBox>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg w-1/3">
+            <h2 className="text-xl font-semibold mb-4">Modal Title</h2>
+            <p>This is the content of the modal. You can put any text here!</p>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={handleCloseModal}
+                className="bg-red-500 text-white px-4 py-2 rounded-md"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <PropertiesDrawer id={id} open={open} setOpen={setOpen}>
         <ColumnSelection
