@@ -22,6 +22,7 @@ import PrintIcon from "@mui/icons-material/Print";
 import { Remarks } from "../charts/Remarks";
 import { GenerateReportModal } from "./chart_modals/GenerateReportmodal";
 import { ReportPreviewModal } from "./chart_modals/ReportPreviewModal";
+import { Tooltip } from "@mui/material";
 
 // Interfaces
 interface VisualizeRibbonProps {
@@ -31,6 +32,7 @@ interface VisualizeRibbonProps {
 interface PopoverButtonProps {
   Icon: React.ElementType;
   label: string;
+  tooltip: string;
   onClick?: () => void;
   rotated?: boolean;
 }
@@ -41,19 +43,33 @@ const PopoverButton: React.FC<PopoverButtonProps> = ({
   label,
   onClick,
   rotated = false,
+  tooltip,
 }) => {
   return (
-    <div
-      onClick={onClick}
-      className="w-24 h-24 rounded-md flex flex-col justify-center items-center outline
+    <Tooltip
+      title={
+        <div style={{ textAlign: "center" }}>
+          <strong style={{ color: "#B4B4B4" }}>{tooltip.split(":")[0]}</strong>
+          <br />
+          <span style={{ color: "#B4B4B4", fontWeight: "normal" }}>
+            {tooltip.split(":")[1]}
+          </span>
+        </div>
+      }
+      placement="right"
+    >
+      <div
+        onClick={onClick}
+        className="w-24 h-24 rounded-md flex flex-col justify-center items-center outline
         text-[#313154] hover:text-white
         bg-[#b4b4b4]
         hover:bg-[#545469]
         outline-[#545469]"
-    >
-      <Icon className={"text-6xl" + (rotated ? " rotate-90" : "")} />
-      <p className="text-sm">{label}</p>
-    </div>
+      >
+        <Icon className={"text-6xl" + (rotated ? " rotate-90" : "")} />
+        <p className="text-sm">{label}</p>
+      </div>
+    </Tooltip>
   );
 };
 
@@ -96,6 +112,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
               Icon={BarChartIcon}
               rotated
               label="Bar Chart"
+              tooltip="Bar Chart: Visualize data with horizontal bars."
               onClick={() => {
                 setIsBarChartInvoked(true);
                 setIsPopoverOpen(false);
@@ -104,6 +121,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
             <PopoverButton
               Icon={BarChartIcon}
               label="Column Chart"
+              tooltip="Column Chart: Visualize data with vertical bars."
               onClick={() => {
                 setIsColumnChartInvoked(true);
                 setIsPopoverOpen(false);
@@ -114,6 +132,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
             <PopoverButton
               Icon={DonutLargeIcon}
               label="Donut Chart"
+              tooltip="Donut Chart: Visualize the percentages of your data wrapped in a donut."
               onClick={() => {
                 setIsDonutChartInvoked(true);
                 setIsPopoverOpen(false);
@@ -122,6 +141,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
             <PopoverButton
               Icon={TollIcon}
               label="Radial Chart"
+              tooltip="Radial Chart: Visualize data with bars wrapped in a circle."
               onClick={() => {
                 setIsRadialChartInvoked(true);
                 setIsPopoverOpen(false);
@@ -132,6 +152,7 @@ const VisualizeRibbon: React.FC<VisualizeRibbonProps> = ({
             <PopoverButton
               Icon={BubbleChartIcon}
               label="Bubble Chart"
+              tooltip="Bubble Chart: Visualize multi-dimensional data with bubbles of varying sizes."
               onClick={() => {
                 setIsBubbleChartInvoked(true);
                 setIsPopoverOpen(false);
@@ -263,4 +284,3 @@ Save your report as PDF or Image"
 };
 
 export default VisualizeRibbon;
-
