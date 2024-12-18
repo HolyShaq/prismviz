@@ -109,10 +109,6 @@ export const BarChart: React.FC<BarProps> = ({
   // Modal visibility state
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleButtonClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent the event from propagating to the parent container
-    setIsModalOpen(true); // Open the modal when button is clicked
-  };
   // Function to convert CSV data (array of objects) to a CSV string
   const convertCsvDataToString = (
     csvData: Record<string, unknown>[],
