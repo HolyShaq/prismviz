@@ -18,6 +18,7 @@ import {
 } from "./PropertiesDrawer";
 import defaultChartOptions from "./defaultChartOpts";
 import { ResizableBox, ResizeCallbackData } from "react-resizable";
+import AssistantIcon from "@mui/icons-material/Assistant";
 
 ChartJS.register(...registerables);
 
@@ -137,7 +138,6 @@ export const BarChart: React.FC<BarProps> = ({
     return [header, ...truncatedDataRows].join("\n");
   };
 
-
   const generatePrompt = () => {
     const csvString = convertCsvDataToString(csvData);
     const truncatedCsv = csvString ? truncateCsvByRows(csvString, 500) : "";
@@ -175,7 +175,7 @@ export const BarChart: React.FC<BarProps> = ({
     setModalContent(null); // Clear previous content
 
     try {
-      console.log("IM HERE SA TRY")
+      console.log("IM HERE SA TRY");
       const prompt = generatePrompt();
       const truncatedCsv = csvData.slice(0, 500); // Optional truncation for large datasets
 
@@ -191,12 +191,13 @@ export const BarChart: React.FC<BarProps> = ({
       setModalContent(data.text); // Set the response content
     } catch (error) {
       console.error("Error fetching insights:", error);
-      setModalContent("An error occurred while generating insights. Please try again.");
+      setModalContent(
+        "An error occurred while generating insights. Please try again.",
+      );
     } finally {
       setIsLoading(false); // Stop loading
     }
   };
-
 
   return (
     <>
@@ -206,21 +207,20 @@ export const BarChart: React.FC<BarProps> = ({
         onResize={onResize}
         minConstraints={[minDimensions.width, minDimensions.height]}
         lockAspectRatio={true}
+        className="group"
       >
         <div
           className="flex items-center justify-center p-4 w-full h-full bg-white rounded-md z-50"
           onClick={() => setOpen(true)}
         >
           <Bar options={options} data={barChartData} />
-          <button
+          <AssistantIcon
             onClick={(e) => {
               e.stopPropagation(); // Prevent triggering parent clicks
               handleOpenModal();
             }}
-            className="absolute top-4 right-4 p-2 bg-blue-500 text-white rounded-lg"
-          >
-            Generate Insights
-          </button>
+            className="absolute top-4 right-4 size-8 text-blue-500 rounded-lg opacity-0 group-hover:opacity-100 cursor-pointer"
+          />
         </div>
       </ResizableBox>
 
