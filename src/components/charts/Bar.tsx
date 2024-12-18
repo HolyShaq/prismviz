@@ -137,7 +137,6 @@ export const BarChart: React.FC<BarProps> = ({
     return [header, ...truncatedDataRows].join("\n");
   };
 
-
   const generatePrompt = () => {
     const csvString = convertCsvDataToString(csvData);
     const truncatedCsv = csvString ? truncateCsvByRows(csvString, 500) : "";
@@ -150,10 +149,10 @@ export const BarChart: React.FC<BarProps> = ({
       `Context: ${context} \n` +
       `- Given the following CSV data: ${truncatedCsv}\n` +
       `- 
-      Analyze the relationship between "${xAxis}" and "${yAxis}" in the provided dataset ${truncatedCsv}.
-      Use "${yMetricAxis}" to provide meaningful insights. Be brief, direct, and insightful.
+      Analyze a ${columnChart ? "column" : "bar"} chart with the bars representing the categories in the column named "${columnChart ? yAxis : xAxis}".
+      ${(columnChart ? xAxis : yAxis) && `The heights of the bars represent ` + (yMetricAxis && "the " + yMetricAxis + " of ") + 'the values in the column named "' + (columnChart ? xAxis : yAxis) + '".'}
     \n` +
-      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics. Please just use the highest and lowest values for your response.`;
+      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics. Talk in the present tense as if the chart has already been generated.`;
 
     return prompt;
   };
@@ -175,7 +174,7 @@ export const BarChart: React.FC<BarProps> = ({
     setModalContent(null); // Clear previous content
 
     try {
-      console.log("IM HERE SA TRY")
+      console.log("IM HERE SA TRY");
       const prompt = generatePrompt();
       const truncatedCsv = csvData.slice(0, 500); // Optional truncation for large datasets
 
@@ -191,12 +190,13 @@ export const BarChart: React.FC<BarProps> = ({
       setModalContent(data.text); // Set the response content
     } catch (error) {
       console.error("Error fetching insights:", error);
-      setModalContent("An error occurred while generating insights. Please try again.");
+      setModalContent(
+        "An error occurred while generating insights. Please try again.",
+      );
     } finally {
       setIsLoading(false); // Stop loading
     }
   };
-
 
   return (
     <>
