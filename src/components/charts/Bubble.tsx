@@ -126,7 +126,7 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
       radiusData = radiusData.map(
         (val) =>
           ((Number(val) - minRadius) / originalRange) *
-          (radiusRange[1] - radiusRange[0]) +
+            (radiusRange[1] - radiusRange[0]) +
           radiusRange[0],
       );
     }
@@ -190,7 +190,6 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
     return [header, ...truncatedDataRows].join("\n");
   };
 
-
   const generatePrompt = () => {
     const csvString = convertCsvDataToString(csvData);
     const truncatedCsv = csvString ? truncateCsvByRows(csvString, 500) : "";
@@ -203,10 +202,10 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
       `Context: ${context} \n` +
       `- Given the following CSV data: ${truncatedCsv}\n` +
       `- 
-        Analyze the relationship between "${xAxis}" and "${yAxis}" in the provided dataset ${truncatedCsv}.
-        Use "${yMetricAxis}" to provide meaningful insights. Be brief, direct, and insightful.
+        Analyze a bubble chart with the bubbles representing the categories in the column named "${column}". Their X position is the value of the column named "${x}". The Y position is the value of the column named "${y}". The radius of the bubbles is the value of the column named "${radius}".
+
       \n` +
-      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics. Please just use the highest and lowest values for your response.`;
+      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics. Talk in the present tense as if the chart has already been generated.`;
 
     return prompt;
   };
@@ -228,7 +227,7 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
     setModalContent(null); // Clear previous content
 
     try {
-      console.log("IM HERE SA TRY")
+      console.log("IM HERE SA TRY");
       const prompt = generatePrompt();
       const truncatedCsv = csvData.slice(0, 500); // Optional truncation for large datasets
 
@@ -244,7 +243,9 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
       setModalContent(data.text); // Set the response content
     } catch (error) {
       console.error("Error fetching insights:", error);
-      setModalContent("An error occurred while generating insights. Please try again.");
+      setModalContent(
+        "An error occurred while generating insights. Please try again.",
+      );
     } finally {
       setIsLoading(false); // Stop loading
     }
@@ -372,8 +373,6 @@ export const BubbleChart: React.FC<BubbleChartProps> = ({
           legendPosition={legendPosition}
           setLegendPosition={setLegendPosition}
         />
-
-
       </PropertiesDrawer>
     </>
   );
