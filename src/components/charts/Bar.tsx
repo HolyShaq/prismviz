@@ -166,11 +166,12 @@ export const BarChart: React.FC<BarProps> = ({
   // Close modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setModalContent(null); // Clear content when modal closes
   };
 
   // Fetch insights from the API
   const fetchInsights = async () => {
+    if (modalContent) return; // Don't fetch if there are insights already
+
     setIsLoading(true); // Start loading
     setModalContent(null); // Clear previous content
 
