@@ -150,10 +150,11 @@ export const BarChart: React.FC<BarProps> = ({
       `Context: ${context} \n` +
       `- Given the following CSV data: ${truncatedCsv}\n` +
       `- 
-      Analyze the relationship between "${xAxis}" and "${yAxis}" in the provided dataset ${truncatedCsv}.
-      Use "${yMetricAxis}" to provide meaningful insights. Be brief, direct, and insightful.
+      Analyze a ${columnChart ? "column" : "bar"} chart with the bars representing the categories in the column named "${columnChart ? yAxis : xAxis}".
+      ${(columnChart ? xAxis : yAxis) && `The heights of the bars represent ` + (yMetricAxis && "the " + yMetricAxis + " of ") + 'the values in the column named "' + (columnChart ? xAxis : yAxis) + '".'}
+      Provide meaningful insights. Be brief, direct, and insightful.
     \n` +
-      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics. Please just use the highest and lowest values for your response.`;
+      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics. Talk in the present tense as if the chart has already been generated.`;
 
     return prompt;
   };

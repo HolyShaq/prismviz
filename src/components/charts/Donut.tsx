@@ -117,10 +117,10 @@ export const DonutChart: React.FC<DonutProps> = ({ columnInitial, id }) => {
       `Context: ${context} \n` +
       `- Given the following CSV data: ${truncatedCsv}\n` +
       `- 
-      Analyze the"${column}" in the provided dataset ${truncatedCsv}.
+      Analyze a donut chart with the slices representing the categories in the column named "${column}".
       Provide meaningful insights. Be brief, direct, and insightful.
     \n` +
-      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics.`;
+      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics. Talk in the present tense as if the chart has already been generated.`;
 
     return prompt;
   };

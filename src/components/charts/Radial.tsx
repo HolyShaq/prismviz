@@ -166,10 +166,11 @@ export const RadialChart: React.FC<RadialChartProps> = ({
       `Context: ${context} \n` +
       `- Given the following CSV data: ${truncatedCsv}\n` +
       `- 
-      Analyze the"${column}" in the provided dataset ${truncatedCsv}.
+      Analyze a radial chart with the sectors representating the categories in the column named "${column}".
+      ${circumference && `The circumference of each sector is ` + (circumferenceMetric && "the " + circumferenceMetric + " of ") + 'the values in the column named "' + circumference + '".'}
       Provide meaningful insights. Be brief, direct, and insightful.
     \n` +
-      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics.`;
+      `- Generate a response that states the values of the field directly so the user can understand the answer better and be used for data analytics. Talk in the present tense as if the chart has already been generated.`;
 
     return prompt;
   };
